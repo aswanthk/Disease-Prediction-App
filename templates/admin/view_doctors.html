@@ -38,7 +38,7 @@
     <td>&nbsp;{{ data["category"] }}</td>
     <td>
         {% if data["user_type"] == "pending" %}
-        <p><a href="/approve_dr/{{ data["doctor_id"] }}">Approve</a></p>
+            <p><a href="/approve_dr/{{ data["doctor_id"] }}">Approve</a></p>
     <p><a href="/reject_dr/{{ data["doctor_id"] }}">Reject</a></p>
         {% endif %}
     <p><a href="/view_more_dr/{{data["doctor_id"]}}">View More</a></p></td>
