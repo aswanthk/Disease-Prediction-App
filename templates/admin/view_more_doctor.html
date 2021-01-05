@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+</head>
+
+<body>
+<h1>Doctor Details</h1>
+<img src="{{ qry["photo"] }}"/>
+<h3>{{ qry["name"] }}</h3>
+<table width="200" border="2" cellspacing="2" cellpadding="2">
+  <tr>
+    <td>Username</td>
+    <td>{{ qry["username"] }}</td>
+  </tr>
+  <tr>
+    <td>Email Address</td>
+    <td>{{ qry["email_address"] }}</td>
+  </tr>
+  <tr>
+    <td>License ID</td>
+    <td>&nbsp;{{ qry["license_id"] }}</td>
+  </tr>
+  <tr>
+    <td>Qualification</td>
+    <td>{{ qry["qualification"] }}</td>
+  </tr>
+  <tr>
+    <td>Category</td>
+    <td>{{ qry["category"] }}</td>
+  </tr>
+  <tr>
+    <td>Address</td>
+    <td>&nbsp;{{ qry["address"] }}</td>
+  </tr>
+  <tr>
+    <td>Age</td>
+    <td>&nbsp;{{ qry["age"] }}</td>
+  </tr>
+  <tr>
+    <td>Experience</td>
+    <td>{{ qry["experience"] }}</td>
+  </tr>
+  <tr>
+    <td>Admission Fee</td>
+    <td>&nbsp;{{ qry["admission_fee"] }}</td>
+  </tr>
+  <tr>
+    <td>Mobile number</td>
+    <td>&nbsp;{{ qry["mobile_number"] }}</td>
+  </tr>
+</table>
+
+</body>
+</html>

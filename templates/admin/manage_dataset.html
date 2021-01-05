@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+</head>
+
+<body>
+<h1>Manage Dataset</h1>
+	<button>Excel</button>
+    <button>CSV</button>
+<button>PDF	</button>
+    
+    <form action="#" method="">
+    <table>
+  	<tr>
+   	 	<td><input type="text" name="search_disease" id="search_disease"></td>
+    	<td><input type="submit" value="Search" /></td>
+  	</tr>
+	</table>
+    </form>
+    <form>
+    <table>
+  <tr>
+    <td>Add Dataset(.CSV)</td>
+    <td><input type="file" name="dataset_csv" id="dataset_csv" />
+    </td>
+    <td><input type="submit" value="Add" /></td>
+  </tr>
+</table>
+    </form> 
+    <table width="488" height="113" border="2" cellpadding="2" cellspacing="2">
+	  <tr>
+	    <th width="18" height="44" scope="col">#</th>
+	    <th width="104" scope="col">Disease Name</th>
+	    <th width="100" scope="col">Category</th>
+	    <th width="300" scope="col">Symptoms</th>
+	    <th width="115" scope="col">Action</th>
+      </tr>
+	  {% for data in qry %}
+      <tr>
+	    <td height="63">&nbsp;{{ loop.index }} </td>
+	    <td>{{ data["disease"] }}</td>
+	    <td>&nbsp;{{ data["category"] }}</td>
+      <td>
+          {% for sym in symptoms[loop.index - 1] %}
+            {{ sym }} <br/>
+          {% endfor %}
+      </td>
+
+	    <td><p><a href="#">Edit</a></p>
+        <p><a href="#">Delete</a></p></td>
+      </tr>
+      {% endfor %}
+</table>
+
+</body>
+</html>

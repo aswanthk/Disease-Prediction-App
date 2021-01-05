@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+</head>
+
+<body>
+<h1>Manage Patients</h1>
+<form action="/search_user" method="post">
+    <table>
+  	<tr>
+   	 	<td><input type="text" name="search_patient" id="search_patient"></td>
+    	<td><input type="submit" value="Search" /></td>
+  	</tr>
+	</table>
+    </form>
+    <table width="624" border="2" cellspacing="2" cellpadding="2">
+  <tr>
+    <th width="11" scope="col">#</th>
+    <th width="44" scope="col"> Name</th>
+    <th width="27" scope="col">Username</th>
+    <th width="36" scope="col">Email Address</th>
+    <th width="48" scope="col">Address</th>
+    <th width="79" scope="col">Mobile Number</th>
+    <th width="79" scope="col">Age</th>
+    </tr>
+  {% for data in qry1 %}
+    <tr>
+      <td>{{ loop.index }}</td>
+    <td>{{data["name"]}} <img src="{{ data["photo"] }}" height="100" width="50"/></td>
+    <td>&nbsp;{{ data["username"] }}</td>
+    <td>&nbsp;{{ data["email_address"] }}</td>
+    <td>&nbsp;{{ data["address"] }}</td>
+    <td>&nbsp;{{ data["mobile_number"] }}</td>
+    <td>&nbsp;{{ data["age"] }}</td>
+    </tr>
+  {% endfor %}
+</table>
+
+</body>
+</html>
