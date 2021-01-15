@@ -6,6 +6,8 @@
 </head>
 
 <body>
+<h1>Disease Prediction System</h1>
+<h2>Sign-In</h2>
 <form method="post" action="/login_post">
 	<table width="252" border="2" cellspacing="2" cellpadding="2">
   <tr>
@@ -21,12 +23,22 @@
       
   </tr>
   <tr>
-	
+    <td>&nbsp;</td>
+    <td><input type="checkbox" name="checkbox" id="checkbox" />
+      <label for="checkbox">Show password</label></td>
+  </tr>
+  <tr>
     <td>&nbsp;</td>
     <td><input type="submit" name="login" id="login" value="Log In" /></td>
+  </tr>
+  <tr>
+	
+    <td>&nbsp;</td>
+    <td><a href="/login_post">Forgot password?</a></td>
       
   </tr>
 </table>
 </form>
+<p>Not registered? <a href=""><b>Sign-Up</b></a></p>
 </body>
 </html>
