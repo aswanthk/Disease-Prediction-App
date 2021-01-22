@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, flash
 from DBConnection import Db
 from email.mime import image
 import os, datetime
@@ -12,7 +12,7 @@ app = Flask(__name__)
 app.secret_key="kmsoe89j42"
 
 path1=r"C:\Users\user\Documents\PROGRAMS\PycharmProjects\DiseasePredictionApp\static\images\\"
-path2=r'C:\Users\user\Documents\PROGRAMS\PycharmProjects\dp_notes\dp_notes.txt'
+path2=r"C:\Users\user\Documents\PROGRAMS\PycharmProjects\dps_email\dps_email.txt"
 
 @app.route('/')
 def login():
@@ -22,7 +22,6 @@ def login():
 def login_post():
     username = request.form['username']
     password = request.form['password']
-    btn = request.form['login']
     db = Db()
     qry = db.selectOne("SELECT * FROM login WHERE username='"+username+"' AND password ='"+password+"'")
     if qry is not None and qry['user_type'] == 'admin':
@@ -34,19 +33,11 @@ def login_post():
     else:
         return "<script>alert('Username/Password mismatch!!'); window.location='/'</script>"
 
-
-@app.route('/login_post2', methods=['POST', 'GET'])
-def login_post2():
-    username = request.form['username']
-    print(username)
-    return "ok"
-
-
-@app.route("/signup")
-def signup():
-    pass
-
-
+@app.route('/logout')
+def logout():
+    session.pop('lid', None)
+    flash('You were logged out.')
+    return redirect('/')
 
 @app.route('/admin_home')
 def admin_home():
@@ -132,7 +123,6 @@ def reset_password_post():
             return "<script>alert('Password mismatch!'); window.location='/reset_password'</script>"
     else:
         return "<script>alert('Incorrect Code!'); window.location='/reset_password'</script>"
-
 
     return render_template("/reset_password")
 
@@ -233,9 +223,9 @@ def edit_user():
     lid = session['lid']
     qry = db.selectOne("select * from user where user_id='" + str(lid) + "'")
     return render_template("user/edit_user_profile.html",data=qry)
+
 @app.route('/edituserpost',methods=['post'])
 def edituserpost():
-
     username=request.form['textfield']
     name=request.form['textfield2']
     photo=request.files['photo']
@@ -254,13 +244,18 @@ def edituserpost():
         if photo.filename != "":
             qry=db.update("UPDATE `user` SET `username`='"+username+"',`email_address`='"+email+"',`name`='"+name+"'`photo`='"+path+"',`home`='"+home+"',`date_of_birth`='"+date_of_birth+"',`mobile_number`='"+phone_number+"',`place`='"+place+"',`pin`='"+pin+"',`post`='"+post+"' WHERE `user_id`='"+str(session['lid'])+"'")
         else:
-            qry = db.update(
-                "UPDATE `user` SET `username`='" + username + "',`email_address`='"+email+"',`name`='"+name+"',`home`='"+home+"',`date_of_birth`='"+date_of_birth+"',`mobile_number`='"+phone_number+"',`place`='"+place+"',`pin`='"+pin+"',`post`='"+post+"' WHERE `user_id`='"+str(session['lid'])+"'")
+            qry = db.update("UPDATE `user` SET `username`='" + username + "',`email_address`='"+email+"',`name`='"+name+"',`home`='"+home+"',`date_of_birth`='"+date_of_birth+"',`mobile_number`='"+phone_number+"',`place`='"+place+"',`pin`='"+pin+"',`post`='"+post+"' WHERE `user_id`='"+str(session['lid'])+"'")
     else:
-            qry = db.update(
-                "UPDATE `user` SET `username`='" + username + "',`email_address`='"+email+"',`name`='"+name+"',`home`='"+home+"',`date_of_birth`='"+date_of_birth+"',`mobile_number`='"+phone_number+"',`place`='"+place+"',`pin`='"+pin+"',`post`='"+post+"' WHERE `user_id`='"+str(session['lid'])+"'")
+            qry = db.update("UPDATE `user` SET `username`='" + username + "',`email_address`='"+email+"',`name`='"+name+"',`home`='"+home+"',`date_of_birth`='"+date_of_birth+"',`mobile_number`='"+phone_number+"',`place`='"+place+"',`pin`='"+pin+"',`post`='"+post+"' WHERE `user_id`='"+str(session['lid'])+"'")
     return view_user_profile()
-	
+
+@app.route('/signup_post', methods=['post'])
+def signup_post():
+    user_type = request.form['sign-up']
+    if user_type == "user":
+        return render_template('user/user_register.html')
+    elif user_type == "doctor":
+        return render_template('doctor/doctor_register.html')
 # =================================================================================================================
 
 @app.route('/add_symptoms')

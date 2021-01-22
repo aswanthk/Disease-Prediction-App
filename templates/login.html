@@ -24,7 +24,7 @@
   </tr>
   <tr>
     <td>&nbsp;</td>
-    <td><input type="checkbox" name="checkbox" id="checkbox" />
+    <td><input type="checkbox" name="checkbox" id="checkbox" onclick="password_visible()" />
       <label for="checkbox">Show password</label></td>
   </tr>
   <tr>
@@ -36,7 +36,26 @@
     <td><a href="/forgot_password" id="forgot-link">Forgot password?</a></td>
   </tr>
 </table>
+</form> <br>
+
+<form action="/signup_post" method="post">
+    Not registered? <b>Sign-Up as</b>
+        <select name="sign-up" id="sign-up">
+            <option value="user" selected>User</option>
+            <option value="doctor">Doctor</option>
+        </select>
+        <input type="submit" value="Sign-Up">
 </form>
-<p>Not registered? <a href=""><b>Sign-Up</b></a></p>
+<script>
+    function password_visible() {
+        var x = document.getElementById('password');
+        if(x.type === "password") {
+            x.type = "text";
+        }
+        else {
+            x.type = "password"
+        }
+    }
+</script>
 </body>
 </html>
