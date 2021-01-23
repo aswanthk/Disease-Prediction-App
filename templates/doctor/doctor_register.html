@@ -2,79 +2,88 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Untitled Document</title>
+<title>Doctor Registration</title>
 </head>
 
 <body>
 <h1>Doctor Registration</h1>
-<form method="">
+<form action="/doctor_register" method="post" enctype="multipart/form-data">
 <table width="344" height="284" border="2"  cellpadding="2" cellspacing="2">
   <tr>
     <td>Username</td>
     <td>
-      <input type="text" name="textfield" id="textfield" />
+      <input type="text" name="username" id="username" />
     </td>
+  </tr>
+    <tr>
+    <td>Email Address</td>
+      <td><input type="text" name="email" id="email" /></td>
   </tr>
   <tr>
     <td>Name</td>
-    <td><input type="text" name="textfield2" id="textfield2" /></td>
+    <td><input type="text" name="name" id="name" /></td>
   </tr>
   <tr>
     <td>Photo</td>
     <td>
-      <input type="file" name="fileField" id="fileField" />
+      <input type="file" name="dr-photo" id="dr-photo" />
     </td>
   </tr>
-  <tr>
-    <td>Phone Number</td>
-    <td><input type="text" name="textfield4" id="textfield4" /></td>
+    <tr>
+    <td>Date of Birth</td>
+    <td><input type="date" name="dob" id="dob" /></td>
   </tr>
-  <tr>
-    <td>Email Address</td>
-      <td><input type="text" name="textfield8" id="textfield8" /></td>
+    <tr>
+    <td>Address</td>
+    <td>
+        <textarea name="address" id="address"></textarea>
+    </td>
+  </tr>
+    <tr>
+    <td>Contact Number</td>
+    <td><input type="text" name="contact-number" id="contact-number" /></td>
   </tr>
   <tr>
     <td>License ID</td>
-      <td><input type="text" name="textfield10" id="textfield10" /></td>
+      <td><input type="text" name="license-id" id="license-id" /></td>
   </tr>
   <tr>
     <td>Qualification</td>
-      <td><input type="text" name="textfield11" id="textfield11" /></td>
+      <td><input type="text" name="qualification" id="qualification" /></td>
   </tr>
   <tr>
-    <td>Category</td>
-      <td><input type="text" name="textfield12" id="textfield12" /></td>
+    <th><label for="category">Category</label></th>
+      <td>
+            <label for="cat1">Category 1</label>
+            <input type="checkbox" name="category" id="cat1" value="category1">
+            <label for="cat2">Category 2</label>
+            <input type="checkbox" name="category" id="cat2" value="category2">
+            <label for="cat3">Category 3</label>
+            <input type="checkbox" name="category" id="cat3" value="category3">
+            <label for="cat4">Category 4</label>
+            <input type="checkbox" name="category" id="cat4" value="category4">
+      </td>
   </tr>
   <tr>
     <td>Admission fee</td>
-      <td><input type="text" name="textfield13" id="textfield13" /></td>
+      <td><input type="text" name="admission-fee" id="admission-fee" /></td>
   </tr>
   <tr>
-    <td>Experience</td>
-      <td><input type="text" name="textfield14" id="textfield14" /></td>
-  </tr>
-  <tr>
-    <td>Address</td>
-    <td>
-        <textarea></textarea>
-    </td>
-  </tr>
-  <tr>
-    <td>Date of Birth</td>
-    <td><input type="date" name="textfield7" id="textfield7" /></td>
+    <td>Profession started Year</td>
+      <td><input type="text" name="pro-started-yr" id="pro-started-yr" /></td>
   </tr>
   <tr>
     <td>Password</td>
-    <td><input type="text" name="textfield5" id="textfield5" /></td>
+    <td><input type="password" name="password" id="password" /></td>
   </tr>
   <tr>
     <td>Re-Enter Password</td>
-    <td><input type="text" name="textfield6" id="textfield6" /></td>
+    <td><input type="password" name="re-password" id="re-password" /></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
     <td>
-      <input type="submit" name="button" id="button" value="Submit" />
+      <input type="submit" value="Register" />
     </td>
   </tr>
 </table>

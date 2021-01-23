@@ -19,12 +19,11 @@
   	</tr>
 	</table>
     </form>
-    <form>
+    <form action="/add_dataset" method="post" enctype="multipart/form-data" onsubmit="return confirm('Do you want to add dataset?')">
     <table>
   <tr>
     <td>Add Dataset(.CSV)</td>
-    <td><input type="file" name="dataset_csv" id="dataset_csv" />
-    </td>
+    <td><input type="file" name="dataset_csv" id="dataset_csv" /></td>
     <td><input type="submit" value="Add" /></td>
   </tr>
 </table>
@@ -35,6 +34,7 @@
 	    <th width="104" scope="col">Disease Name</th>
 	    <th width="100" scope="col">Category</th>
 	    <th width="300" scope="col">Symptoms</th>
+          <th width="300" scope="col">Count of Occurrence</th>
 	    <th width="115" scope="col">Action</th>
       </tr>
 	  {% for data in qry %}
@@ -47,8 +47,9 @@
             {{ sym }} <br/>
           {% endfor %}
       </td>
+      <td>&nbsp;{{ data["count_of_occurrence"] }}</td>
 
-	    <td><p><a href="#">Edit</a></p>
+	    <td><p><a href="/edit_dataset/{{ data['dataset_id'] }}">Edit</a></p>
         <p><a href="#">Delete</a></p></td>
       </tr>
       {% endfor %}

@@ -7,18 +7,18 @@
 
 <body>
 <h1>User Registration</h1>
-<form method="">
+<form action="/user_register" method="post" enctype="multipart/form-data">
 <table width="344" height="284" border="2" cellpadding="2" cellspacing="2">
   <tr>
     <td width="93">Username</td>
     <td width="229">
-      <label for="textfield"></label>
-      <input type="text" name="textfield" id="textfield" />
+      <label for="username"></label>
+      <input type="text" name="username" id="username" />
     </td>
   </tr>
   <tr>
     <td>Name</td>
-    <td><input type="text" name="textfield2" id="textfield2" /></td>
+    <td><input type="text" name="name" id="name" /></td>
   </tr>
   <tr>
     <td>Photo</td>
@@ -57,16 +57,16 @@
   </tr>
   <tr>
     <td>Password</td>
-    <td><input type="text" name="textfield5" id="textfield5" /></td>
+    <td><input type="password" name="password" id="password" /></td>
   </tr>
   <tr>
     <td>Re-Enter Password</td>
-    <td><input type="text" name="textfield6" id="textfield6" /></td>
+    <td><input type="password" name="re-password" id="re-password" /></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
     <td>
-      <input type="submit" name="button" id="button" value="Submit" />
+      <input type="submit" value="Submit" />
     </td>
   </tr>
 </table>

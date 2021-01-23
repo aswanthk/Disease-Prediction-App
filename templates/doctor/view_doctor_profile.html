@@ -6,58 +6,52 @@
 </head>
 
 <body>
-	<h2>View Doctor's Profile</h2>
-    <p><a href="">Edit Profile</a></p>
-    <img src="" alt="doctor's-photo" />
-<h3>--name here--</h3>
+	<h2>{{ q['name'] }} - Profile</h2>
+    <p><a href="/edit_dr">Edit Profile ({{ q['username'] }})</a></p>
+    <img src="{{ q['photo'] }}" alt="{{ q['username'] }}'s-photo" height="200px" width="150px"/>
+<h3>{{ q['name'] }}</h3>
     <table width="200" border="2" cellspacing="2" cellpadding="2">
   <tr>
     <th scope="row">Username</th>
-    <td>&nbsp;</td>
+    <td>&nbsp;{{ q['username'] }}</td>
   </tr>
   <tr>
-    <th scope="row">Email Addres</th>
-    <td>&nbsp;</td>
-  </tr>
-  <tr>
-    <th scope="row">Address</th>
-    <td>&nbsp;</td>
-  </tr>
-  <tr>
-    <th scope="row">Phone Number</th>
-    <td>&nbsp;</td>
-  </tr>
-  <tr>
-    <th scope="row">License ID</th>
-    <td>&nbsp;</td>
-  </tr>
-  <tr>
-    <th scope="row">Qualification</th>
-    <td>&nbsp;</td>
-  </tr>
-  <tr>
-    <th scope="row">Category</th>
-    <td>&nbsp;</td>
-  </tr>
-  <tr>
-    <th scope="row">Admission fee</th>
-    <td>&nbsp;</td>
-  </tr>
-  <tr>
-    <th scope="row">Experience</th>
-    <td>&nbsp;</td>
+    <th scope="row">Email Address</th>
+    <td>&nbsp;{{ q['email_address'] }}</td>
   </tr>
   <tr>
     <th scope="row">Age</th>
-    <td>&nbsp;</td>
+    <td>&nbsp;{{ age }}</td>
   </tr>
   <tr>
-    <th scope="row">Mobile Number</th>
-    <td>&nbsp;</td>
+    <th scope="row">Address</th>
+    <td>&nbsp;{{ q['address'] }}</td>
+  </tr>
+  <tr>
+    <th scope="row">Contact Number</th>
+    <td>&nbsp;{{ q['contact_number'] }}</td>
+  </tr>
+  <tr>
+    <th scope="row">License ID</th>
+    <td>{{ q['license_id'] }}</td>
+  </tr>
+  <tr>
+    <th scope="row">Qualification</th>
+    <td>&nbsp;{{ q['qualification'] }}</td>
+  </tr>
+  <tr>
+    <th scope="row">Category</th>
+    <td>&nbsp;{{ q['category'] }}</td>
+  </tr>
+  <tr>
+    <th scope="row">Admission fee</th>
+    <td>&nbsp;{{ q['admission_fee'] }}</td>
+  </tr>
+  <tr>
+    <th scope="row">Profession Started Year</th>
+    <td>&nbsp;{{ q['pro_started_yr'] }}</td>
   </tr>
 </table>
-
-    
 </body>
 </html>
 

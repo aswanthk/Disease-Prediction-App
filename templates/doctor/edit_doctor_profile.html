@@ -6,77 +6,76 @@
 </head>
 
 <body>
-<h2>Edit Doctor Profile</h2>
-<form method="">
-<table width="344" height="284" border="2" cellpadding="2" cellspacing="2">
+<h2>Edit Profile ({{ data['username'] }})</h2>
+<form action="/edit_dr_post" method="post" enctype="multipart/form-data">
+<table width="344" height="284" border="2"  cellpadding="2" cellspacing="2">
   <tr>
-    <td width="93">Username</td>
-    <td width="229">
-      <label for="textfield"></label>
-      <input type="text" name="textfield" id="textfield" />
+    <td>Username</td>
+    <td>
+      <input type="text" name="username" id="username" value="{{ data['username'] }}" readonly />
     </td>
+  </tr>
+    <tr>
+    <td>Email Address</td>
+      <td><input type="text" name="email" id="email" value="{{ data['email_address'] }}" readonly /></td>
   </tr>
   <tr>
     <td>Name</td>
-    <td><input type="text" name="textfield2" id="textfield2" /></td>
+    <td><input type="text" name="name" id="name" value="{{ data['name'] }}" /></td>
   </tr>
   <tr>
     <td>Photo</td>
     <td>
-      <label for="fileField"></label>
-      <input type="file" name="fileField" id="fileField" />
+      <input type="file" name="dr-photo" id="dr-photo" />
     </td>
   </tr>
-  <tr>
-    <td>Phone Number</td>
-    <td><input type="text" name="textfield4" id="textfield4" /></td>
+    <tr>
+    <td>Date of Birth</td>
+    <td><input type="date" name="dob" id="dob" value="{{ data['date_of_birth'] }}" /></td>
   </tr>
-  <tr>
-    <td>Email Address</td>
-    <td><input type="text" name="textfield8" id="textfield8" />        
+    <tr>
+    <td>Address</td>
+    <td>
+        <textarea name="address" id="address">{{ data['address'] }}"</textarea>
+    </td>
+  </tr>
+    <tr>
+    <td>Contact Number</td>
+    <td><input type="text" name="contact-number" id="contact-number" value="{{ data['contact_number'] }}" /></td>
   </tr>
   <tr>
     <td>License ID</td>
-    <td><input type="text" name="textfield10" id="textfield10" />      
+      <td><input type="text" name="license-id" id="license-id" value="{{ data['license_id'] }}" /></td>
   </tr>
   <tr>
     <td>Qualification</td>
-    <td><input type="text" name="textfield11" id="textfield11" />      
+      <td><input type="text" name="qualification" id="qualification" value="{{ data['qualification'] }}" /></td>
   </tr>
   <tr>
-    <td>Category</td>
-    <td><input type="text" name="textfield12" id="textfield12" />      
+    <th><label for="category">Category</label></th>
+      <td>
+            <label for="cat1">Category 1</label>
+            <input type="checkbox" name="category" id="cat1" value="category1" {% if "category1" in category %} checked {% endif %}>
+            <label for="cat2">Category 2</label>
+            <input type="checkbox" name="category" id="cat2" value="category2" {% if "category2" in category %} checked {% endif %}>
+            <label for="cat3">Category 3</label>
+            <input type="checkbox" name="category" id="cat3" value="category3" {% if "category3" in category %} checked {% endif %}>
+            <label for="cat4">Category 4</label>
+            <input type="checkbox" name="category" id="cat4" value="category4" {% if "category4" in category %} checked {% endif %}>
+      </td>
   </tr>
   <tr>
     <td>Admission fee</td>
-    <td><input type="text" name="textfield13" id="textfield13" />      
+      <td><input type="text" name="admission-fee" id="admission-fee" value="{{ data['admission_fee'] }}" /></td>
   </tr>
   <tr>
-    <td>Experience</td>
-    <td><input type="text" name="textfield14" id="textfield14" />      
-  </tr>
-  <tr>
-    <td>Address</td>
-    <input type="text" name="textfield3" id="textfield3" /></td>
-      <input type="text" name="textfield15" id="textfield15" />
-      <input type="text" name="textfield9" id="textfield9" />
-  </tr>
-  <tr>
-    <td>Date of Birth</td>
-    <td><input type="date" name="textfield7" id="textfield7" /></td>
-  </tr>
-  <tr>
-    <td>Password</td>
-    <td><input type="text" name="textfield5" id="textfield5" /></td>
-  </tr>
-  <tr>
-    <td>Re-Enter Password</td>
-    <td><input type="text" name="textfield6" id="textfield6" /></td>
+    <td>Profession started Year</td>
+      <td><input type="text" name="pro-started-yr" id="pro-started-yr" value="{{ data['pro_started_yr'] }}" /></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
     <td>
-      <input type="submit" name="button" id="button" value="Edit" />
+      <input type="submit" value="Edit" />
     </td>
   </tr>
 </table>

@@ -7,19 +7,25 @@
 
 <body>
 	<h1>Edit Dataset</h1>
-    <form>
+    <form action="/edit_dataset_post/{{ qry['dataset_id'] }}" method="post" onsubmit="return confirm('Do you want to update dataset?')">
     <table width="369" height="179" border="2" cellpadding="2" cellspacing="2">
   <tr>
     <td><label for="disease_name">Disease Name</label></td>
-    <td><input type="text" name="disease_name" id="disease_name" value=""></td>
+    <td><input type="text" name="disease_name" id="disease_name" value="{{ qry['disease'] }}"></td>
   </tr>
   <tr>
     <td>Category</td>
-    <td><input type="text" name="disease_type" id="disease_type" value=""></td>
+    <td><input type="text" name="category" id="category" value="{{ qry['category'] }}" /></td>
   </tr>
   <tr>
     <td><label for="symptoms">Symptoms</label></td>
-    <td><input type="text" name="symptoms" id="symptoms" value=""></td>
+    <td>
+        <textarea name="symptoms" id="symptoms">{{ qry['symptoms'] }}</textarea>
+    </td>
+  </tr>
+        <tr>
+    <td><label for="count">Count of Occurrence</label></td>
+    <td><input type="text" name="count" id="count" value="{{ qry['count_of_occurrence'] }}"></td>
   </tr>
   <tr>
     <td>&nbsp;</td>

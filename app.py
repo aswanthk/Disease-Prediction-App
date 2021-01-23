@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, flash
 from DBConnection import Db
 from email.mime import image
-import os, datetime
+import os, datetime, csv
 from flask import Flask, render_template, request, redirect,session
 import smtplib
 from email.mime.text import MIMEText
@@ -30,6 +30,9 @@ def login_post():
     elif qry is not None and qry['user_type'] == 'user':
         session['lid'] = qry["login_id"]
         return redirect('/user_home')
+    elif qry is not None and (qry['user_type'] == 'doctor' or qry['user_type'] == 'pending'):
+        session['lid'] = qry["login_id"]
+        return redirect('/doctor_home')
     else:
         return "<script>alert('Username/Password mismatch!!'); window.location='/'</script>"
 
@@ -47,12 +50,41 @@ def admin_home():
 def dataset():
     db = Db()
     qry = db.select("SELECT * FROM disease_dataset")
-    print(qry)
     symptoms = []
     for i in range(len(qry)):
         symptoms.append(qry[i]["symptoms"].split(","))
-    print(symptoms)
     return render_template("admin/manage_dataset.html", qry=qry, symptoms=symptoms)
+
+@app.route('/add_dataset', methods=['post'])
+def add_dataset():
+    csv_file = request.files['dataset_csv']
+    dates = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+    path = path1 + dates + ".csv"
+    csv_file.save(path)
+    csv_dicts = []
+    with open(path, mode='r') as file:
+        for row in csv.DictReader(file):
+            csv_dicts.append(dict(row))
+    db = Db()
+    for data in csv_dicts:
+        qry = db.insert("INSERT INTO disease_dataset VALUES('','" + data['disease'] + "', '" + data['category'] + "','" + data['symptom'] + "','" + data['count_of_disease_occurrence'] + "')")
+    return redirect('/dataset')
+
+@app.route('/edit_dataset/<i>')
+def edit_dataset(i):
+    db = Db()
+    qry = db.selectOne("SELECT * FROM disease_dataset WHERE dataset_id = '" + i + "'")
+    return render_template('admin/dataset_edit.html', qry=qry)
+
+@app.route('/edit_dataset_post/<i>', methods=['post'])
+def edit_dataset_post(i):
+    disease_name = request.form['disease_name']
+    category = request.form['category']
+    symptoms = request.form['symptoms']
+    count = request.form['count']
+    db = Db()
+    qry = db.update("UPDATE disease_dataset SET disease = '" + disease_name + "', category = '" + category + "', symptoms = '" + symptoms + "', count_of_occurrence = '" + count + "' WHERE dataset_id = '" + i + "'")
+    return redirect('/dataset')
 
 @app.route("/forgot_password")
 def forgot_password():
@@ -256,6 +288,127 @@ def signup_post():
         return render_template('user/user_register.html')
     elif user_type == "doctor":
         return render_template('doctor/doctor_register.html')
+
+@app.route('/user_register', methods=['post'])
+def user_register():
+    username = request.form['username']
+    name = request.form['name']
+    photo = request.files['photo']
+    phone_number = request.form['phone-number']
+    email = request.form['email']
+    home = request.form['home']
+    place = request.form['place']
+    post = request.form['post']
+    pin = request.form['pin']
+    dob = request.form['dob']
+    password = request.form['password']
+    re_password = request.form['re-password']
+    dates = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+    photo.save(path1 + dates + ".jpg")
+    path = "/static/images/" + dates + ".jpg"
+
+    db = Db()
+    qry2 = db.select("SELECT * FROM login WHERE username = '"+username+"'")
+    if len(qry2) > 0:
+        return "<script>alert('Username already exist!'); window.location='/'</script>"
+    else:
+        if password == re_password:
+            qry = db.insert("INSERT INTO login VALUES('','" + username + "', '" + password + "', 'user')")
+            qry1 = db.insert(
+                "INSERT INTO user VALUES('" + str(
+                    qry) + "','" + username + "', '" + email + "', '" + name + "', '" + path + "', '" + home + "', '" + dob + "', '" + phone_number + "', '" + place + "', '" + pin + "', '" + post + "')")
+            return redirect('/')
+        else:
+            return "<script>alert('Password mismatch!'); window.location='/signup_post'</script>"
+
+@app.route('/doctor_home')
+def doctor_home():
+    return render_template('doctor/doctor_home.html')
+
+@app.route('/doctor_register', methods=['post'])
+def doctor_register():
+    username = request.form['username']
+    email = request.form['email']
+    name = request.form['name']
+    photo = request.files['dr-photo']
+    dob = request.form['dob']
+    address = request.form['address']
+    contact_number = request.form['contact-number']
+    license_id = request.form['license-id']
+    qualification = request.form['qualification']
+    category = request.form.getlist('category')
+    category = ','.join(category)
+    admission_fee = request.form['admission-fee']
+    pro_started_yr = request.form['pro-started-yr']
+    password = request.form['password']
+    re_password = request.form['re-password']
+    dates = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+    photo.save(path1 + dates + ".jpg")
+    path = "/static/images/" + dates + ".jpg"
+
+    db = Db()
+    qry2 = db.select("SELECT * FROM login WHERE username = '"+username+"'")
+    if len(qry2) > 0:
+        return "<script>alert('Username already exist!'); window.location='/'</script>"
+    else:
+        if password == re_password:
+            qry = db.insert("INSERT INTO login VALUES('','" + username + "', '" + password + "', 'pending')")
+            qry1 = db.insert(
+                "INSERT INTO doctor VALUES('" + str(
+                    qry) + "','" + username + "', '" + email + "', '" + name + "', '" + path + "', '" + dob + "', '" + address + "', '" + contact_number + "', '" + license_id + "', '" + qualification + "', '" + category + "', '" + admission_fee + "', '" + pro_started_yr + "')")
+            return redirect('/')
+        else:
+            return "<script>alert('Password mismatch!'); window.location='/signup_post'</script>"
+
+@app.route('/view_dr_profile')
+def view_dr_profile():
+    db=Db()
+    lid=session['lid']
+    qry=db.selectOne("select * from doctor where doctor_id='"+str(lid)+"'")
+    this_year = datetime.date.today().year
+    age = this_year - int(qry['date_of_birth'].split('-')[0])
+    return render_template("doctor/view_doctor_profile.html",q=qry, age=age)
+
+
+@app.route('/edit_dr')
+def edit_dr():
+    db = Db()
+    lid = session['lid']
+    qry = db.selectOne("select * from doctor where doctor_id='" + str(lid) + "'")
+    category = qry['category'].split(',')
+    return render_template("doctor/edit_doctor_profile.html", data=qry, category=category)
+
+@app.route('/edit_dr_post', methods=['post'])
+def edit_dr_post():
+    username = request.form['username']
+    email = request.form['email']
+    name = request.form['name']
+    photo = request.files['dr-photo']
+    dob = request.form['dob']
+    address = request.form['address']
+    contact_number = request.form['contact-number']
+    license_id = request.form['license-id']
+    qualification = request.form['qualification']
+    category = request.form.getlist('category')
+    category = ','.join(category)
+    admission_fee = request.form['admission-fee']
+    pro_started_yr = request.form['pro-started-yr']
+    dates=datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+    photo.save(path1+dates+".jpg")
+    path="/static/images/"+dates+".jpg"
+    db=Db()
+    if request.files is not None:
+        if photo.filename != "":
+            qry=db.update("UPDATE `doctor` SET `username`='"+username+"',`email_address`='"+email+"',`name`='"+name+"',`photo`='"+path+"',`date_of_birth`='"+dob+"',`address`='"+address+"',`contact_number`='"+contact_number+"',`license_id`='"+license_id+"',`qualification`='"+qualification+"',`category`='"+category+"',`admission_fee`='"+admission_fee+"',`pro_started_yr`='"+pro_started_yr+"' WHERE `doctor_id`='"+str(session['lid'])+"'")
+        else:
+            qry = db.update(
+                "UPDATE `doctor` SET `username`='" + username + "',`email_address`='" + email + "',`name`='" + name + "',`date_of_birth`='" + dob + "',`address`='" + address + "',`contact_number`='" + contact_number + "',`license_id`='" + license_id + "',`qualification`='" + qualification + "',`category`='" + category + "',`admission_fee`='" + admission_fee + "',`pro_started_yr`='" + pro_started_yr + "' WHERE `doctor_id`='" + str(
+                    session['lid']) + "'")
+    else:
+        qry = db.update(
+            "UPDATE `doctor` SET `username`='" + username + "',`email_address`='" + email + "',`name`='" + name + "',`date_of_birth`='" + dob + "',`address`='" + address + "',`contact_number`='" + contact_number + "',`license_id`='" + license_id + "',`qualification`='" + qualification + "',`category`='" + category + "',`admission_fee`='" + admission_fee + "',`pro_started_yr`='" + pro_started_yr + "' WHERE `doctor_id`='" + str(
+                session['lid']) + "'")
+    return view_dr_profile()
 # =================================================================================================================
 
 @app.route('/add_symptoms')
