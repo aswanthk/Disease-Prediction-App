@@ -1,0 +1,7 @@
+disease,category,symptom,count_of_disease_occurrence
+hypertensive disease,,"pain chest,shortness of breath,dizziness,asthenia,fall,syncope,vertigo,sweat,sweating increased,palpitation,nausea,angina pectoris,pressure chest",3363
+diabetes,,"polyuria,polydypsia,shortness of breath,pain chest,asthenia,nausea,orthopnea,rale,sweat,sweating increased,unresponsiveness,mental status changes,vertigo,vomiting,labored breathing",1421
+depression mental,,"feeling suicidal,suicidal,hallucinations auditory,feeling hopeless,weepiness,sleeplessness,motor retardation,irritable mood,blackout,mood depressed,hallucinations visual,worry,agitation,tremor,intoxication,verbal auditory hallucinations,energy increased,difficulty,nightmare,unable to concentrate,homelessness",1337
+depressive disorder,,"feeling suicidal,suicidal,hallucinations auditory,feeling hopeless,weepiness,sleeplessness,motor retardation,irritable mood,blackout,mood depressed,hallucinations visual,worry,agitation,tremor,intoxication,verbal auditory hallucinations,energy increased,difficulty,nightmare,unable to concentrate,homelessness",1337
+coronary arteriosclerosis,,"pain chest,angina pectoris,shortness of breath,hypokinesia,sweat,sweating increased,pressure chest,dyspnea on exertion,orthopnea,chest tightness",1284
+coronary heart disease,,"pain chest,angina pectoris,shortness of breath,hypokinesia,sweat,sweating increased,pressure chest,dyspnea on exertion,orthopnea,chest tightness",1284
