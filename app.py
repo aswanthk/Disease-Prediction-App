@@ -435,6 +435,27 @@ def user_view_history():
 def user_send_feedback():
     return render_template('user/send_feedback.html')
 
+@app.route('/pending_dr')
+def pending_dr():
+    db = Db()
+    qry1 = db.select("SELECT * FROM doctor, login WHERE doctor.`doctor_id` = login.`login_id` AND user_type = 'pending'")
+    return render_template("admin/pending_dr.html", qry1=qry1)
+
+@app.route('/search_pending_dr', methods=['post'])
+def search_pending_dr():
+    text = request.form['search_pending_dr']
+    db = Db()
+    qry = db.select("SELECT * FROM doctor, login WHERE doctor.`doctor_id` = login.`login_id` AND user_type = 'pending' AND doctor.name like '%"+text+"%'")
+    return render_template('admin/pending_dr.html', qry1=qry)
+
+@app.route('/send_feedback', methods=['post'])
+def send_feedback():
+    dates = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+    rate = request.form['rate']
+    review = request.form['review']
+    db = Db()
+    qry = db.insert("INSERT INTO feedbacks VALUES('', '"+str(session['lid'])+"', '"+rate+"', '"+review+"', '"+dates+"')")
+    return redirect('/user_home')
 
 if __name__ == '__main__':
     app.run(debug=True)
