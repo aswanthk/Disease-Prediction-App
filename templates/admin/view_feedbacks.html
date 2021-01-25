@@ -11,14 +11,16 @@
   <tr>
     <th width="11" scope="col">#</th>
     <th width="44" scope="col">User Info</th>
-    <th width="36" scope="col">Feedback</th>
+    <th width="44" scope="col">Rating</th>
+    <th width="36" scope="col">Reviews</th>
     <th width="36" scope="col">Date</th>
     </tr>
   {% for data in qry %}
     <tr>
     <td>&nbsp;{{ loop.index }}</td>
     <td>&nbsp;{{ data["username"] }}</td>
-    <td>&nbsp;{{ data["feedback"] }}</td>
+     <td>&nbsp;{{ data["rate"] }}</td>
+    <td>&nbsp;{{ data["review"] }}</td>
     <td>&nbsp;{{ data["date"] }}</td>
     </tr>
   {% endfor %}

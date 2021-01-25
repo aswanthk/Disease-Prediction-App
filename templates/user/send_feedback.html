@@ -7,21 +7,20 @@
 
 <body>
 <h2>Send Feedback</h2>
-<form action="/send_feedback" method="post" onsubmit="return confirm('You reviewed successfully')">
-    <label for="rate">Rate</label>&nbsp;
-    <select name="rate" id="rate">
+<form action="/send_feedback_post" method="post" onsubmit="return confirm('You reviewed successfully')">
+    <label for="rate">Rate</label>
+        <select name="rate" id="rate">
     	   <option value="--select--">--select--</option>
-    	   <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-    </select><br><br>
-
-    <label for="review">Review</label>&nbsp;
-    <textarea name="review" id="review"></textarea><br /><br />
+    	   <option value="1" {% if content and qry['rate'] == 1 %} selected {% endif %}>1</option>
+            <option value="2" {% if content and qry['rate'] == 2 %} selected {% endif %}>2</option>
+            <option value="3" {% if content and qry['rate'] == 3 %} selected {% endif %}>3</option>
+            <option value="4" {% if content and qry['rate'] == 4 %} selected {% endif %}>4</option>
+            <option value="5" {% if content and qry['rate'] == 5 %} selected {% endif %}>5</option>
+        </select><br><br>
+        <label for="review">Review</label>&nbsp;
+        <textarea name="review" id="review">{% if content %}{{ qry['review'] }}{% endif %}</textarea><br /><br />
     
-    <input type="submit" value="Send Feedback" />
+    <input type="submit" value="Send/Update Feedback" />
     </form>
 </body>
 </html>
