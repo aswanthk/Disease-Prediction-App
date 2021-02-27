@@ -14,6 +14,16 @@ app.secret_key="kmsoe89j42"
 path1=r"C:\Users\user\Documents\PROGRAMS\PycharmProjects\DiseasePredictionApp\static\images\\"
 path2=r"C:\Users\user\Documents\PROGRAMS\PycharmProjects\dps_email\dps_email.txt"
 
+"""
+import bcrypt
+password = b"secretPass123"
+hashed = bcrypt.hashpw(password, bcrypt.gensalt())
+print(hashed)
+if bcrypt.checkpw(password, hashed):
+    print("It matches.")
+else:
+    print("Didn't match!")
+"""
 ########################################################################################################################
 
 @app.route('/')
@@ -274,6 +284,8 @@ def doctor_register():
     category = ','.join(category)
     admission_fee = request.form['admission-fee']
     pro_started_yr = request.form['pro-started-yr']
+    latitude = request.form['latitude']
+    longitude = request.form['longitude']
     password = request.form['password']
     re_password = request.form['re-password']
     dates = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
@@ -290,6 +302,8 @@ def doctor_register():
             qry1 = db.insert(
                 "INSERT INTO doctor VALUES('" + str(
                     qry) + "','" + username + "', '" + email + "', '" + name + "', '" + path + "', '" + dob + "', '" + address + "', '" + contact_number + "', '" + license_id + "', '" + qualification + "', '" + category + "', '" + admission_fee + "', '" + pro_started_yr + "')")
+            qry3 = db.insert(
+                "INSERT INTO location VALUES('','" + str(qry) + "', '" + longitude + "', '" + latitude + "')")
             return redirect('/')
         else:
             return "<script>alert('Password mismatch!'); window.location='/signup_post'</script>"
@@ -362,6 +376,8 @@ def user_register():
     post = request.form['post']
     pin = request.form['pin']
     dob = request.form['dob']
+    latitude = request.form['latitude']
+    longitude = request.form['longitude']
     password = request.form['password']
     re_password = request.form['re-password']
     dates = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
@@ -378,6 +394,8 @@ def user_register():
             qry1 = db.insert(
                 "INSERT INTO user VALUES('" + str(
                     qry) + "','" + username + "', '" + email + "', '" + name + "', '" + path + "', '" + home + "', '" + dob + "', '" + phone_number + "', '" + place + "', '" + pin + "', '" + post + "')")
+
+            qry3 = db.insert("INSERT INTO location VALUES('','" + str(qry) + "', '"+longitude+"', '"+latitude+"')")
             return redirect('/')
         else:
             return "<script>alert('Password mismatch!'); window.location='/signup_post'</script>"
@@ -427,6 +445,17 @@ def edituserpost():
             qry=db.update("UPDATE login, user SET login.username='"+username+"',user.email_address='"+email+"',user.name='"+name+"', user.home='"+home+"', user.date_of_birth='"+date_of_birth+"',user.mobile_number='"+phone_number+"',user.place='"+place+"',user.pin='"+pin+"',user.post='"+post+"' WHERE login.login_id = user.user_id AND login.login_id='"+str(session.get('lid'))+"'")
     return view_user_profile()
 
+@app.route('/nearestservice',methods=['get'])
+def nearestservice():
+    db = Db()
+    user_loc = db.selectOne("SELECT * FROM location WHERE location.login_id = '"+str(session['lid'])+"'")
+    #doc_loc = db.select("SELECT * FROM login, location WHERE location.login_id = login.login_id AND login.user_type = 'doctor'")
+    #print(doc_loc)
+    print(user_loc)
+    qry=db.select("SELECT  (3959 * ACOS ( COS ( RADIANS('"+str(user_loc['latitude'])+"') ) * COS( RADIANS( location.latitude) ) * COS( RADIANS( location.longitude ) - RADIANS('"+str(user_loc['longitude'])+"') ) + SIN ( RADIANS('"+str(user_loc['latitude'])+"') ) * SIN( RADIANS(  location.latitude ) ))) AS user_distance,doctor.* FROM doctor, login, location WHERE doctor.doctor_id = login.login_id AND location.login_id = login.login_id AND login.user_type = 'doctor' HAVING user_distance  < 10.2137")
+    print(qry)
+    return "ok"
+
 @app.route('/add_symptoms')
 def add_symptoms():
     return render_template('user/add_symtoms.html')
@@ -438,6 +467,40 @@ def disease_prediction_result():
 @app.route('/search_doctor')
 def search_doctor():
     return render_template('user/search_doctor.html')
+
+@app.route('/search_doctor_post', methods=['post'])
+def search_doctor_post():
+    opt = request.form['option']
+    if opt == 'name':
+        text = request.form['text']
+        db = Db()
+        qry = db.select(
+            "SELECT * FROM doctor, login WHERE doctor.`doctor_id` = login.`login_id` AND user_type = 'doctor' AND doctor.name like '%" + text + "%'")
+        return render_template('user/search_doctor.html', qry1=qry)
+    elif opt == 'experience':
+        db = Db()
+        qry = db.select(
+            "SELECT * FROM doctor, login WHERE doctor.`doctor_id` = login.`login_id` AND user_type = 'doctor' ORDER BY doctor.pro_started_yr")
+        return render_template('user/search_doctor.html', qry1=qry)
+    elif opt == 'location':
+        db = Db()
+        my_loc = db.selectOne("SELECT latitude, longitude FROM location WHERE login_id = '"+str(session['lid'])+"'")
+        docs = db.select(
+            "SELECT * FROM doctor, login WHERE doctor.`doctor_id` = login.`login_id` AND user_type = 'doctor'")
+        return render_template('user/search_doctor.html', qry1=qry)
+    elif opt == 'specialisation':
+        db = Db()
+        option = request.form['specialisation']
+        qry = db.select(
+            "SELECT * FROM doctor, login WHERE doctor.`doctor_id` = login.`login_id` AND user_type = 'doctor' AND qualification = '"+option+"'")
+        return render_template('user/search_doctor.html', qry1=qry)
+        return render_template('user/search_doctor.html', qry1=qry)
+
+
+
+@app.route('/search_result')
+def search_result():
+    return render_template('user/search_result.html')
 
 @app.route('/user_change_pass')
 def user_change_pass():
@@ -474,6 +537,34 @@ def send_feedback_post():
         qry1 = db.insert("INSERT INTO feedbacks VALUES('', '" + str(lid) + "', '" + rate + "', '" + review + "', '" + dates + "')")
         return redirect('/user_home')
 
+@app.route('/search_doctor_search/<eid>')
+def search_dr_experience(eid):
+    if eid=='name':
+        return render_template('user/search_dr/dr_name.html')
+    elif eid=='specialisation':
+        return render_template('user/search_dr/dr_specialisation.html')
+    elif eid=='experience':
+        return render_template('user/search_dr/dr_experience.html')
+    elif eid=='location':
+        return render_template('user/search_dr/dr_location.html')
+    else:
+        return render_template('user/search_doctor.html')
+
+# @app.route('/search_doctor')
+# def search_dr_experience():
+#     return render_template('user/search_dr/dr_experience.html')
+#
+# @app.route('/search_doctor')
+# def search_dr_name():
+#     return render_template('user/search_dr/dr_name.html')
+#
+# @app.route('/search_doctor/specialisation')
+# def search_dr_specialisation():
+#     return render_template('user/search_dr/dr_specialisation.html')
+#
+# @app.route('/search_doctor/location')
+# def search_dr_location():
+#     return render_template('user/search_dr/dr_location.html')
 
 ########################################################################################################################
 
