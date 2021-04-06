@@ -7,77 +7,60 @@
 
 <body>
 	<h2>Check Your Disease</h2>
-    <form method="" action="">
+    <form method="POST" action="/disease_prediction">
     	<table width="282" height="215" border="2" cellpadding="2" cellspacing="2">
   <tr>
-    <th width="106" scope="row">Symptom 1</th>
+    <th width="103" scope="row">Symptom 1</th>
     <td width="103">
-        <input list="symptoms" name="symptoms">
+        <input list="symptoms" name="symptoms1">
     	<datalist id="symptoms">
-            <option value="sym1">
-            <option value="sym2">
-            <option value="sym3">
-            <option value="sym4">
+            {% for s in l1 %}
+                <option value={{ s }}>
+            {% endfor %}
         </datalist>
     </td>
   </tr>
   <tr>
     <th scope="row">Symptom 2</th>
     <td>
-        <input list="symptoms" name="symptoms">
+        <input list="symptoms" name="symptoms2">
     	<datalist id="symptoms">
-            <option value="sym1">
-            <option value="sym2">
-            <option value="sym3">
-            <option value="sym4">
+            {% for s in l1 %}
+                <option value={{ s }}>
+            {% endfor %}
             </datalist>
     </td>
   </tr>
   <tr>
     <th scope="row">Symptom 3</th>
     <td>
-        <input list="symptoms" name="symptoms">
+        <input list="symptoms" name="symptoms3">
     	<datalist id="symptoms">
-            <option value="sym1">
-            <option value="sym2">
-            <option value="sym3">
-            <option value="sym4">
+            {% for s in l1 %}
+                <option value={{ s }}>
+            {% endfor %}
             </datalist>
     </td>
   </tr>
   <tr>
     <th scope="row">Symptom 4</th>
     <td>
-        <input list="symptoms" name="symptoms">
+        <input list="symptoms" name="symptoms4">
     	<datalist id="symptoms">
-            <option value="sym1">
-            <option value="sym2">
-            <option value="sym3">
-            <option value="sym4">
+            {% for s in l1 %}
+                <option value={{ s }}>
+            {% endfor %}
         </datalist>
     </td>
   </tr>
   <tr>
     <th scope="row">Symptom 5</th>
     <td>
-        <input list="symptoms" name="symptoms">
+        <input list="symptoms" name="symptoms5">
     	<datalist id="symptoms">
-            <option value="sym1">
-            <option value="sym2">
-            <option value="sym3">
-            <option value="sym4">
-        </datalist>
-    </td>
-  </tr>
-  <tr>
-    <th scope="row">Symptom 6</th>
-    <td>
-        <input list="symptoms" name="symptoms">
-    	<datalist id="symptoms">
-            <option value="sym1">
-            <option value="sym2">
-            <option value="sym3">
-            <option value="sym4">
+            <{% for s in l1 %}
+                <option value={{ s }}>
+            {% endfor %}
         </datalist>
     </td>
   </tr>

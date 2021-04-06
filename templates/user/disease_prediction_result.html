@@ -7,9 +7,21 @@
 
 <body>
 	<h2>Your Disease Prediction Results</h2>
-    <p>It seems like you are suffering from ----- disease</p>
+    <p>It seems like you are suffering from: </p><br>
+    {% if not res1=="False" %}
+        <p>Based on <b>Decision Tree</b> - <b>{{ res1 }}</b> disease</p><br>
+        <p>Based on <b>Random Forest</b> - <b>{{ res2 }}</b> disease</p><br>
+        <p>Based on <b>Naive Bayes</b> - <b>{{ res3 }}</b> disease</p><br>
+    {% endif %}
+    {% if res1=="False" %}
+        <p>Invalid Entry</p>
+    {% endif %}
+
     <h3>You have following Symptoms:</h3>
-    <p>symptoms</p>
+    {% for ds in qry %}
+        <p><b>{{ ds }}</b></p>
+    {% endfor %}
+
     
     <h2>You may contact this Doctor</h2>
     <table width="624" border="2" cellspacing="2" cellpadding="2">
