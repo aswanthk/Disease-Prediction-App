@@ -14,6 +14,7 @@
     <th width="106" rowspan="2" scope="col">Symptoms</th>
     <th colspan="2" scope="col">Disease Prediction</th>
     <th width="102" rowspan="2" scope="col">Date/Time</th>
+    <th width="115" rowspan="2" scope="col"></th>
   </tr>
   <tr>
     <th width="112"><div align="center">Algorithm</div></th>
@@ -28,6 +29,9 @@
         <td>{{d[0]}}</td>
         <td>{{d[1]}}</td>
        <td rowspan="3">{{row["date"]}}</td>
+       <td rowspan="3">
+            <a href="/rm_pred_history/{{row["prediction_id"]}}">Remove</a>
+       </td>
           </tr>
           {% endif %}
     {% if loop.index == 2 %}

@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+</head>
+
+<body>
+<h2>Add Doctor Schedule Data</h2>
+     <form action="/doctor_schedule_add_post" method="post">
+     <table width="279" border="2" cellspacing="2" cellpadding="2">
+  <tr>
+    <th width="115" scope="row">Schedule Date</th>
+    <td width="142"><input type="date" id="schedule_date" name="schedule_date"/></td>
+  </tr>
+  <tr>
+    <th scope="row">Start Time</th>
+    <td><input type="time" id="start_time" name="start_time"/></td>
+  </tr>
+  <tr>
+    <th scope="row">End Time</th>
+    <td><input type="time" id="end_time" name="end_time"/></td>
+  </tr>
+  <tr>
+    <th scope="row">&nbsp;</th>
+    <td><input type="submit" value="Add"/>
+    &nbsp;
+    <input type="reset" value="Close"/>
+    </td>
+  </tr>
+</table>
+     </form>
+</body>
+</html>

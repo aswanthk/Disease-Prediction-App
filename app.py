@@ -321,6 +321,37 @@ def doctor_register():
 def doctor_home():
     return render_template('doctor/doctor_home.html')
 
+@app.route('/doctor_schedule')
+def doctor_schedule():
+    db = Db()
+    qry = db.select("SELECT * FROM schedule WHERE doctor_id='"+str(session['lid'])+"' ORDER BY schedule_date desc")
+    return render_template('doctor/doctor_schedule.html', qry=qry)
+
+@app.route('/doctor_schedule_add')
+def doctor_schedule_add():
+    return render_template('doctor/doctor_schedule_add.html')
+
+@app.route('/doctor_schedule_add_post', methods=['post'])
+def doctor_schedule_add_post():
+    schedule_date = request.form['schedule_date']
+    start_time = request.form['start_time']
+    end_time = request.form['end_time']
+    import datetime
+    # schedule_date="2021-04-10"
+    year, month, day = (int(x) for x in schedule_date.split('-'))
+    ans = datetime.date(year, month, day)
+    print(ans.strftime("%A"))
+    schedule_day =ans.strftime("%A")
+    status = "Active"
+    db = Db()
+    db.insert("INSERT INTO schedule VALUES('', '"+str(session['lid'])+"', '"+schedule_date+"','"+schedule_day+"', '"+start_time+"', '"+end_time+"', '"+status+"')")
+    return doctor_schedule()
+
+@app.route('/appointment')
+def appointment():
+
+    return render_template('doctor/appointment.html')
+
 @app.route('/view_dr_profile')
 def view_dr_profile():
     db=Db()
@@ -624,8 +655,9 @@ def disease_prediction():
     dates = datetime.datetime.now().strftime("%Y-%m-%d.%H:%M:%S")
     db = Db()
     db.insert("INSERT INTO prediction_results VALUES('','" + str(session['lid']) + "', '" + syms + "', '" + predictions + "', '"+dates+"')")
+    qry1 = db.select("SELECT * FROM login, doctor WHERE login.login_id=doctor.doctor_id AND login.user_type='doctor'")
 
-    return render_template("user/disease_prediction_result.html", res1=res1, res2=res2, res3=res3, qry=symptoms)
+    return render_template("user/disease_prediction_result.html", res1=res1, res2=res2, res3=res3, qry=symptoms, qry1=qry1)
 
 
 
@@ -753,6 +785,7 @@ def user_view_history():
     pred_list = []
     for data in qry:
         pred_dict = dict()
+        pred_dict["prediction_id"] = data["prediction_id"]
         pred_dict["symptoms"] = data["symptoms"]
         abc = data["predicted_disease"].split(",")
         ll = []
@@ -764,6 +797,12 @@ def user_view_history():
         pred_list.append(pred_dict)
         print(pred_list)
     return render_template("user/user_view_history.html", dp_res=pred_list)
+
+@app.route('/rm_pred_history/<i>')
+def rm_pred_history(i):
+    db = Db()
+    qry = db.delete("DELETE FROM prediction_results WHERE prediction_id = '"+i+"'")
+    return redirect('/user_view_history')
 
 @app.route('/search_doctor')
 def search_doctor():

@@ -35,18 +35,20 @@
     <th width="79" scope="col">Category</th>
     <th width="102" scope="col">&nbsp;</th>
   </tr>
+        {% for data in qry1 %}
   <tr>
-  	<td>#</td>
-    <td>#</td>
-    <td>#</td>
-    <td>#</td>
-    <td>#</td>
-    <td>#</td>
-    <td>#</td>
+  	<td>{{ loop.index }}</td>
+    <td>{{data["name"]}} <img src="{{ data["photo"] }}" height="100" width="50"/></td>
+    <td>{{ data["username"] }}</td>
+    <td>&nbsp;{{ data["email_address"] }}</td>
+    <td>{{ data["license_id"] }}</td>
+    <td>&nbsp;{{ data["qualification"] }}</td>
+    <td>&nbsp;{{ data["category"] }}</td>
     <td>
     	<a href="">Register Now</a>
     </td>
   </tr>
+        {% endfor %}
   </table>
 </body>
 </html>

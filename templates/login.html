@@ -101,7 +101,7 @@
 
 <main class="form-signin">
   <form method="post" action="/login_post">
-    <img class="mb-4" src="../assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
+    <img class="mb-4" src="static/images/dp_icon_logo.png" alt="">
     <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
     <div class="form-floating">
@@ -119,8 +119,21 @@
       </label>
     </div>
     <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+      <br><br>
+    </form>
+      <p><b>Don't have an Account?</b></p>
+      <form action="/signup_post" method="post">
+    <b>Register as</b>
+        <select name="sign-up" id="sign-up">
+            <option value="user" selected>User</option>
+            <option value="doctor">Doctor</option>
+        </select>
+        <input type="submit" value="Sign-Up" class="btn btn-danger">
+    </form>
+      <br>
+      <p><a href="/forgot_password" id="forgot-link">Forgot password?</a></p>
+
     <p class="mt-5 mb-3 text-muted">&copy; 2017–2021</p>
-  </form>
 </main>
 
 <script>
