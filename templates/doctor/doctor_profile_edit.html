@@ -7,17 +7,13 @@
 
 <body>
 <h2>Edit Profile ({{ data['username'] }})</h2>
-<form action="/edit_dr_post" method="post" enctype="multipart/form-data">
+<form action="/doctor/profile/edit/post" method="post" enctype="multipart/form-data">
 <table width="344" height="284" border="2"  cellpadding="2" cellspacing="2">
   <tr>
     <td>Username</td>
     <td>
       <input type="text" name="username" id="username" value="{{ data['username'] }}" readonly />
     </td>
-  </tr>
-    <tr>
-    <td>Email Address</td>
-      <td><input type="text" name="email" id="email" value="{{ data['email_address'] }}" readonly /></td>
   </tr>
   <tr>
     <td>Name</td>
@@ -26,22 +22,27 @@
   <tr>
     <td>Photo</td>
     <td>
-      <input type="file" name="dr-photo" id="dr-photo" />
+      <input type="file" name="photo" id="photo" />
+    </td>
+  </tr>
+    <tr>
+    <td>Email Address</td>
+      <td><input type="text" name="email-address" id="email-address" value="{{ data['email_address'] }}" readonly /></td>
+  </tr>
+   <tr>
+    <td>Contact Number</td>
+    <td><input type="text" name="contact-number" id="contact-number" value="{{ data['contact_number'] }}" /></td>
+  </tr>
+  <tr>
+    <td>Gender</td>
+        <td><input type="radio" name="gender" id="male" value="Male" {{ 'checked' if data['gender']=='Male' }}/>Male
+        <input type="radio" name="gender" id="female" value="Female" {{ 'checked' if data['gender']=='Female' }}/>Female
+        <input type="radio" name="gender" id="other" value="Other" {{ 'checked' if data['gender']=='Other' }}/>Other
     </td>
   </tr>
     <tr>
     <td>Date of Birth</td>
-    <td><input type="date" name="dob" id="dob" value="{{ data['date_of_birth'] }}" /></td>
-  </tr>
-    <tr>
-    <td>Address</td>
-    <td>
-        <textarea name="address" id="address">{{ data['address'] }}"</textarea>
-    </td>
-  </tr>
-    <tr>
-    <td>Contact Number</td>
-    <td><input type="text" name="contact-number" id="contact-number" value="{{ data['contact_number'] }}" /></td>
+    <td><input type="date" name="dob" id="dob" value="{{ data['dob'] }}" /></td>
   </tr>
   <tr>
     <td>License ID</td>
@@ -51,6 +52,7 @@
     <td>Qualification</td>
       <td><input type="text" name="qualification" id="qualification" value="{{ data['qualification'] }}" /></td>
   </tr>
+
   <tr>
     <th><label for="category">Category</label></th>
       <td>
@@ -64,6 +66,36 @@
             <input type="checkbox" name="category" id="cat4" value="category4" {% if "category4" in category %} checked {% endif %}>
       </td>
   </tr>
+
+    <tr>
+    <td>Hospital/ Clinic name</td>
+    <td>
+      <input type="text" name="hospital-name" id="hospital-name" value="{{ data['hospital_name'] }}" />
+    </td>
+  </tr>
+ <tr>
+    <td>Place</td>
+   <td> <input type="text" name="place" id="place"  value="{{ data['place'] }}"/></td>
+  </tr>
+  <tr>
+    <td>District</td>
+   <td> <input type="text" name="district" id="district"  value="{{ data['district'] }}"/></td>
+  </tr>
+  <tr>
+    <td>State</td>
+   <td> <input type="text" name="state" id="state"  value="{{ data['state'] }}"/></td>
+  </tr>
+   <tr>
+    <td>Post</td>
+   <td> <input type="text" name="post" id="post"  value="{{ data['post'] }}"/></td>
+  </tr>
+  <tr>
+    <td>pin</td>
+    <td>
+      <input type="text" name="pin" id="pin" value="{{ data['pin'] }}"/>
+    </td>
+  </tr>
+
   <tr>
     <td>Admission fee</td>
       <td><input type="text" name="admission-fee" id="admission-fee" value="{{ data['admission_fee'] }}" /></td>
@@ -75,7 +107,7 @@
   <tr>
     <td>&nbsp;</td>
     <td>
-      <input type="submit" value="Edit" />
+      <input type="submit" value="EDIT" />
     </td>
   </tr>
 </table>

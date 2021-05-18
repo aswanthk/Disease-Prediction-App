@@ -17,7 +17,7 @@ var xmlHttp;
                     alert("Browser does not support XMLHTTP Request")
                     return;
                 }
-                var url="/search_doctor_search/"+eid
+                var url="/search_dr_experience/"+eid
                 xmlHttp.onreadystatechange = stateChange;
                 xmlHttp.open("GET", url, true);
                 xmlHttp.send(null);
@@ -57,6 +57,7 @@ var xmlHttp;
     <th width="48" scope="col">License ID</th>
     <th width="48" scope="col">Qualification</th>
     <th width="79" scope="col">Category</th>
+    <th width="79" scope="col"></th>
   </tr>
   {% for data in qry1 %}
       <tr>
@@ -68,6 +69,7 @@ var xmlHttp;
     <td>{{ data["license_id"] }}</td>
     <td>&nbsp;{{ data["qualification"] }}</td>
     <td>&nbsp;{{ data["category"] }}</td>
+      <td><a href="#">Register Now</a></td>
   {% endfor %}
 </table>
 </body>

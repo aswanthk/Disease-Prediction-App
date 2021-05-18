@@ -7,7 +7,7 @@
 
 <body>
 <h1>Doctor Registration</h1>
-<form action="/doctor_register" method="post" enctype="multipart/form-data">
+<form action="/doctor/register_post" method="post" enctype="multipart/form-data">
 <table width="344" height="284" border="2"  cellpadding="2" cellspacing="2">
   <tr>
     <td>Username</td>
@@ -16,32 +16,35 @@
     </td>
   </tr>
     <tr>
-    <td>Email Address</td>
-      <td><input type="text" name="email" id="email" /></td>
-  </tr>
-  <tr>
     <td>Name</td>
     <td><input type="text" name="name" id="name" /></td>
   </tr>
   <tr>
     <td>Photo</td>
     <td>
-      <input type="file" name="dr-photo" id="dr-photo" />
+      <input type="file" name="photo" id="photo" />
     </td>
   </tr>
     <tr>
-    <td>Date of Birth</td>
-    <td><input type="date" name="dob" id="dob" /></td>
-  </tr>
-    <tr>
-    <td>Address</td>
-    <td>
-        <textarea name="address" id="address"></textarea>
-    </td>
+    <td>Email Address</td>
+      <td><input type="text" name="email-address" id="email-address" /></td>
   </tr>
     <tr>
     <td>Contact Number</td>
     <td><input type="text" name="contact-number" id="contact-number" /></td>
+  </tr>
+
+    <tr>
+    <td>Gender</td>
+    <td><input type="radio" name="gender" id="male" value="Male"/>Male
+        <input type="radio" name="gender" id="female" value="Female"/>Female
+        <input type="radio" name="gender" id="other" value="Other"/>Other
+    </td>
+  </tr>
+
+    <tr>
+    <td>Date of Birth</td>
+    <td><input type="date" name="dob" id="dob" /></td>
   </tr>
   <tr>
     <td>License ID</td>
@@ -63,6 +66,43 @@
             <label for="cat4">Category 4</label>
             <input type="checkbox" name="category" id="cat4" value="category4">
       </td>
+  </tr>
+
+    <tr>
+    <td>Hospital/ Clinic Name</td>
+    <td>
+        <input type="text" name="hospital-name" id="hospital-name" />
+    </td>
+  </tr>
+    <tr>
+    <td>Place</td>
+    <td>
+        <input type="text" name="place" id="place" />
+    </td>
+  </tr>
+    <tr>
+    <td>District</td>
+    <td>
+        <input type="text" name="district" id="district" />
+    </td>
+  </tr>
+    <tr>
+    <td>State</td>
+    <td>
+        <input type="text" name="state" id="state" />
+    </td>
+  </tr>
+    <tr>
+    <td>Post</td>
+    <td>
+        <input type="text" name="post" id="post" />
+    </td>
+  </tr>
+    <tr>
+    <td>PIN</td>
+    <td>
+        <input type="text" name="pin" id="pin" />
+    </td>
   </tr>
   <tr>
     <td>Admission fee</td>

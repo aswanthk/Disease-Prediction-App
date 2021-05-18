@@ -6,7 +6,7 @@
 </head>
 
 <body>
-<h2>View Prediction History</h2>
+<h2>Prediction History</h2>
 
 <table width="516" border="2" cellspacing="2" cellpadding="2">
   <tr>
@@ -30,7 +30,8 @@
         <td>{{d[1]}}</td>
        <td rowspan="3">{{row["date"]}}</td>
        <td rowspan="3">
-            <a href="/rm_pred_history/{{row["prediction_id"]}}">Remove</a>
+           <a href="/user/dp_history/rm/{{row["prediction_id"]}}">Remove</a><br><br>
+           <a href="/user/dp_history/dr_rec/{{row["prediction_id"]}}">Dr. Recommendation</a>
        </td>
           </tr>
           {% endif %}

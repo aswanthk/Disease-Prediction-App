@@ -46,12 +46,15 @@ def login_post():
     db = Db()
     qry = db.selectOne("SELECT * FROM login WHERE username='"+username+"' AND password ='"+password+"'")
     if qry is not None and qry['user_type'] == 'admin':
+        session['log'] = "login"
         session['lid'] = qry["login_id"]
         return redirect('/admin_home')
     elif qry is not None and qry['user_type'] == 'user':
+        session['log'] = "ulogin"
         session['lid'] = qry["login_id"]
         return redirect('/user_home')
     elif qry is not None and (qry['user_type'] == 'doctor' or qry['user_type'] == 'pending'):
+        session['log'] = "dlogin"
         session['lid'] = qry["login_id"]
         return redirect('/doctor_home')
     else:
@@ -61,15 +64,18 @@ def login_post():
 def logout():
     session.pop('lid', None)
     flash('You were logged out.')
+    session['log'] = ""
     return redirect('/')
 
-@app.route('/signup_post', methods=['post'])
+@app.route('/signup_post', methods=['post', 'get'])
 def signup_post():
     user_type = request.form['sign-up']
     if user_type == "user":
-        return render_template('user/user_register.html')
+        return redirect('/user/register')
+        # return render_template('user/user_register.html')
     elif user_type == "doctor":
-        return render_template('doctor/doctor_register.html')
+        return redirect('/doctor/register')
+        # return render_template('doctor/doctor_register.html')
 
 @app.route("/forgot_password")
 def forgot_password():
@@ -145,7 +151,12 @@ def reset_password_post():
 
 @app.route('/change_pass')
 def change_pass():
-    return render_template("change_pass.html")
+    db = Db()
+    utype = db.select("select user_type from login where login_id='"+str(session['lid'])+"'")
+    if utype[0]['user_type']=="user":
+        return render_template("user/user_change_pass.html")
+    elif utype[0]['user_type']=="doctor":
+        return render_template("doctor/doctor_change_pass.html")
 
 @app.route('/change_pass_post', methods=['POST'])
 def change_pass_post():
@@ -170,127 +181,187 @@ def change_pass_post():
 
 @app.route('/admin_home')
 def admin_home():
-    return render_template("admin/admin_home.html")
+    if session['log'] == "login":
+        return render_template("admin/admin_home.html")
+    else:
+        return redirect('/')
 
 @app.route('/dataset')
 def dataset():
-    db = Db()
-    qry = db.select("SELECT * FROM disease_dataset")
-    symptoms = []
-    for i in range(len(qry)):
-        symptoms.append(qry[i]["symptoms"].split(","))
-    return render_template("admin/manage_dataset.html", qry=qry, symptoms=symptoms)
+    if session['log'] == "login":
+        db = Db()
+        qry = db.select("SELECT * FROM disease_dataset")
+        symptoms = []
+        for i in range(len(qry)):
+            symptoms.append(qry[i]["symptoms"].split(","))
+        return render_template("admin/manage_dataset.html", qry=qry, symptoms=symptoms)
+    else:
+        return redirect('/')
 
 @app.route('/add_dataset', methods=['post'])
 def add_dataset():
-    csv_file = request.files['dataset_csv']
-    dates = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-    path = path1 + dates + ".csv"
-    csv_file.save(path)
-    csv_dicts = []
-    with open(path, mode='r') as file:
-        for row in csv.DictReader(file):
-            csv_dicts.append(dict(row))
-    db = Db()
-    for data in csv_dicts:
-        qry = db.insert("INSERT INTO disease_dataset VALUES('','" + data['disease'] + "', '" + data['category'] + "','" + data['symptom'] + "','" + data['count_of_disease_occurrence'] + "')")
-    return redirect('/dataset')
+    if session['log'] == "login":
+        csv_file = request.files['dataset_csv']
+        dates = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+        path = path1 + dates + ".csv"
+        csv_file.save(path)
+        csv_dicts = []
+        with open(path, mode='r') as file:
+            for row in csv.DictReader(file):
+                csv_dicts.append(dict(row))
+        db = Db()
+        for data in csv_dicts:
+            qry = db.insert("INSERT INTO disease_dataset VALUES('','" + data['disease'] + "', '" + data['category'] + "','" + data['symptom'] + "','" + data['count_of_disease_occurrence'] + "')")
+        return redirect('/dataset')
+    else:
+        return redirect('/')
 
 @app.route('/edit_dataset/<i>')
 def edit_dataset(i):
-    db = Db()
-    qry = db.selectOne("SELECT * FROM disease_dataset WHERE dataset_id = '" + i + "'")
-    return render_template('admin/dataset_edit.html', qry=qry)
+    if session['log'] == "login":
+        db = Db()
+        qry = db.selectOne("SELECT * FROM disease_dataset WHERE dataset_id = '" + i + "'")
+        return render_template('admin/dataset_edit.html', qry=qry)
+    else:
+        return redirect('/')
 
 @app.route('/edit_dataset_post/<i>', methods=['post'])
 def edit_dataset_post(i):
-    disease_name = request.form['disease_name']
-    category = request.form['category']
-    symptoms = request.form['symptoms']
-    count = request.form['count']
-    db = Db()
-    qry = db.update("UPDATE disease_dataset SET disease = '" + disease_name + "', category = '" + category + "', symptoms = '" + symptoms + "', count_of_occurrence = '" + count + "' WHERE dataset_id = '" + i + "'")
-    return redirect('/dataset')
+    if session['log'] == "login":
+        disease_name = request.form['disease_name']
+        category = request.form['category']
+        symptoms = request.form['symptoms']
+        count = request.form['count']
+        db = Db()
+        qry = db.update("UPDATE disease_dataset SET disease = '" + disease_name + "', category = '" + category + "', symptoms = '" + symptoms + "', count_of_occurrence = '" + count + "' WHERE dataset_id = '" + i + "'")
+        return redirect('/dataset')
+    else:
+        return redirect('/')
 
 @app.route('/doctors')
 def doctors():
-    db = Db()
-    qry1 = db.select("SELECT * FROM doctor, login WHERE doctor.`doctor_id` = login.`login_id` AND user_type != 'rejected'")
-    return render_template("admin/view_doctors.html", qry1=qry1)
+    if session['log'] == "login":
+        db = Db()
+        qry1 = db.select("SELECT * FROM doctor, login WHERE doctor.`doctor_id` = login.`login_id` AND user_type != 'rejected'")
+        return render_template("admin/view_doctors.html", qry1=qry1)
+    else:
+        return redirect('/')
 
 @app.route('/pending_dr')
 def pending_dr():
-    db = Db()
-    qry1 = db.select("SELECT * FROM doctor, login WHERE doctor.`doctor_id` = login.`login_id` AND user_type = 'pending'")
-    return render_template("admin/pending_dr.html", qry1=qry1)
+    if session['log'] == "login":
+        db = Db()
+        qry1 = db.select(
+            "SELECT * FROM doctor, login WHERE doctor.`doctor_id` = login.`login_id` AND user_type = 'pending'")
+        return render_template("admin/pending_dr.html", qry1=qry1)
+    else:
+        return redirect('/')
 
 @app.route('/search_pending_dr', methods=['post'])
 def search_pending_dr():
-    text = request.form['search_pending_dr']
-    db = Db()
-    qry = db.select("SELECT * FROM doctor, login WHERE doctor.`doctor_id` = login.`login_id` AND user_type = 'pending' AND doctor.name like '%"+text+"%'")
-    return render_template('admin/pending_dr.html', qry1=qry)
+    if session['log'] == "login":
+        text = request.form['search_pending_dr']
+        db = Db()
+        qry = db.select(
+            "SELECT * FROM doctor, login WHERE doctor.`doctor_id` = login.`login_id` AND user_type = 'pending' AND doctor.name like '%" + text + "%'")
+        return render_template('admin/pending_dr.html', qry1=qry)
+    else:
+        return redirect('/')
 
 @app.route('/patients')
 def patients():
-    db = Db()
-    qry1 = db.select("SELECT * FROM user, login WHERE user.user_id = login.login_id AND login.user_type = 'user'")
-    return render_template("admin/view_patients.html", qry1=qry1)
+    if session['log'] == "login":
+        db = Db()
+        qry1 = db.select("SELECT * FROM user, login WHERE user.user_id = login.login_id AND login.user_type = 'user'")
+        return render_template("admin/view_patients.html", qry1=qry1)
+    else:
+        return redirect('/')
 
 @app.route('/search_user', methods=['POST'])
 def search_user():
-    text = request.form['search_patient']
-    db = Db()
-    qry = db.select("SELECT * FROM user, login WHERE user.`user_id` = login.`login_id` AND user_type = 'user' AND user.name like '%"+text+"%'")
-    return render_template('admin/view_patients.html', qry1=qry)
+    if session['log'] == "login":
+        text = request.form['search_patient']
+        db = Db()
+        qry = db.select(
+            "SELECT * FROM user, login WHERE user.`user_id` = login.`login_id` AND user_type = 'user' AND user.name like '%" + text + "%'")
+        return render_template('admin/view_patients.html', qry1=qry)
+    else:
+        return redirect('/')
 
 @app.route('/approve_dr/<i>')
 def approve_dr(i):
-    db = Db()
-    qry = db.update("UPDATE login SET `user_type` = 'doctor' WHERE login_id = '"+i+"'")
-    return doctors()
+    if session['log'] == "login":
+        db = Db()
+        qry = db.update("UPDATE login SET `user_type` = 'doctor' WHERE login_id = '" + i + "'")
+        return doctors()
+    else:
+        return redirect('/')
 
 @app.route('/reject_dr/<i>')
 def reject_dr(i):
-    db = Db()
-    qry = db.update("UPDATE login SET `user_type` = 'rejected' WHERE login_id = '"+i+"'")
-    return doctors()
+    if session['log'] == "login":
+        db = Db()
+        qry = db.update("UPDATE login SET `user_type` = 'rejected' WHERE login_id = '" + i + "'")
+        return doctors()
+    else:
+        return redirect('/')
 
 @app.route('/search_dr', methods=['POST'])
 def search_dr():
-    text = request.form['search_doctor']
-    db = Db()
-    qry = db.select("SELECT * FROM doctor, login WHERE doctor.`doctor_id` = login.`login_id` AND user_type != 'rejected' AND name like '%"+text+"%'")
-    return render_template('admin/view_doctors.html', qry1=qry)
+    if session['log'] == "login":
+        text = request.form['search_doctor']
+        db = Db()
+        qry = db.select(
+            "SELECT * FROM doctor, login WHERE doctor.`doctor_id` = login.`login_id` AND user_type != 'rejected' AND name like '%" + text + "%'")
+        return render_template('admin/view_doctors.html', qry1=qry)
+    else:
+        return redirect('/')
 
 @app.route('/view_more_dr/<i>')
 def view_more_dr(i):
-    db = Db()
-    qry = db.selectOne("SELECT * FROM doctor WHERE doctor_id = '"+i+"'")
-    return render_template("admin/view_more_doctor.html", qry=qry)
+    if session['log'] == "login":
+        db = Db()
+        qry = db.selectOne("SELECT * FROM doctor WHERE doctor_id = '" + i + "'")
+        return render_template("admin/view_more_doctor.html", qry=qry)
+    else:
+        return redirect('/')
 
 @app.route('/feedbacks')
 def feedbacks():
-    db = Db()
-    qry = db.select("SELECT * FROM login, feedbacks WHERE login.login_id = feedbacks.user_id AND login.user_type='user'")
-    return render_template("admin/view_feedbacks.html", qry=qry)
+    if session['log'] == "login":
+        db = Db()
+        qry = db.select(
+            "SELECT * FROM login, feedbacks WHERE login.login_id = feedbacks.user_id AND login.user_type='user'")
+        return render_template("admin/view_feedbacks.html", qry=qry)
+    else:
+        return redirect('/')
 
 
 ############     D O C T O R     #######################################################################################
 
-@app.route('/doctor_register', methods=['post'])
+@app.route('/doctor/register')
 def doctor_register():
+    return render_template('doctor/doctor_register.html')
+
+@app.route('/doctor/register_post', methods=['post'])
+def doctor_register_post():
     username = request.form['username']
-    email = request.form['email']
     name = request.form['name']
-    photo = request.files['dr-photo']
-    dob = request.form['dob']
-    address = request.form['address']
+    photo = request.files['photo']
+    email_address = request.form['email-address']
     contact_number = request.form['contact-number']
+    gender = request.form['gender']
+    dob = request.form['dob']
     license_id = request.form['license-id']
     qualification = request.form['qualification']
     category = request.form.getlist('category')
     category = ','.join(category)
+    hospital_name = request.form['hospital-name']
+    place = request.form['place']
+    district = request.form['district']
+    state = request.form['state']
+    post = request.form['post']
+    pin = request.form['pin']
     admission_fee = request.form['admission-fee']
     pro_started_yr = request.form['pro-started-yr']
     latitude = request.form['latitude']
@@ -310,7 +381,7 @@ def doctor_register():
             qry = db.insert("INSERT INTO login VALUES('','" + username + "', '" + password + "', 'pending')")
             qry1 = db.insert(
                 "INSERT INTO doctor VALUES('" + str(
-                    qry) + "','" + username + "', '" + email + "', '" + name + "', '" + path + "', '" + dob + "', '" + address + "', '" + contact_number + "', '" + license_id + "', '" + qualification + "', '" + category + "', '" + admission_fee + "', '" + pro_started_yr + "')")
+                    qry) + "','" + username + "', '" + name + "', '" + path + "', '" + email_address + "', '" + contact_number + "', '" + gender + "', '" + dob + "', '" + license_id + "', '" + qualification + "', '" + category + "', '" + hospital_name + "', '" + place + "', '" + district + "', '" + state + "', '" + post + "', '" + pin + "','" + admission_fee + "', '" + pro_started_yr + "')")
             qry3 = db.insert(
                 "INSERT INTO location VALUES('','" + str(qry) + "', '" + longitude + "', '" + latitude + "')")
             return redirect('/')
@@ -319,103 +390,155 @@ def doctor_register():
 
 @app.route('/doctor_home')
 def doctor_home():
-    return render_template('doctor/doctor_home.html')
+
+    if session['log'] == "dlogin":
+        return render_template('doctor/doctor_home.html')
+    else:
+        return redirect('/')
+
 
 @app.route('/doctor_schedule')
 def doctor_schedule():
-    db = Db()
-    qry = db.select("SELECT * FROM schedule WHERE doctor_id='"+str(session['lid'])+"' ORDER BY schedule_date desc")
-    return render_template('doctor/doctor_schedule.html', qry=qry)
+    if session['log'] == "dlogin":
+        db = Db()
+        qry = db.select(
+            "SELECT * FROM schedule WHERE doctor_id='" + str(session['lid']) + "' ORDER BY schedule_date desc")
+        return render_template('doctor/doctor_schedule.html', qry=qry)
+    else:
+        return redirect('/')
 
 @app.route('/doctor_schedule_add')
 def doctor_schedule_add():
-    return render_template('doctor/doctor_schedule_add.html')
+    if session['log'] == "dlogin":
+        return render_template('doctor/doctor_schedule_add.html')
+    else:
+        return redirect('/')
 
 @app.route('/doctor_schedule_add_post', methods=['post'])
 def doctor_schedule_add_post():
-    schedule_date = request.form['schedule_date']
-    start_time = request.form['start_time']
-    end_time = request.form['end_time']
-    import datetime
-    # schedule_date="2021-04-10"
-    year, month, day = (int(x) for x in schedule_date.split('-'))
-    ans = datetime.date(year, month, day)
-    print(ans.strftime("%A"))
-    schedule_day =ans.strftime("%A")
-    status = "Active"
-    db = Db()
-    db.insert("INSERT INTO schedule VALUES('', '"+str(session['lid'])+"', '"+schedule_date+"','"+schedule_day+"', '"+start_time+"', '"+end_time+"', '"+status+"')")
-    return doctor_schedule()
+    if session['log'] == "dlogin":
+        schedule_date = request.form['schedule_date']
+        start_time = request.form['start_time']
+        end_time = request.form['end_time']
+        # schedule_date="2021-04-10"
+        year, month, day = (int(x) for x in schedule_date.split('-'))
+        ans = datetime.date(year, month, day)
+        print(ans.strftime("%A"))
+        schedule_day = ans.strftime("%A")
+        db = Db()
+        db.insert("INSERT INTO schedule VALUES('', '" + str(session[
+                                                                'lid']) + "', '" + schedule_date + "','" + schedule_day + "', '" + start_time + "', '" + end_time + "', 'not active')")
+        return doctor_schedule()
+    else:
+        return redirect('/')
+
+
+@app.route('/doctor/schedule/rm/<i>')
+def doctor_schedule_rm(i):
+    if session['log'] == "dlogin":
+        db = Db()
+        qry = db.delete("DELETE FROM schedule WHERE schedule_id = '" + i + "'")
+        return redirect('/doctor_schedule')
+    else:
+        return redirect('/')
 
 @app.route('/appointment')
 def appointment():
+    if session['log'] == "dlogin":
+        return render_template('doctor/appointment.html')
+    else:
+        return redirect('/')
 
-    return render_template('doctor/appointment.html')
+@app.route('/doctor/profile')
+def doctor_profile():
+    if session['log'] == "dlogin":
+        db = Db()
+        lid = session['lid']
+        qry = db.selectOne("select * from doctor where doctor_id='" + str(lid) + "'")
+        this_year = datetime.date.today().year
+        age = this_year - int(qry['dob'].split('-')[0])
 
-@app.route('/view_dr_profile')
-def view_dr_profile():
-    db=Db()
-    lid=session['lid']
-    qry=db.selectOne("select * from doctor where doctor_id='"+str(lid)+"'")
-    this_year = datetime.date.today().year
-    age = this_year - int(qry['date_of_birth'].split('-')[0])
-    return render_template("doctor/view_doctor_profile.html",q=qry, age=age)
+        return render_template("doctor/doctor_profile.html", q=qry, age=age)
+    else:
+        return redirect('/')
 
-@app.route('/edit_dr')
-def edit_dr():
-    db = Db()
-    lid = session['lid']
-    qry = db.selectOne("select * from doctor where doctor_id='" + str(lid) + "'")
-    category = qry['category'].split(',')
-    return render_template("doctor/edit_doctor_profile.html", data=qry, category=category)
+@app.route('/doctor/profile/edit')
+def doctor_profile_edit():
+    if session['log'] == "dlogin":
+        db = Db()
+        lid = session['lid']
+        qry = db.selectOne("select * from doctor where doctor_id='" + str(lid) + "'")
+        category = qry['category'].split(',')
+        return render_template("doctor/doctor_profile_edit.html", data=qry, category=category)
+    else:
+        return redirect('/')
 
-@app.route('/edit_dr_post', methods=['post'])
-def edit_dr_post():
-    username = request.form['username']
-    email = request.form['email']
-    name = request.form['name']
-    photo = request.files['dr-photo']
-    dob = request.form['dob']
-    address = request.form['address']
-    contact_number = request.form['contact-number']
-    license_id = request.form['license-id']
-    qualification = request.form['qualification']
-    category = request.form.getlist('category')
-    category = ','.join(category)
-    admission_fee = request.form['admission-fee']
-    pro_started_yr = request.form['pro-started-yr']
-    dates=datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-    photo.save(path1+dates+".jpg")
-    path="/static/images/"+dates+".jpg"
-    db=Db()
-    if request.files is not None:
-        if photo.filename != "":
-            qry=db.update("UPDATE `doctor` SET `username`='"+username+"',`email_address`='"+email+"',`name`='"+name+"',`photo`='"+path+"',`date_of_birth`='"+dob+"',`address`='"+address+"',`contact_number`='"+contact_number+"',`license_id`='"+license_id+"',`qualification`='"+qualification+"',`category`='"+category+"',`admission_fee`='"+admission_fee+"',`pro_started_yr`='"+pro_started_yr+"' WHERE `doctor_id`='"+str(session['lid'])+"'")
+@app.route('/doctor/profile/edit/post', methods=['post'])
+def doctor_profile_edit_post():
+    if session['log'] == "dlogin":
+        username = request.form['username']
+        name = request.form['name']
+        photo = request.files['photo']
+        email_address = request.form['email-address']
+        contact_number = request.form['contact-number']
+        gender = request.form['gender']
+        dob = request.form['dob']
+        license_id = request.form['license-id']
+        qualification = request.form['qualification']
+        category = request.form.getlist('category')
+        category = ','.join(category)
+        hospital_name = request.form['hospital-name']
+        place = request.form['place']
+        district = request.form['district']
+        state = request.form['state']
+        post = request.form['post']
+        pin = request.form['pin']
+        admission_fee = request.form['admission-fee']
+        pro_started_yr = request.form['pro-started-yr']
+
+        dates = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+        photo.save(path1 + dates + ".jpg")
+        path = "/static/images/" + dates + ".jpg"
+        db = Db()
+        if request.files is not None:
+            if photo.filename != "":
+                qry = db.update(
+                    "UPDATE doctor SET username='" + username + "',name='" + name + "', photo='" + path + "', email_address='" + email_address + "', contact_number='" + contact_number + "', gender='" + gender + "', dob='" + dob + "', license_id='" + license_id + "', qualification='" + qualification + "', category='" + category + "', hospital_name='" + hospital_name + "', place='" + place + "', district='" + district + "', state='" + state + "', post='" + post + "', pin='" + pin + "', admission_fee='" + admission_fee + "', pro_started_yr='" + pro_started_yr + "' WHERE doctor_id='" + str(
+                        session['lid']) + "'")
+            else:
+                qry = db.update(
+                    "UPDATE doctor SET username='" + username + "',name='" + name + "', email_address='" + email_address + "', contact_number='" + contact_number + "', gender='" + gender + "', dob='" + dob + "', license_id='" + license_id + "', qualification='" + qualification + "', category='" + category + "', hospital_name='" + hospital_name + "', place='" + place + "', district='" + district + "', state='" + state + "', post='" + post + "', pin='" + pin + "', admission_fee='" + admission_fee + "', pro_started_yr='" + pro_started_yr + "' WHERE doctor_id='" + str(
+                        session['lid']) + "'")
         else:
             qry = db.update(
-                "UPDATE `doctor` SET `username`='" + username + "',`email_address`='" + email + "',`name`='" + name + "',`date_of_birth`='" + dob + "',`address`='" + address + "',`contact_number`='" + contact_number + "',`license_id`='" + license_id + "',`qualification`='" + qualification + "',`category`='" + category + "',`admission_fee`='" + admission_fee + "',`pro_started_yr`='" + pro_started_yr + "' WHERE `doctor_id`='" + str(
-                    session['lid']) + "'")
+                    "UPDATE doctor SET username='" + username + "',name='" + name + "', email_address='" + email_address + "', contact_number='" + contact_number + "', gender='" + gender + "', dob='" + dob + "', license_id='" + license_id + "', qualification='" + qualification + "', category='" + category + "', hospital_name='" + hospital_name + "', place='" + place + "', district='" + district + "', state='" + state + "', post='" + post + "', pin='" + pin + "', admission_fee='" + admission_fee + "', pro_started_yr='" + pro_started_yr + "' WHERE doctor_id='" + str(
+                        session['lid']) + "'")
+        return doctor_profile()
     else:
-        qry = db.update(
-            "UPDATE `doctor` SET `username`='" + username + "',`email_address`='" + email + "',`name`='" + name + "',`date_of_birth`='" + dob + "',`address`='" + address + "',`contact_number`='" + contact_number + "',`license_id`='" + license_id + "',`qualification`='" + qualification + "',`category`='" + category + "',`admission_fee`='" + admission_fee + "',`pro_started_yr`='" + pro_started_yr + "' WHERE `doctor_id`='" + str(
-                session['lid']) + "'")
-    return view_dr_profile()
+        return redirect('/')
 
 
 ############     U S E R     ###########################################################################################
 
-@app.route('/user_register', methods=['post'])
+@app.route("/user/register")
 def user_register():
+    return render_template("user/user_register.html")
+
+@app.route('/user/register_post', methods=['post'])
+def user_register_post():
     username = request.form['username']
     name = request.form['name']
     photo = request.files['photo']
-    phone_number = request.form['phone-number']
-    email = request.form['email']
-    home = request.form['home']
+    email_address = request.form['email-address']
+    mobile_number = request.form['mobile-number']
+    gender = request.form['gender']
+    dob = request.form['dob']
+    house_name = request.form['house-name']
     place = request.form['place']
+    district = request.form['district']
+    state = request.form['state']
     post = request.form['post']
     pin = request.form['pin']
-    dob = request.form['dob']
     latitude = request.form['latitude']
     longitude = request.form['longitude']
     password = request.form['password']
@@ -427,78 +550,106 @@ def user_register():
     db = Db()
     qry2 = db.select("SELECT * FROM login WHERE username = '"+username+"'")
     if len(qry2) > 0:
-        return "<script>alert('Username already exist!'); window.location='/'</script>"
+        return "<script>alert('Username already exist!'); window.location='/user/register'</script>"
     else:
         if password == re_password:
             qry = db.insert("INSERT INTO login VALUES('','" + username + "', '" + password + "', 'user')")
             qry1 = db.insert(
                 "INSERT INTO user VALUES('" + str(
-                    qry) + "','" + username + "', '" + email + "', '" + name + "', '" + path + "', '" + home + "', '" + dob + "', '" + phone_number + "', '" + place + "', '" + pin + "', '" + post + "')")
+                    qry) + "','" + username + "', '" + name + "', '" + path + "', '" + email_address + "', '" + mobile_number + "', '" + gender + "', '" + dob + "', '" + house_name + "', '" + place + "', '" + district + "', '" + state + "', '" + post + "', '" + pin + "')")
 
             qry3 = db.insert("INSERT INTO location VALUES('','" + str(qry) + "', '"+longitude+"', '"+latitude+"')")
             return redirect('/')
         else:
-            return "<script>alert('Password mismatch!'); window.location='/signup_post'</script>"
+            return "<script>alert('Password mismatch!'); window.location='/user/register'</script>"
 
 @app.route('/user_home')
 def user_home():
-    return render_template("user/user_home.html")
 
-@app.route('/view_user_profile')
-def view_user_profile():
-    db=Db()
-    lid=session['lid']
-    qry=db.selectOne("select * from user where user_id='"+str(lid)+"'")
-    this_year = datetime.date.today().year
-    age = this_year - int(qry['date_of_birth'].split('-')[0])
-    return render_template("user/view_user_profile.html",q=qry, age=age)
-
-@app.route('/edit_user')
-def edit_user():
-    db = Db()
-    lid = session['lid']
-    qry = db.selectOne("select * from user where user_id='"+str(lid)+"'")
-    return render_template("user/edit_user_profile.html",data=qry)
-
-@app.route('/edituserpost',methods=['post'])
-def edituserpost():
-    username=request.form['textfield']
-    name=request.form['textfield2']
-    photo=request.files['photo']
-    home=request.form['home']
-    place=request.form['textfield3']
-    post=request.form['post']
-    pin=request.form['pin']
-    phone_number=request.form['phone_number']
-    email=request.form['email']
-    date_of_birth=request.form['dob']
-    dates=datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-    photo.save(path1+dates+".jpg")
-    path="/static/images/"+dates+".jpg"
-    db=Db()
-    if request.files is not None:
-        if photo.filename != "":
-            qry=db.update("UPDATE login, user SET login.username='"+username+"',user.email_address='"+email+"',user.name='"+name+"', user.photo='"+path+"', user.home='"+home+"', user.date_of_birth='"+date_of_birth+"',user.mobile_number='"+phone_number+"',user.place='"+place+"',user.pin='"+pin+"',user.post='"+post+"' WHERE login.login_id = user.user_id AND login.login_id='"+str(session.get('lid'))+"'")
-        else:
-            qry=db.update("UPDATE login, user SET login.username='"+username+"',user.email_address='"+email+"',user.name='"+name+"', user.home='"+home+"', user.date_of_birth='"+date_of_birth+"',user.mobile_number='"+phone_number+"',user.place='"+place+"',user.pin='"+pin+"',user.post='"+post+"' WHERE login.login_id = user.user_id AND login.login_id='"+str(session.get('lid'))+"'")
+    if session['log'] == "ulogin":
+        return render_template("user/user_home.html")
     else:
-            qry=db.update("UPDATE login, user SET login.username='"+username+"',user.email_address='"+email+"',user.name='"+name+"', user.home='"+home+"', user.date_of_birth='"+date_of_birth+"',user.mobile_number='"+phone_number+"',user.place='"+place+"',user.pin='"+pin+"',user.post='"+post+"' WHERE login.login_id = user.user_id AND login.login_id='"+str(session.get('lid'))+"'")
-    return view_user_profile()
+        return redirect('/')
+
+@app.route('/user/profile')
+def user_profile():
+    if session['log'] == "ulogin":
+        db = Db()
+        lid = session['lid']
+        qry = db.selectOne("select * from user where user_id='" + str(lid) + "'")
+        this_year = datetime.date.today().year
+        age = this_year - int(qry['dob'].split('-')[0])
+        return render_template("user/user_profile.html", q=qry, age=age)
+    else:
+        return redirect('/')
+
+@app.route('/user/profile/edit')
+def user_profile_edit():
+    if session['log'] == "ulogin":
+        db = Db()
+        lid = session['lid']
+        qry = db.selectOne("select * from user where user_id='" + str(lid) + "'")
+        return render_template("user/user_profile_edit.html", data=qry)
+    else:
+        return redirect('/')
+
+@app.route('/user/profile/edit-post',methods=['post'])
+def user_profile_edit_post():
+    if session['log'] == "ulogin":
+        username = request.form['username']
+        name = request.form['name']
+        photo = request.files['photo']
+        email_address = request.form['email-address']
+        mobile_number = request.form['mobile-number']
+        gender = request.form['gender']
+        dob = request.form['dob']
+        house_name = request.form['house-name']
+        place = request.form['place']
+        district = request.form['district']
+        state = request.form['state']
+        post = request.form['post']
+        pin = request.form['pin']
+        dates = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+        photo.save(path1 + dates + ".jpg")
+        path = "/static/images/" + dates + ".jpg"
+        db = Db()
+        if request.files is not None:
+            if photo.filename != "":
+                qry = db.update(
+                    "UPDATE login, user SET login.username='" + username + "',user.username='" + username + "',user.name='" + name + "', user.photo='" + path + "', user.email_address='" + email_address + "',user.mobile_number='" + mobile_number + "', user.gender='" + gender + "', user.dob='" + dob + "', user.house_name='" + house_name + "', user.place='" + place + "', user.district='" + district + "',user.state='" + state + "', user.post='" + post + "', user.pin='" + pin + "' WHERE login.login_id = user.user_id AND login.login_id='" + str(
+                        session.get('lid')) + "'")
+            else:
+                qry = db.update(
+                    "UPDATE login, user SET login.username='" + username + "',user.username='" + username + "',user.name='" + name + "', user.email_address='" + email_address + "',user.mobile_number='" + mobile_number + "', user.gender='" + gender + "', user.dob='" + dob + "', user.house_name='" + house_name + "', user.place='" + place + "', user.district='" + district + "',user.state='" + state + "', user.post='" + post + "', user.pin='" + pin + "' WHERE login.login_id = user.user_id AND login.login_id='" + str(
+                        session.get('lid')) + "'")
+        else:
+            qry = db.update(
+                "UPDATE login, user SET login.username='" + username + "',user.username='" + username + "',user.name='" + name + "', user.email_address='" + email_address + "',user.mobile_number='" + mobile_number + "', user.gender='" + gender + "', user.dob='" + dob + "', user.house_name='" + house_name + "', user.place='" + place + "', user.district='" + district + "',user.state='" + state + "', user.post='" + post + "', user.pin='" + pin + "' WHERE login.login_id = user.user_id AND login.login_id='" + str(
+                    session.get('lid')) + "'")
+        return user_profile()
+    else:
+        return redirect('/')
 
 @app.route('/nearestservice',methods=['get'])
 def nearestservice():
-    db = Db()
-    user_loc = db.selectOne("SELECT * FROM location WHERE location.login_id = '"+str(session['lid'])+"'")
-    #doc_loc = db.select("SELECT * FROM login, location WHERE location.login_id = login.login_id AND login.user_type = 'doctor'")
-    #print(doc_loc)
-    print(user_loc)
-    qry=db.select("SELECT  (3959 * ACOS ( COS ( RADIANS('"+str(user_loc['latitude'])+"') ) * COS( RADIANS( location.latitude) ) * COS( RADIANS( location.longitude ) - RADIANS('"+str(user_loc['longitude'])+"') ) + SIN ( RADIANS('"+str(user_loc['latitude'])+"') ) * SIN( RADIANS(  location.latitude ) ))) AS user_distance,doctor.* FROM doctor, login, location WHERE doctor.doctor_id = login.login_id AND location.login_id = login.login_id AND login.user_type = 'doctor' HAVING user_distance  < 10.2137")
-    print(qry)
-    return "ok"
+    if session['log'] == "ulogin":
+        db = Db()
+        user_loc = db.selectOne("SELECT * FROM location WHERE location.login_id = '" + str(session['lid']) + "'")
+        # doc_loc = db.select("SELECT * FROM login, location WHERE location.login_id = login.login_id AND login.user_type = 'doctor'")
+        # print(doc_loc)
+        print(user_loc)
+        qry = db.select("SELECT  (3959 * ACOS ( COS ( RADIANS('" + str(user_loc[
+                                                                           'latitude']) + "') ) * COS( RADIANS( location.latitude) ) * COS( RADIANS( location.longitude ) - RADIANS('" + str(
+            user_loc['longitude']) + "') ) + SIN ( RADIANS('" + str(user_loc[
+                                                                        'latitude']) + "') ) * SIN( RADIANS(  location.latitude ) ))) AS user_distance,doctor.* FROM doctor, login, location WHERE doctor.doctor_id = login.login_id AND location.login_id = login.login_id AND login.user_type = 'doctor' HAVING user_distance  < 100000.2137")
+        print(qry)
+        return "ok"
+    else:
+        return redirect('/')
 
 
-@app.route('/add_symptoms')
-def add_symptoms():
+@app.route('/user/add_symptoms')
+def user_add_symptoms():
     # List of the symptoms is listed here in list l1.
 
     l1 = ['back_pain', 'constipation', 'abdominal_pain', 'diarrhoea', 'mild_fever', 'yellow_urine',
@@ -523,7 +674,7 @@ def add_symptoms():
           'silver_like_dusting', 'small_dents_in_nails', 'inflammatory_nails', 'blister', 'red_sore_around_nose',
           'yellow_crust_ooze']
     l1 = sorted(l1)
-    return render_template('user/add_symtoms.html', l1=l1)
+    return render_template('user/user_add_symtoms.html', l1=l1)
 
 # @app.route('/dp_post', methods=['post'])
 # def dp_post():
@@ -540,9 +691,19 @@ def add_symptoms():
 #     session['sym_row'] = sym_row
 #     return redirect('/dp_result')
 
+# @app.route('/user/add_symptoms_post', methods=['post'])
+# def user_add_symptoms_post():
+#     symptoms1 = request.form['symptoms1']
+#     symptoms2 = request.form['symptoms2']
+#     symptoms3 = request.form['symptoms3']
+#     symptoms4 = request.form['symptoms4']
+#     symptoms5 = request.form['symptoms5']
+#     session['symptoms'] = [symptoms1, symptoms2, symptoms3, symptoms4, symptoms5]
+#     return redirect('/user/disease_prediction')
 
-@app.route('/disease_prediction',methods=['post'])
-def disease_prediction():
+
+@app.route('/user/disease_prediction', methods=['post'])
+def user_disease_prediction():
     l1 = ['back_pain', 'constipation', 'abdominal_pain', 'diarrhoea', 'mild_fever', 'yellow_urine',
           'yellowing_of_eyes', 'acute_liver_failure', 'fluid_overload', 'swelling_of_stomach',
           'swelled_lymph_nodes', 'malaise', 'blurred_and_distorted_vision', 'phlegm', 'throat_irritation',
@@ -636,28 +797,49 @@ def disease_prediction():
     symptoms = [symptoms1, symptoms2, symptoms3, symptoms4, symptoms5]
 
 
+
     # if symptoms1 not in l1 or symptoms2 not in l1 or symptoms3 not in l1:
-    #     return render_template("user/disease_prediction_result.html", res1="False", qry=symptoms)
+    #     return render_template("user/user_disease_predictions.html", res1="False", qry=symptoms)
 
     # sym_valid = [True for sym in symptoms if sym in l1]
     # print(sym_valid)
 
 
-    res1=DecisionTree(symptoms1, symptoms2, symptoms3, symptoms4, symptoms5, X, y, X_test, y_test, l1, disease, l2)
-    res2=randomforest(symptoms1, symptoms2, symptoms3, symptoms4, symptoms5, X, y, X_test, y_test, l1, disease, l2)
-    res3=NaiveBayes(symptoms1, symptoms2, symptoms3, symptoms4, symptoms5, X, y, X_test, y_test, l1, disease, l2)
+    res1=DecisionTree(symptoms[0], symptoms[1], symptoms[2], symptoms[3], symptoms[4], X, y, X_test, y_test, l1, disease, l2)
+    res2=randomforest(symptoms[0], symptoms[1], symptoms[2], symptoms[3], symptoms[4], X, y, X_test, y_test, l1, disease, l2)
+    res3=NaiveBayes(symptoms[0], symptoms[1], symptoms[2], symptoms[3], symptoms[4], X, y, X_test, y_test, l1, disease, l2)
 
-    syms = f"{symptoms1},{symptoms2},{symptoms3},{symptoms4},{symptoms5}"
+    syms = f"{symptoms[0]},{symptoms[1]},{symptoms[2]},{symptoms[3]},{symptoms[4]}"
+    syms = syms.rstrip(',')
     algo = ["Decision Tree", "Random Forest", "Naive Bayes"]
     predictions = f"{algo[0]}:{res1},{algo[1]}:{res2},{algo[2]}:{res3}"
     print(predictions)
     print(type(predictions))
+
+    category = "category3"
     dates = datetime.datetime.now().strftime("%Y-%m-%d.%H:%M:%S")
     db = Db()
-    db.insert("INSERT INTO prediction_results VALUES('','" + str(session['lid']) + "', '" + syms + "', '" + predictions + "', '"+dates+"')")
-    qry1 = db.select("SELECT * FROM login, doctor WHERE login.login_id=doctor.doctor_id AND login.user_type='doctor'")
 
-    return render_template("user/disease_prediction_result.html", res1=res1, res2=res2, res3=res3, qry=symptoms, qry1=qry1)
+    qry2 = db.select("select * from doctor, login where login.login_id=doctor.doctor_id and login.user_type='doctor' and doctor.category like '%"+ category +"%'")
+
+    if len(qry2) > 5:
+        qry2 = qry2[0:5]
+
+    # drs = ""
+    # for x in qry2:
+    #     drs += str(x['doctor_id']) + ','
+    # drs = drs.rstrip(',')
+    # print(drs)
+
+
+    dp_row = db.insert("INSERT INTO prediction_results VALUES('','" + str(session['lid']) + "', '" + syms + "', '" + predictions + "', '"+dates+"')")
+    # qry1 = db.select("SELECT * FROM login, doctor WHERE login.login_id=doctor.doctor_id AND login.user_type='doctor'")
+
+    for x in qry2:
+        db.insert("INSERT INTO dr_recommendation VALUES('','" + str(dp_row) + "', '" + str(x['doctor_id']) + "', '" + category + "')")
+
+
+    return render_template("user/user_disease_predictions.html", res1=res1, res2=res2, res3=res3, qry=symptoms, qry1=qry2)
 
 
 
@@ -778,10 +960,10 @@ def NaiveBayes(symptom1=None, symptom2=None, symptom3=None, symptom4=None, sympt
 #         t3.delete("1.0", END)
 #         t3.insert(END, "Not Found")
 
-@app.route('/user_view_history')
-def user_view_history():
+@app.route('/user/dp_history')
+def user_dp_history():
     db = Db()
-    qry = db.select("SELECT * FROM prediction_results WHERE user_id='"+str(session['lid'])+"'")
+    qry = db.select("SELECT * FROM prediction_results WHERE user_id='"+str(session['lid'])+"' order by date desc")
     pred_list = []
     for data in qry:
         pred_dict = dict()
@@ -796,13 +978,41 @@ def user_view_history():
         pred_dict["date"] = data["date"]
         pred_list.append(pred_dict)
         print(pred_list)
-    return render_template("user/user_view_history.html", dp_res=pred_list)
+    return render_template("user/user_dp_history.html", dp_res=pred_list)
 
-@app.route('/rm_pred_history/<i>')
-def rm_pred_history(i):
+@app.route('/user/dp_history/dr_rec/<i>')
+def user_dp_history_dr_rec(i):
+    db = Db()
+    qry = db.select("SELECT * FROM dr_recommendation, doctor WHERE dr_recommendation.doctor_id=doctor.doctor_id and dr_recommendation.prediction_id='"+i+"'")
+    session['pd_id'] = int(i)
+    return render_template("user/user_dp_history_dr_rec.html", qry1=qry)
+
+@app.route('/user/dr/appointment/<i>')
+def user_dr_appointment(i):
+    session['did'] = int(i)
+    db = Db()
+    qry = db.select("select * from user, prediction_results where  user.user_id=prediction_results.user_id and prediction_results.prediction_id='"+str(session['pd_id'])+"'")
+    xlist = qry[0]['predicted_disease'].split(',')
+    pred = []
+    for x in xlist:
+        pred.append([x.split(':')[0], x.split(':')[1]])
+    this_year = datetime.date.today().year
+    age = this_year - int(qry[0]['dob'].split('-')[0])
+    today_date = str(datetime.date.today())
+
+    qry2 = db.selectOne(
+        "select * from doctor, login where  doctor.doctor_id=login.login_id and login.user_type='doctor' and doctor.doctor_id='"+str(i)+"'")
+
+    qry3 = db.select("select * from schedule where doctor_id='"+str(i)+"'")
+    print(i)
+    print(qry3)
+    return render_template('user/user_dr_appointment.html', usr=qry, pred=pred, age=age, dr=qry2, app=qry3)
+
+@app.route('/user/dp_history/rm/<i>')
+def user_dp_history_rm(i):
     db = Db()
     qry = db.delete("DELETE FROM prediction_results WHERE prediction_id = '"+i+"'")
-    return redirect('/user_view_history')
+    return redirect('/user/dp_history')
 
 @app.route('/search_doctor')
 def search_doctor():
@@ -823,10 +1033,21 @@ def search_doctor_post():
             "SELECT * FROM doctor, login WHERE doctor.`doctor_id` = login.`login_id` AND user_type = 'doctor' ORDER BY doctor.pro_started_yr")
         return render_template('user/search_doctor.html', qry1=qry)
     elif opt == 'location':
+        #my_loc = db.selectOne("SELECT latitude, longitude FROM location WHERE login_id = '"+str(session['lid'])+"'")
+        #docs = db.select(
+        #    "SELECT * FROM doctor, login WHERE doctor.`doctor_id` = login.`login_id` AND user_type = 'doctor'")
+
         db = Db()
-        my_loc = db.selectOne("SELECT latitude, longitude FROM location WHERE login_id = '"+str(session['lid'])+"'")
-        docs = db.select(
-            "SELECT * FROM doctor, login WHERE doctor.`doctor_id` = login.`login_id` AND user_type = 'doctor'")
+        user_loc = db.selectOne("SELECT * FROM location WHERE location.login_id = '" + str(session['lid']) + "'")
+        # doc_loc = db.select("SELECT * FROM login, location WHERE location.login_id = login.login_id AND login.user_type = 'doctor'")
+        # print(doc_loc)
+        print(user_loc)
+        qry = db.select("SELECT  (3959 * ACOS ( COS ( RADIANS('" + str(user_loc[
+                                                                           'latitude']) + "') ) * COS( RADIANS( location.latitude) ) * COS( RADIANS( location.longitude ) - RADIANS('" + str(
+            user_loc['longitude']) + "') ) + SIN ( RADIANS('" + str(user_loc[
+                                                                        'latitude']) + "') ) * SIN( RADIANS(  location.latitude ) ))) AS user_distance,doctor.* FROM doctor, login, location WHERE doctor.doctor_id = login.login_id AND location.login_id = login.login_id AND login.user_type = 'doctor' HAVING user_distance  < 100000.2137 order by user_distance asc")
+        print(qry)
+
         return render_template('user/search_doctor.html', qry1=qry)
     elif opt == 'specialisation':
         db = Db()
@@ -873,7 +1094,7 @@ def send_feedback_post():
         qry1 = db.insert("INSERT INTO feedbacks VALUES('', '" + str(lid) + "', '" + rate + "', '" + review + "', '" + dates + "')")
         return redirect('/user_home')
 
-@app.route('/search_doctor_search/<eid>')
+@app.route('/search_dr_experience/<eid>')
 def search_dr_experience(eid):
     if eid=='name':
         return render_template('user/search_dr/dr_name.html')
@@ -885,6 +1106,63 @@ def search_dr_experience(eid):
         return render_template('user/search_dr/dr_location.html')
     else:
         return render_template('user/search_doctor.html')
+
+@app.route('/user/appointment/submit', methods=['post'])
+def user_appointment_submit():
+    patient_name = request.form['patient-name']
+    patient_age = request.form['patient-age']
+    patient_address = request.form['patient-address']
+    patient_email = request.form['patient-email']
+    patient_mobile = request.form['patient-mobile']
+    dr_name = request.form['dr-name']
+    dr_address = request.form['dr_address']
+    doption_date = request.form['option-date']
+    option_time = request.form['option_time']
+    pred_id = request.form['pred_id']
+
+    db = Db()
+
+    return  'ok'
+
+
+########################### -------------------------
+@app.route('/appointment_select/<eid>')
+def appointment_select(eid):
+    db = Db()
+    today = str(datetime.date.today())
+    i = session['did']
+    qry = db.select(
+        "select * from user, prediction_results where  user.user_id=prediction_results.user_id and prediction_results.prediction_id='" + str(
+            session['pd_id']) + "'")
+    xlist = qry[0]['predicted_disease'].split(',')
+    pred = []
+    for x in xlist:
+        pred.append([x.split(':')[0], x.split(':')[1]])
+    this_year = datetime.date.today().year
+    age = this_year - int(qry[0]['dob'].split('-')[0])
+    today_date = str(datetime.date.today())
+
+    qry2 = db.selectOne(
+        "select * from doctor, login where  doctor.doctor_id=login.login_id and login.user_type='doctor' and doctor.doctor_id='" + str(
+            i) + "'")
+
+    qry3 = db.select("select * from schedule where doctor_id='" + str(i) + "' and schedule_date >= '"+today+"'")
+
+    app_dates = db.select("select schedule_date from schedule where doctor_id='" + str(i) + "' and schedule_date >= '"+today+"'")
+    app_dates = [x['schedule_date'] for x in app_dates]
+    print(app_dates)
+    print(eid)
+    if eid in app_dates:
+        times = db.select("select start_time, end_time from schedule where doctor_id='" + str(i) + "' and schedule_date='"+eid+"'")
+        print(times)
+        return render_template('user/user_dr_appointment_time.html', times=times, eid=eid)
+    else:
+        print('else')
+        return render_template('user/user_dr_appointment_time.html',  usr=qry, pred=pred, age=age, dr=qry2, app=qry3)
+
+# @app.route('/appointment_select_post', methods=['post'])
+# def appointment_select_post():
+#     return render_template("user/user_dr_appointment.html")
 
 # @app.route('/search_doctor')
 # def search_dr_experience():

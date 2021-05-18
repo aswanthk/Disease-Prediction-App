@@ -7,7 +7,7 @@
 
 <body>
 	<h2>{{ q['name'] }} - Profile</h2>
-    <p><a href="/edit_dr">Edit Profile ({{ q['username'] }})</a></p>
+    <p><a href="/doctor/profile/edit">Edit Profile ({{ q['username'] }})</a></p>
     <img src="{{ q['photo'] }}" alt="{{ q['username'] }}'s-photo" height="200px" width="150px"/>
 <h3>{{ q['name'] }}</h3>
     <table width="200" border="2" cellspacing="2" cellpadding="2">
@@ -19,13 +19,27 @@
     <th scope="row">Email Address</th>
     <td>&nbsp;{{ q['email_address'] }}</td>
   </tr>
+   <tr>
+    <th scope="row">Contact Number</th>
+    <td>&nbsp;{{ q['contact_number'] }}</td>
+  </tr>
+   <tr>
+    <th scope="row">Gender</th>
+    <td>&nbsp;{{ q['gender'] }}</td>
+  </tr>
   <tr>
     <th scope="row">Age</th>
     <td>&nbsp;{{ age }}</td>
   </tr>
   <tr>
     <th scope="row">Address</th>
-    <td>&nbsp;{{ q['address'] }}</td>
+    <td> {{ q['hospital_name'] }} <br/>
+        {{ q['place'] }} <br/>
+        {{ q['district'] }} <br/>
+         {{ q['state'] }} <br/>
+        (P.O) {{ q['post'] }} <br/>
+        PIN:  {{ q['pin'] }}
+    </td>
   </tr>
   <tr>
     <th scope="row">Contact Number</th>

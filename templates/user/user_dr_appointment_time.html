@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    Appointment Time : <select id="option_time" name="option_time">
+        	<option value="--select--">--select--</option>
+            {% for x in times %}
+            <option value="{{ x['start_time'] }}-{{ x['end_time'] }}">{{ x['start_time'] }} to {{ x['end_time'] }}</option>
+            {% endfor %}
+        </select>
+</body>
+</html>

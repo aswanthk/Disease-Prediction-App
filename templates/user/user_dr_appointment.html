@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+<script type="text/javascript">
+var xmlHttp;
+            function adds(eid){
+
+                if (typeof XMLHttpRequest != "undefined"){
+                xmlHttp= new XMLHttpRequest();
+                }
+                else if (window.ActiveXObject){
+                    xmlHttp= new ActiveXObject("Microsoft.XMLHTTP");
+                }
+                if (xmlHttp==null){
+                    alert("Browser does not support XMLHTTP Request")
+                    return;
+                }
+                var url="/appointment_select/"+eid
+                xmlHttp.onreadystatechange = stateChange;
+                xmlHttp.open("GET", url, true);
+                xmlHttp.send(null);
+            }
+
+            function stateChange(){
+                if(xmlHttp.readyState==4 || xmlHttp.readyState=="complete"){
+                    document.getElementById("d").innerHTML=xmlHttp.responseText
+
+                }
+            }
+</script>
+</head>
+<body>
+	<form action="/user/appointment/submit" method="post">
+        <h3>Register for Appointment</h3>
+	<h3>Patient Details</h3>
+<pre>
+    Patient Name :  <input type="text" name="patient-name" id="patient-name" value="{{ usr[0]['name'] }}"/><br /><br />
+    Age :           <input type="text" name="patient-age" id="patient-age" value="{{ age }}"/><br /><br />
+    Address :       <textarea name="patient-address" cols="25" rows="5">
+"{{ usr[0]['house_name'] }}"
+{{ usr[0]['place'] }}
+{{ usr[0]['district'] }}, {{ usr[0]['state'] }}
+PIN: {{ usr[0]['pin'] }}
+                </textarea><br /><br />
+    Email Address : <input type="text" name="patient-email" id="patient-email" value="{{ usr[0]['email_address'] }}" readonly/><br /><br />
+    Mobile Number : <input type="text" name="patient-mobile" id="patient-mobile" value="{{ usr[0]['mobile_number'] }}"/>
+</pre>
+
+<h3>Appointment Details</h3>
+<pre>
+    Doctor Name :           <input type="text" name="dr-name" id="dr-name" value="{{ dr['name'] }}"/><br /><br />
+    Doctor Address :        <textarea name="dr-address" id="dr-address" cols="25" rows="5">{{ dr['name'] }}</textarea><br /><br />
+
+    Appointment Date :      <select name="option_date" id="option_date" onchange="adds(this.value)">
+                                <option value="--select--">--select--</option>
+                                {% for x in app %}
+                                <option value="{{ x['schedule_date'] }}">{{ x['schedule_date'] }}({{ x['schedule_day'] }})</option>
+                                {% endfor %}
+                            </select>
+    <p id="d"></p>
+</pre>
+
+<h3>Prediction Information</h3>
+<pre>
+    Symptoms:           {{ usr[0]['symptoms'] }}
+
+    Predicted Disease:
+                        {% for p in pred %}
+                            {{ p[0] }}  :   {{ p[1] }}
+                        {% endfor %}
+    Predicted on {{ usr[0]['date'] }}
+    <input type="hidden" name="pred_id" id="pred_id" value="{{ usr[0]['prediction_id'] }}">
+</pre>
+
+        <input type="submit" value="Book">
+        <button><a>Cancel</a></button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+</head>
+<body>
+	<h2>Edit Profile ({{ data['username'] }})</h2>
+    <form method="post" action="/user/profile/edit-post" enctype="multipart/form-data">
+    <table width="359" height="284" border="2" cellpadding="2" cellspacing="2">
+  <tr>
+    <td width="93">Username</td>
+    <td width="244">
+      <label for="textfield"></label>
+      <input type="text" name="username" id="username" value="{{ data['username'] }}"/>
+    </td>
+  </tr>
+  <tr>
+    <td>Name</td>
+    <td><input type="text" name="name" id="name"value="{{ data['name'] }} "/></td>
+  </tr>
+  <tr>
+    <td>Photo</td>
+    <td>
+      <label for="photo"></label>
+      <input type="file" name="photo" id="photo" />
+    </td>
+  </tr>
+   <tr>
+    <td>Email Address</td>
+    <td><input type="text" name="email-address" id="email-address" readonly value="{{ data['email_address'] }}"/>
+  </tr>
+   <tr>
+    <td>Mobile Number</td>
+    <td><input type="text" name="mobile-number" id="mobile-number" value="{{ data['mobile_number'] }}"/></td>
+  </tr>
+   <tr>
+    <td>Gender</td>
+        <td><input type="radio" name="gender" id="male" value="Male" {{ 'checked' if data['gender']=='Male' }}/>Male
+        <input type="radio" name="gender" id="female" value="Female" {{ 'checked' if data['gender']=='Female' }}/>Female
+        <input type="radio" name="gender" id="other" value="Other" {{ 'checked' if data['gender']=='Other' }}/>Other
+    </td>
+  </tr>
+  <tr>
+    <td>Date of Birth</td>
+    <td><input type="date" name="dob" id="dob"  value="{{ data['dob'] }}"/>&nbsp;</td>
+  </tr>
+   <tr>
+    <td>House name</td>
+    <td>
+      <input type="text" name="house-name" id="house-name" value="{{ data['house_name'] }}" />
+    </td>
+  </tr>
+ <tr>
+    <td>Place</td>
+   <td> <input type="text" name="place" id="place"  value="{{ data['place'] }}"/></td>
+  </tr>
+  <tr>
+    <td>District</td>
+   <td> <input type="text" name="district" id="district"  value="{{ data['district'] }}"/></td>
+  </tr>
+  <tr>
+    <td>State</td>
+   <td> <input type="text" name="state" id="state"  value="{{ data['state'] }}"/></td>
+  </tr>
+   <tr>
+    <td>Post</td>
+   <td> <input type="text" name="post" id="post"  value="{{ data['post'] }}"/></td>
+  </tr>
+  <tr>
+    <td>pin</td>
+    <td>
+      <input type="text" name="pin" id="pin" value="{{ data['pin'] }}"/>
+    </td>
+  </tr>
+        <tr>
+        <td>
+        </td>
+        <td><input type="submit"value="EDIT"/>
+        </td></tr>
+
+</table>
+    </form>
+</body>
+</html>
