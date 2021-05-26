@@ -1,0 +1,46 @@
+{% extends 'user/user_base.html' %}
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <title>Title</title>#}
+{#</head>#}
+{#<body>#}
+
+{% block content %}
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h4">My Appointment List</h1>
+        </div>
+    <table width="513" border="2" cellspacing="2" cellpadding="2">
+  <tr>
+    <th width="41" scope="col">Appointment No.</th>
+    <th width="65" scope="col">Doctor Name</th>
+    <th width="63" scope="col">Appointment Date</th>
+    <th width="58" scope="col">Appointment Time</th>
+    <th width="78" scope="col">Appointment Day</th>
+    <th width="83" scope="col">Appointment Status</th>
+    <th width="63" scope="col">Action</th>
+  </tr>
+    {% for x in qry %}
+  <tr>
+    <td>{{ x['appointment_id'] }}</td>
+    <td>{{ x['patient_name'] }} **</td>
+    <td>{{ x['schedule_date'] }}</td>
+    <td>{{ x['schedule_day'] }}</td>
+    <td>{{ x['start_time'] }} - {{ x['end_time'] }}</td>
+    <td>{{ x['status'] }}</td>
+    <td>
+        <a href="/user/myappointment/more/{{ x['appointment_id'] }}">View More</a><br><br>
+        <a href="/user/myappointment/download/{{ x['appointment_id'] }}">Download</a><br><br>
+        {% if x['status'] != 'Booked' %}
+            <p><a href="/user/myappointment/cancel/{{ x['appointment_id'] }}">Cancel</a></p>
+        {% endif %}
+    </td>
+  </tr>
+    {% endfor %}
+</table>
+    </main>
+{% endblock content %}
+{#</body>#}
+{#</html>#}

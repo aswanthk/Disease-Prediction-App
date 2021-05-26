@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+</head>
+<body>
+
+    <h3>Appointment Details</h3>
+	<h3>Patient Details</h3>
+<pre>
+    Patient Name :  {{ usr['patient_name'] }}
+    Age :           {{ usr['patient_age'] }}
+    Address :       {{ usr['patient_address'] }}
+    Email Address : {{ usr['patient_email'] }}
+    Mobile Number : {{ usr['patient_mobile'] }}"
+</pre>
+
+    <h3>Appointment Time</h3>
+<pre>
+    Appointment Date :      {{ usr['schedule_date'] }}
+    Appointment Day :      {{ usr['shedule_day'] }}
+    Appointment Time :      {{ usr['start_time'] }} - {{ usr['end_time'] }}
+</pre>
+    <h3>Prediction Information</h3>
+<pre>
+    Symptoms:           {{ usr['symptoms'] }}
+
+    Predicted Disease:  {{ usr['prediction1'] }}
+                        {{ usr['prediction2'] }}
+                        {{ usr['prediction3'] }}
+    Predicted on {{ usr['prediction_date'] }}
+
+    <h4>Booking Status</h4> {{ usr['status'] }}
+    {% if usr['status']=='Pending' %}
+        <a href="/doctor/appointment/approve/{{ usr['appointment_id'] }}"><button>Approve</button></a>
+        <a href="/doctor/appointment/reject/{{ usr['appointment_id'] }}"><button>Reject</button></a>
+    {% endif %}
+</pre>
+    <button onclick="print()">Print</button>
+</body>
+</html>

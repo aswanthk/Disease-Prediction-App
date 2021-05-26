@@ -1,13 +1,19 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Untitled Document</title>
-</head>
+{#<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">#}
+{#<html xmlns="http://www.w3.org/1999/xhtml">#}
+{#<head>#}
+{#<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />#}
+{#<title>Untitled Document</title>#}
+{#</head>#}
+{##}
+{#<body>#}
+{% extends 'user/user_base.html' %}
 
-<body>
-	<h2>{{ q['name'] }} - Profile</h2>
-    <p><a href="/user/profile/edit">Edit Profile ({{ q['username'] }})</a></p>
+{% block content %}
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h4">{{ q['name'] }} - Profile</h1>
+        </div>
+        <p><a href="/user/profile/edit">Edit Profile ({{ q['username'] }})</a></p>
     <img src="{{ q['photo'] }}" alt="{{ q['username'] }}'s-photo" height="200px" width="150px"/>
     <h3>{{ q['name'] }}</h3>
     <table width="200" border="2" cellspacing="2" cellpadding="2">
@@ -69,6 +75,7 @@
     <td> {{ q['pin'] }}</td>
   </tr>
 </table>
-
-</body>
-</html>
+    </main>
+{% endblock content %}
+{#</body>#}
+{#</html>#}

@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-    Appointment Time : <select id="option_time" name="option_time">
+    Appointment Time : <select id="option-time" name="option-time">
         	<option value="--select--">--select--</option>
             {% for x in times %}
             <option value="{{ x['start_time'] }}-{{ x['end_time'] }}">{{ x['start_time'] }} to {{ x['end_time'] }}</option>

@@ -1,0 +1,56 @@
+{% extends 'doctor/doctor_home.html' %}
+{% block body %}
+{#<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">#}
+{#<html xmlns="http://www.w3.org/1999/xhtml">#}
+{#<head>#}
+{#<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />#}
+{#<title>Untitled Document</title>#}
+{#</head>#}
+{##}
+{#<body>#}
+	<h2>Appointment Management</h2>
+    <p><b>Appointment List</b></p>
+    <a href="/doctor/appointment"><button>Refresh</button></a>
+    <form action="/doctor/search/app-date" method="post">
+{#    	<input type="date" name="date1" id="date1" class="form-control"/>#}
+        <input type="date" name="date1" id="date1" />
+        <input type="date" name="date2" id="date2" />
+{#        <input type="submit" value="Search" class="btn btn-danger" />#}
+        <input type="submit" value="Search" />
+    </form>
+    <form action="/doctor/search/app-name" method="post">
+    	<input type="text" name="qry-name" id="qry-name" />
+        <input type="submit" value="Search" />
+    </form>
+    <table width="513" border="2" cellspacing="2" cellpadding="2">
+  <tr>
+    <th width="41" scope="col">Appointment No.</th>
+    <th width="65" scope="col">Patient Name</th>
+    <th width="63" scope="col">Appointment Date</th>
+    <th width="58" scope="col">Appointment Time</th>
+    <th width="78" scope="col">Appointment Day</th>
+    <th width="83" scope="col">Appointment Status</th>
+    <th width="63" scope="col">Action</th>
+  </tr>
+    {% for x in qry %}
+  <tr>
+    <td>{{ x['appointment_id'] }}</td>
+    <td>{{ x['patient_name'] }}</td>
+    <td>{{ x['schedule_date'] }}</td>
+    <td>{{ x['schedule_day'] }}</td>
+    <td>{{ x['start_time'] }} - {{ x['end_time'] }}</td>
+    <td>{{ x['status'] }}</td>
+    <td>
+        <a href="/doctor/appointment/more/{{ x['appointment_id'] }}">View more</a><br><br>
+        {% if x['status'] != 'Booked' %}
+            <p><a href="/doctor/appointment/approve/{{ x['appointment_id'] }}">Approve</a></p>
+    <p><a href="/doctor/appointment/reject/{{ x['appointment_id'] }}">Reject</a></p>
+        {% endif %}
+    </td>
+  </tr>
+    {% endfor %}
+</table>
+
+{#</body>#}
+{#</html>#}
+{% endblock body %}

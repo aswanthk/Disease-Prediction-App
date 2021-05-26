@@ -442,12 +442,54 @@ def doctor_schedule_rm(i):
     else:
         return redirect('/')
 
-@app.route('/appointment')
-def appointment():
+@app.route('/doctor/appointment')
+def doctor_appointment():
     if session['log'] == "dlogin":
-        return render_template('doctor/appointment.html')
+        db = Db()
+        qry = db.select("select * from dr_appointment where doctor_id='"+str(session['lid'])+"' and status!='Cancelled' order by schedule_date desc")
+
+
+        return render_template('doctor/doctor_appointment.html', qry=qry)
     else:
         return redirect('/')
+
+@app.route('/doctor/appointment/more/<i>')
+def doctor_appointment_more(i):
+    if session['log'] == "dlogin":
+        db = Db()
+        qry = db.selectOne("select * from dr_appointment where appointment_id='" + i + "'")
+        return render_template('doctor/doctor_appointment_more.html', usr=qry)
+    else:
+        return redirect('/')
+
+@app.route('/doctor/appointment/approve/<i>')
+def doctor_appointment_approve(i):
+    db = Db()
+    db.update("UPDATE dr_appointment SET status='Booked' WHERE appointment_id='"+i+"'")
+    return doctor_appointment()
+
+@app.route('/doctor/appointment/reject/<i>')
+def doctor_appointment_reject(i):
+    db = Db()
+    db.update("UPDATE dr_appointment SET status='Cancelled' WHERE appointment_id='"+i+"'")
+    return doctor_appointment()
+
+@app.route('/doctor/search/app-name', methods=['post'])
+def doctor_search_app_name():
+    text = request.form['qry-name']
+    db = Db()
+    qry = db.select(
+        "SELECT * FROM dr_appointment WHERE doctor_id='"+str(session['lid'])+"' AND status!='Cancelled' AND patient_name like '%" + text + "%'")
+    return render_template('doctor/doctor_appointment.html', qry=qry)
+
+@app.route('/doctor/search/app-date', methods=['post'])
+def doctor_search_app_date():
+    date1 = request.form['date1']
+    date2 = request.form['date2']
+    db = Db()
+    qry = db.select(
+        "SELECT * FROM dr_appointment WHERE doctor_id='"+str(session['lid'])+"' AND status!='Cancelled' AND schedule_date between '"+date1+"' and '"+date2+"'")
+    return render_template('doctor/doctor_appointment.html', qry=qry)
 
 @app.route('/doctor/profile')
 def doctor_profile():
@@ -991,6 +1033,7 @@ def user_dp_history_dr_rec(i):
 def user_dr_appointment(i):
     session['did'] = int(i)
     db = Db()
+    today = str(datetime.date.today())
     qry = db.select("select * from user, prediction_results where  user.user_id=prediction_results.user_id and prediction_results.prediction_id='"+str(session['pd_id'])+"'")
     xlist = qry[0]['predicted_disease'].split(',')
     pred = []
@@ -1003,10 +1046,17 @@ def user_dr_appointment(i):
     qry2 = db.selectOne(
         "select * from doctor, login where  doctor.doctor_id=login.login_id and login.user_type='doctor' and doctor.doctor_id='"+str(i)+"'")
 
-    qry3 = db.select("select * from schedule where doctor_id='"+str(i)+"'")
+    qry3 = db.select("select * from schedule where doctor_id='" + str(i) + "' and schedule_date >= '" + today + "'")
     print(i)
     print(qry3)
     return render_template('user/user_dr_appointment.html', usr=qry, pred=pred, age=age, dr=qry2, app=qry3)
+
+
+@app.route('/user/my_appointment')
+def user_my_appointment():
+    db = Db()
+    qry = db.select("select * from dr_appointment where user_id='"+str(session['lid'])+"'")
+    return render_template('user/user_myappointment.html', qry=qry)
 
 @app.route('/user/dp_history/rm/<i>')
 def user_dp_history_rm(i):
@@ -1115,12 +1165,24 @@ def user_appointment_submit():
     patient_email = request.form['patient-email']
     patient_mobile = request.form['patient-mobile']
     dr_name = request.form['dr-name']
-    dr_address = request.form['dr_address']
-    doption_date = request.form['option-date']
-    option_time = request.form['option_time']
-    pred_id = request.form['pred_id']
+    dr_address = request.form['dr-address']
+    option_date = request.form['option-date']
+    option_time = request.form['option-time']
+
+    symptoms = request.form['symptoms']
+    prediction1 = request.form['prediction1']
+    prediction2 = request.form['prediction2']
+    prediction3 = request.form['prediction3']
+    prediction_date = request.form['prediction-date']
+    pred_id = request.form['pred-id']
+    dr_id = request.form['dr-id']
+    patient_username = request.form['patient-username']
 
     db = Db()
+    shdl = db.selectOne("select * from schedule where doctor_id='"+dr_id+"' and schedule_date='"+option_date+"' and start_time='"+option_time.split('-')[0]+"' and end_time='"+option_time.split('-')[1]+"'")
+
+    qry = db.insert("INSERT INTO dr_appointment VALUES('', '"+pred_id+"', '"+dr_id+"', '"+str(session['lid'])+"', '"+str(shdl['schedule_id'])+"', '"+patient_name+"', '"+patient_username+"', '"+patient_age+"', '"+patient_address+"', '"+patient_email+"', '"+patient_mobile+"', '"+shdl['schedule_date']+"', '"+shdl['schedule_day']+"', '"+shdl['start_time']+"', '"+shdl['end_time']+"', '"+symptoms+"', '"+prediction1+"', '"+prediction2+"', '"+prediction3+"', '"+prediction_date+"', 'Pending')")
+
 
     return  'ok'
 

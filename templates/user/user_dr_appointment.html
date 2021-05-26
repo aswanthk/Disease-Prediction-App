@@ -50,10 +50,10 @@ PIN: {{ usr[0]['pin'] }}
 
 <h3>Appointment Details</h3>
 <pre>
-    Doctor Name :           <input type="text" name="dr-name" id="dr-name" value="{{ dr['name'] }}"/><br /><br />
-    Doctor Address :        <textarea name="dr-address" id="dr-address" cols="25" rows="5">{{ dr['name'] }}</textarea><br /><br />
+    Doctor Name :           <input type="text" name="dr-name" id="dr-name" value="{{ dr['name'] }}" readonly/><br /><br />
+    Doctor Address :        <textarea name="dr-address" id="dr-address" cols="25" rows="5">{{ dr['hospital_name'] }}</textarea><br /><br />
 
-    Appointment Date :      <select name="option_date" id="option_date" onchange="adds(this.value)">
+    Appointment Date :      <select name="option-date" id="option-date" onchange="adds(this.value)">
                                 <option value="--select--">--select--</option>
                                 {% for x in app %}
                                 <option value="{{ x['schedule_date'] }}">{{ x['schedule_date'] }}({{ x['schedule_day'] }})</option>
@@ -64,14 +64,16 @@ PIN: {{ usr[0]['pin'] }}
 
 <h3>Prediction Information</h3>
 <pre>
-    Symptoms:           {{ usr[0]['symptoms'] }}
+    Symptoms:           {{ usr[0]['symptoms'] }} <input type="hidden" name="symptoms" id="symptoms" value="{{ usr[0]['symptoms'] }}">
 
     Predicted Disease:
                         {% for p in pred %}
-                            {{ p[0] }}  :   {{ p[1] }}
+                            {{ p[0] }}  :   {{ p[1] }} <input type="hidden" name="prediction{{ loop.index }}" id="prediction{{ loop.index }}" value="{{ p[0] }}  :   {{ p[1] }}">
                         {% endfor %}
-    Predicted on {{ usr[0]['date'] }}
-    <input type="hidden" name="pred_id" id="pred_id" value="{{ usr[0]['prediction_id'] }}">
+    Predicted on {{ usr[0]['date'] }} <input type="hidden" name="prediction-date" id="prediction-date" value="{{ usr[0]['date'] }}">
+    <input type="hidden" name="pred-id" id="pred-id" value="{{ usr[0]['prediction_id'] }}">
+    <input type="hidden" name="dr-id" id="dr-id" value="{{ dr['doctor_id'] }}">
+    <input type="hidden" name="patient-username" id="patient-username" value="{{ usr[0]['username'] }}">
 </pre>
 
         <input type="submit" value="Book">
