@@ -881,7 +881,7 @@ def user_disease_prediction():
         db.insert("INSERT INTO dr_recommendation VALUES('','" + str(dp_row) + "', '" + str(x['doctor_id']) + "', '" + category + "')")
 
 
-    return render_template("user/user_disease_predictions.html", res1=res1, res2=res2, res3=res3, qry=symptoms, qry1=qry2)
+    return render_template("user/user_disease_predictions.html", res1=res1, res2=res2, res3=res3, qry=symptoms, qry1=qry2, l=[len(qry2)])
 
 
 
@@ -1010,16 +1010,18 @@ def user_dp_history():
     for data in qry:
         pred_dict = dict()
         pred_dict["prediction_id"] = data["prediction_id"]
-        pred_dict["symptoms"] = data["symptoms"]
+        sym_set = list(filter(lambda x: x != "", data["symptoms"].split(',')))
+        pred_dict["symptoms"] = sym_set
+        # sym_set1 = ", ".join(sym_set1)
+        # sym_set1 = sym_set1.strip()
         abc = data["predicted_disease"].split(",")
         ll = []
         for dd in abc:
             d = tuple(dd.split(":"))
             ll.append(d)
         pred_dict["prediction"] = ll
-        pred_dict["date"] = data["date"]
+        pred_dict["date"] = data["date"].split(".")
         pred_list.append(pred_dict)
-        print(pred_list)
     return render_template("user/user_dp_history.html", dp_res=pred_list)
 
 @app.route('/user/dp_history/dr_rec/<i>')
@@ -1027,7 +1029,7 @@ def user_dp_history_dr_rec(i):
     db = Db()
     qry = db.select("SELECT * FROM dr_recommendation, doctor WHERE dr_recommendation.doctor_id=doctor.doctor_id and dr_recommendation.prediction_id='"+i+"'")
     session['pd_id'] = int(i)
-    return render_template("user/user_dp_history_dr_rec.html", qry1=qry)
+    return render_template("user/user_dp_history_dr_rec.html", qry1=qry, l=[len(qry)])
 
 @app.route('/user/dr/appointment/<i>')
 def user_dr_appointment(i):
@@ -1066,7 +1068,7 @@ def user_dp_history_rm(i):
 
 @app.route('/search_doctor')
 def search_doctor():
-    return render_template('user/search_doctor.html')
+    return render_template('user/search_doctor.html', l=[0])
 
 @app.route('/search_doctor_post', methods=['post'])
 def search_doctor_post():
@@ -1076,12 +1078,12 @@ def search_doctor_post():
         db = Db()
         qry = db.select(
             "SELECT * FROM doctor, login WHERE doctor.`doctor_id` = login.`login_id` AND user_type = 'doctor' AND doctor.name like '%" + text + "%'")
-        return render_template('user/search_doctor.html', qry1=qry)
+        return render_template('user/search_doctor.html', qry1=qry, l=[len(qry)])
     elif opt == 'experience':
         db = Db()
         qry = db.select(
             "SELECT * FROM doctor, login WHERE doctor.`doctor_id` = login.`login_id` AND user_type = 'doctor' ORDER BY doctor.pro_started_yr")
-        return render_template('user/search_doctor.html', qry1=qry)
+        return render_template('user/search_doctor.html', qry1=qry, l=[len(qry)])
     elif opt == 'location':
         #my_loc = db.selectOne("SELECT latitude, longitude FROM location WHERE login_id = '"+str(session['lid'])+"'")
         #docs = db.select(
@@ -1096,16 +1098,16 @@ def search_doctor_post():
                                                                            'latitude']) + "') ) * COS( RADIANS( location.latitude) ) * COS( RADIANS( location.longitude ) - RADIANS('" + str(
             user_loc['longitude']) + "') ) + SIN ( RADIANS('" + str(user_loc[
                                                                         'latitude']) + "') ) * SIN( RADIANS(  location.latitude ) ))) AS user_distance,doctor.* FROM doctor, login, location WHERE doctor.doctor_id = login.login_id AND location.login_id = login.login_id AND login.user_type = 'doctor' HAVING user_distance  < 100000.2137 order by user_distance asc")
-        print(qry)
 
-        return render_template('user/search_doctor.html', qry1=qry)
+        return render_template('user/search_doctor.html', qry1=qry, l=[len(qry)])
     elif opt == 'specialisation':
         db = Db()
         option = request.form['specialisation']
         qry = db.select(
             "SELECT * FROM doctor, login WHERE doctor.`doctor_id` = login.`login_id` AND user_type = 'doctor' AND qualification = '"+option+"'")
-        return render_template('user/search_doctor.html', qry1=qry)
-        return render_template('user/search_doctor.html', qry1=qry)
+        return render_template('user/search_doctor.html', qry1=qry, l=[len(qry)])
+    elif opt == "select":
+        return search_doctor()
 
 
 

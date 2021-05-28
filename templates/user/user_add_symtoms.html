@@ -5,71 +5,144 @@
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 class="h4">Check Your Disease</h1>
         </div>
-    <form method="POST" action="/user/disease_prediction">
-    	<table width="282" height="215" border="2" cellpadding="2" cellspacing="2">
-  <tr>
-    <th width="103" scope="row">Symptom 1</th>
-    <td width="103">
-        <input list="symptoms" name="symptoms1">
-    	<datalist id="symptoms">
-            {% for s in l1 %}
-                <option value={{ s }}>
-            {% endfor %}
-        </datalist>
-    </td>
-  </tr>
-  <tr>
-    <th scope="row">Symptom 2</th>
-    <td>
-        <input list="symptoms" name="symptoms2">
-    	<datalist id="symptoms">
-            {% for s in l1 %}
-                <option value={{ s }}>
-            {% endfor %}
-            </datalist>
-    </td>
-  </tr>
-  <tr>
-    <th scope="row">Symptom 3</th>
-    <td>
-        <input list="symptoms" name="symptoms3">
-    	<datalist id="symptoms">
-            {% for s in l1 %}
-                <option value={{ s }}>
-            {% endfor %}
-            </datalist>
-    </td>
-  </tr>
-  <tr>
-    <th scope="row">Symptom 4</th>
-    <td>
-        <input list="symptoms" name="symptoms4">
-    	<datalist id="symptoms">
-            {% for s in l1 %}
-                <option value={{ s }}>
-            {% endfor %}
-        </datalist>
-    </td>
-  </tr>
-  <tr>
-    <th scope="row">Symptom 5</th>
-    <td>
-        <input list="symptoms" name="symptoms5">
-    	<datalist id="symptoms">
-            <{% for s in l1 %}
-                <option value={{ s }}>
-            {% endfor %}
-        </datalist>
-    </td>
-  </tr>
-  <tr>
-    <th scope="row">&nbsp;</th>
-    <td>
-    	<input type="submit" value="Predict Disease"/>
-        <input type="reset" value="Reset"/>
-    </td>
-  </tr>
-</table>
-    </form>
-</main>
+
+        <form method="POST" action="/user/disease_prediction">
+            <div class="form-group">
+                <label for="symptoms1" class="form-label">Symptom 1</label>
+                <input class="form-control" list="symptoms" id="symptoms1" name="symptoms1" placeholder="Type to search..." required>
+                <datalist id="symptoms">
+                    {% for s in l1 %}
+                        <option value={{ s }}>
+                    {% endfor %}
+                </datalist>
+            </div>
+
+            <div class="form-group">
+                <label for="symptoms2" class="form-label">Symptom 2</label>
+                <input class="form-control" list="symptoms" id="symptoms2" name="symptoms2" placeholder="Type to search..." required>
+                <datalist id="symptoms">
+                    {% for s in l1 %}
+                        <option value={{ s }}>
+                    {% endfor %}
+                </datalist>
+            </div>
+
+            <div class="form-group">
+                <label for="symptoms3" class="form-label">Symptom 3</label>
+                <input class="form-control" list="symptoms" id="symptoms3" name="symptoms3" placeholder="Type to search..." required>
+                <datalist id="symptoms">
+                    {% for s in l1 %}
+                        <option value={{ s }}>
+                    {% endfor %}
+                </datalist>
+            </div>
+
+            <div class="form-group">
+                <label for="symptoms4" class="form-label">Symptom 4</label>
+                <input class="form-control" list="symptoms" id="symptoms4" name="symptoms4" placeholder="Type to search...">
+                <datalist id="symptoms">
+                    {% for s in l1 %}
+                        <option value={{ s }}>
+                    {% endfor %}
+                </datalist>
+            </div>
+
+            <div class="form-group">
+                 <label for="symptoms5" class="form-label">Symptom 5</label>
+                <input class="form-control" list="symptoms" id="symptoms5" name="symptoms5" placeholder="Type to search...">
+                <datalist id="symptoms">
+                    {% for s in l1 %}
+                        <option value={{ s }}>
+                    {% endfor %}
+                </datalist>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary">Predict Disease</button>
+            <button type="reset" class="btn btn-secondary">Reset</button>
+        </form>
+    <footer class="page-footer font-small unique-color-dark pt-4">
+        <div class="footer-copyright text-center py-3">Copyright &copy 2021</div>
+    </footer>
+    </main>
 {% endblock content %}
+
+
+{#<label for="exampleDataList" class="form-label">Datalist example</label>#}
+{#<input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Type to search...">#}
+{#<datalist id="datalistOptions">#}
+{#    <option value="San Francisco">#}
+{#    <option value="New York">#}
+{#    <option value="Seattle">#}
+{#    <option value="Los Angeles">#}
+{#    <option value="Chicago">#}
+{#</datalist>#}
+{##}
+{##}
+{#    <form method="POST" action="/user/disease_prediction">#}
+{#    	<table width="282" height="215" border="2" cellpadding="2" cellspacing="2">#}
+{#  <tr>#}
+{#    <th width="103" scope="row">Symptom 1</th>#}
+{#    <td width="103">#}
+{#        <input list="symptoms" name="symptoms1">#}
+{#    	<datalist id="symptoms">#}
+{#            {% for s in l1 %}#}
+{#                <option value={{ s }}>#}
+{#            {% endfor %}#}
+{#        </datalist>#}
+{#    </td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <th scope="row">Symptom 2</th>#}
+{#    <td>#}
+{#        <input list="symptoms" name="symptoms2">#}
+{#    	<datalist id="symptoms">#}
+{#            {% for s in l1 %}#}
+{#                <option value={{ s }}>#}
+{#            {% endfor %}#}
+{#            </datalist>#}
+{#    </td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <th scope="row">Symptom 3</th>#}
+{#    <td>#}
+{#        <input list="symptoms" name="symptoms3">#}
+{#    	<datalist id="symptoms">#}
+{#            {% for s in l1 %}#}
+{#                <option value={{ s }}>#}
+{#            {% endfor %}#}
+{#            </datalist>#}
+{#    </td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <th scope="row">Symptom 4</th>#}
+{#    <td>#}
+{#        <input list="symptoms" name="symptoms4">#}
+{#    	<datalist id="symptoms">#}
+{#            {% for s in l1 %}#}
+{#                <option value={{ s }}>#}
+{#            {% endfor %}#}
+{#        </datalist>#}
+{#    </td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <th scope="row">Symptom 5</th>#}
+{#    <td>#}
+{#        <input list="symptoms" name="symptoms5">#}
+{#    	<datalist id="symptoms">#}
+{#            <{% for s in l1 %}#}
+{#                <option value={{ s }}>#}
+{#            {% endfor %}#}
+{#        </datalist>#}
+{#    </td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <th scope="row">&nbsp;</th>#}
+{#    <td>#}
+{#    	<input type="submit" value="Predict Disease"/>#}
+{#        <input type="reset" value="Reset"/>#}
+{#    </td>#}
+{#  </tr>#}
+{#</table>#}
+{#    </form>#}
+{#    </main>#}
+{#{% endblock content %}#}

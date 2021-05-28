@@ -1,85 +1,197 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Untitled Document</title>
-</head>
-<body>
-	<h2>Edit Profile ({{ data['username'] }})</h2>
-    <form method="post" action="/user/profile/edit-post" enctype="multipart/form-data">
-    <table width="359" height="284" border="2" cellpadding="2" cellspacing="2">
-  <tr>
-    <td width="93">Username</td>
-    <td width="244">
-      <label for="textfield"></label>
-      <input type="text" name="username" id="username" value="{{ data['username'] }}"/>
-    </td>
-  </tr>
-  <tr>
-    <td>Name</td>
-    <td><input type="text" name="name" id="name"value="{{ data['name'] }} "/></td>
-  </tr>
-  <tr>
-    <td>Photo</td>
-    <td>
-      <label for="photo"></label>
-      <input type="file" name="photo" id="photo" />
-    </td>
-  </tr>
-   <tr>
-    <td>Email Address</td>
-    <td><input type="text" name="email-address" id="email-address" readonly value="{{ data['email_address'] }}"/>
-  </tr>
-   <tr>
-    <td>Mobile Number</td>
-    <td><input type="text" name="mobile-number" id="mobile-number" value="{{ data['mobile_number'] }}"/></td>
-  </tr>
-   <tr>
-    <td>Gender</td>
-        <td><input type="radio" name="gender" id="male" value="Male" {{ 'checked' if data['gender']=='Male' }}/>Male
-        <input type="radio" name="gender" id="female" value="Female" {{ 'checked' if data['gender']=='Female' }}/>Female
-        <input type="radio" name="gender" id="other" value="Other" {{ 'checked' if data['gender']=='Other' }}/>Other
-    </td>
-  </tr>
-  <tr>
-    <td>Date of Birth</td>
-    <td><input type="date" name="dob" id="dob"  value="{{ data['dob'] }}"/>&nbsp;</td>
-  </tr>
-   <tr>
-    <td>House name</td>
-    <td>
-      <input type="text" name="house-name" id="house-name" value="{{ data['house_name'] }}" />
-    </td>
-  </tr>
- <tr>
-    <td>Place</td>
-   <td> <input type="text" name="place" id="place"  value="{{ data['place'] }}"/></td>
-  </tr>
-  <tr>
-    <td>District</td>
-   <td> <input type="text" name="district" id="district"  value="{{ data['district'] }}"/></td>
-  </tr>
-  <tr>
-    <td>State</td>
-   <td> <input type="text" name="state" id="state"  value="{{ data['state'] }}"/></td>
-  </tr>
-   <tr>
-    <td>Post</td>
-   <td> <input type="text" name="post" id="post"  value="{{ data['post'] }}"/></td>
-  </tr>
-  <tr>
-    <td>pin</td>
-    <td>
-      <input type="text" name="pin" id="pin" value="{{ data['pin'] }}"/>
-    </td>
-  </tr>
-        <tr>
-        <td>
-        </td>
-        <td><input type="submit"value="EDIT"/>
-        </td></tr>
+{% extends 'user/user_base.html' %}
 
-</table>
-    </form>
-</body>
-</html>
+{% block content %}
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h4">Edit Profile ({{ data['name'] }})</h1>
+            <form method="post" action="/user/profile/edit-post" enctype="multipart/form-data">
+            <button type="submit" class="btn btn-primary" style="text-align: right">Save</button>
+        </div>
+
+            <div class="row g-3">
+              <div class="col">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="Username" aria-label="Username" value="{{ data['username'] }}" required>
+              </div>
+              <div class="col">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Name" aria-label="Name" value="{{ data['name'] }}" required>
+              </div>
+            </div>
+            <br>
+
+{#            <label for="name" class="form-label">Photo</label>#}
+{#            <div class="custom-file">#}
+{#                <input type="file" class="custom-file-input" id="customFile">#}
+{#                <label class="custom-file-label" for="customFile">Choose file</label>#}
+{#              </div>#}
+          <div class="form-group">
+            <label for="photo">Photo</label>
+            <input type="file" class="form-control-file" id="photo" name="photo">
+          </div>
+
+            <br>
+            <div class="row g-3">
+              <div class="col">
+                <label for="email-address" class="form-label">Email Address</label>
+                <input type="text" class="form-control" id="email-address" name="email-address" placeholder="Email Address" aria-label="Username" value="{{ data['email_address'] }}" required>
+              </div>
+              <div class="col">
+                <label for="mobile-number" class="form-label">Mobile Number</label>
+                <input type="text" class="form-control" id="mobile-number" name="mobile-number" placeholder="Mobile Number" aria-label="Name" value="{{ data['mobile_number'] }}" required>
+              </div>
+            </div>
+            <br>
+            <fieldset class="form-group">
+                <div class="row">
+                  <legend class="col-form-label col-sm-2 pt-0">Gender</legend>
+                  <div class="col-sm-10">
+{#                    <div class="form-check">#}
+                      <input class="form-check-input" type="radio" name="gender" id="male" value="Male" {{ 'checked' if data['gender']=='Male' }}>
+                      <label class="form-check-label" for="male">
+                        Male
+                      </label>
+{#                    </div>#}
+{#                    <div class="form-check">#}
+                      <input class="form-check-input" type="radio" name="gender" id="female" value="Female" {{ 'checked' if data['gender']=='Female' }}>
+                      <label class="form-check-label" for="female">
+                        Female
+                      </label>
+{#                    </div>#}
+                      <input class="form-check-input" type="radio" name="gender" id="other" value="Other" {{ 'checked' if data['gender']=='Other' }}>
+                      <label class="form-check-label" for="other">
+                        Other
+                      </label>
+                  </div>
+                </div>
+              </fieldset>
+
+            <br>
+            <div class="col-12">
+                <label for="dob" class="form-label">Date of Birth</label>
+                <input type="date" class="form-control" id="dob" name="dob" value="{{ data['dob'] }}" required>
+              </div>
+
+            <br>
+            <fieldset>
+                <legend style="font-size: 16px"><b>ADDRESS</b></legend>
+                <div class="row g-3">
+              <div class="col">
+                <label for="house-name" class="form-label">House Name</label>
+                <input type="text" class="form-control" id="house-name" name="house-name" placeholder="House Name" aria-label="House Name" value="{{ data['house_name'] }}" required>
+              </div>
+              <div class="col">
+                <label for="place" class="form-label">Place</label>
+                <input type="text" class="form-control" id="place" name="place" placeholder="Place" aria-label="Place" value="{{ data['place'] }}" required>
+              </div>
+            </div>
+        <br>
+            <div class="row g-3">
+              <div class="col">
+                <label for="district" class="form-label">District</label>
+                <input type="text" class="form-control" id="district" name="district" placeholder="District" aria-label="District" value="{{ data['district'] }}" required>
+              </div>
+              <div class="col">
+                <label for="state" class="form-label">State</label>
+                <input type="text" class="form-control" id="state" name="state" placeholder="State" aria-label="State" value="{{ data['state'] }}" required>
+              </div>
+            </div>
+        <br>
+            <div class="row g-3">
+              <div class="col">
+                <label for="post" class="form-label">Post</label>
+                <input type="text" class="form-control" id="post" name="post" placeholder="Post" aria-label="Post" value="{{ data['post'] }}" required>
+              </div>
+              <div class="col">
+                <label for="pin" class="form-label">PIN</label>
+                <input type="text" class="form-control" id="pin" name="pin" placeholder="PIN" aria-label="PIN" value="{{ data['pin'] }}" required>
+              </div>
+            </div>
+            </fieldset>
+        <footer class="page-footer font-small unique-color-dark pt-4">
+            <div class="footer-copyright text-center py-3">Copyright &copy 2021</div>
+        </footer>
+
+    </main>
+
+    ..
+{#    <form method="post" action="/user/profile/edit-post" enctype="multipart/form-data">#}
+{#    <table width="359" height="284" border="2" cellpadding="2" cellspacing="2">#}
+{#  <tr>#}
+{#    <td width="93">Username</td>#}
+{#    <td width="244">#}
+{#      <label for="textfield"></label>#}
+{#      <input type="text" name="username" id="username" value="{{ data['username'] }}"/>#}
+{#    </td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <td>Name</td>#}
+{#    <td><input type="text" name="name" id="name"value="{{ data['name'] }} "/></td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <td>Photo</td>#}
+{#    <td>#}
+{#      <label for="photo"></label>#}
+{#      <input type="file" name="photo" id="photo" />#}
+{#    </td>#}
+{#  </tr>#}
+{#   <tr>#}
+{#    <td>Email Address</td>#}
+{#    <td><input type="text" name="email-address" id="email-address" readonly value="{{ data['email_address'] }}"/>#}
+{#  </tr>#}
+{#   <tr>#}
+{#    <td>Mobile Number</td>#}
+{#    <td><input type="text" name="mobile-number" id="mobile-number" value="{{ data['mobile_number'] }}"/></td>#}
+{#  </tr>#}
+{#   <tr>#}
+{#    <td>Gender</td>#}
+{#        <td><input type="radio" name="gender" id="male" value="Male" {{ 'checked' if data['gender']=='Male' }}/>Male#}
+{#        <input type="radio" name="gender" id="female" value="Female" {{ 'checked' if data['gender']=='Female' }}/>Female#}
+{#        <input type="radio" name="gender" id="other" value="Other" {{ 'checked' if data['gender']=='Other' }}/>Other#}
+{#    </td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <td>Date of Birth</td>#}
+{#    <td><input type="date" name="dob" id="dob"  value="{{ data['dob'] }}"/>&nbsp;</td>#}
+{#  </tr>#}
+{#   <tr>#}
+{#    <td>House name</td>#}
+{#    <td>#}
+{#      <input type="text" name="house-name" id="house-name" value="{{ data['house_name'] }}" />#}
+{#    </td>#}
+{#  </tr>#}
+{# <tr>#}
+{#    <td>Place</td>#}
+{#   <td> <input type="text" name="place" id="place"  value="{{ data['place'] }}"/></td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <td>District</td>#}
+{#   <td> <input type="text" name="district" id="district"  value="{{ data['district'] }}"/></td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <td>State</td>#}
+{#   <td> <input type="text" name="state" id="state"  value="{{ data['state'] }}"/></td>#}
+{#  </tr>#}
+{#   <tr>#}
+{#    <td>Post</td>#}
+{#   <td> <input type="text" name="post" id="post"  value="{{ data['post'] }}"/></td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <td>pin</td>#}
+{#    <td>#}
+{#      <input type="text" name="pin" id="pin" value="{{ data['pin'] }}"/>#}
+{#    </td>#}
+{#  </tr>#}
+{#        <tr>#}
+{#        <td>#}
+{#        </td>#}
+{#        <td><input type="submit"value="EDIT"/>#}
+{#        </td></tr>#}
+{##}
+{#</table>#}
+{#    </form>#}
+
+{% endblock content %}
+
+{% block footer %}
+{% endblock footer %}

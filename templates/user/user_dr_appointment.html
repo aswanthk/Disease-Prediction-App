@@ -1,40 +1,13 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Untitled Document</title>
-<script type="text/javascript">
-var xmlHttp;
-            function adds(eid){
+{% extends 'user/user_base.html' %}
 
-                if (typeof XMLHttpRequest != "undefined"){
-                xmlHttp= new XMLHttpRequest();
-                }
-                else if (window.ActiveXObject){
-                    xmlHttp= new ActiveXObject("Microsoft.XMLHTTP");
-                }
-                if (xmlHttp==null){
-                    alert("Browser does not support XMLHTTP Request")
-                    return;
-                }
-                var url="/appointment_select/"+eid
-                xmlHttp.onreadystatechange = stateChange;
-                xmlHttp.open("GET", url, true);
-                xmlHttp.send(null);
-            }
+{% block content %}
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h4">Register for Appointment</h1>
+        </div>
+        <form action="/user/appointment/submit" method="post">
 
-            function stateChange(){
-                if(xmlHttp.readyState==4 || xmlHttp.readyState=="complete"){
-                    document.getElementById("d").innerHTML=xmlHttp.responseText
-
-                }
-            }
-</script>
-</head>
-<body>
-	<form action="/user/appointment/submit" method="post">
-        <h3>Register for Appointment</h3>
-	<h3>Patient Details</h3>
+            <h3>Patient Details</h3>
 <pre>
     Patient Name :  <input type="text" name="patient-name" id="patient-name" value="{{ usr[0]['name'] }}"/><br /><br />
     Age :           <input type="text" name="patient-age" id="patient-age" value="{{ age }}"/><br /><br />
@@ -78,6 +51,122 @@ PIN: {{ usr[0]['pin'] }}
 
         <input type="submit" value="Book">
         <button><a>Cancel</a></button>
-    </form>
-</body>
-</html>
+
+        </form>
+
+
+    </main>
+<footer class="page-footer font-small unique-color-dark pt-4">
+    <div class="footer-copyright text-center py-3">Copyright &copy 2021</div>
+</footer>
+{% endblock content %}
+
+{% block footer %}
+    <script type="text/javascript">
+        var xmlHttp;
+                    function adds(eid){
+
+                        if (typeof XMLHttpRequest != "undefined"){
+                        xmlHttp= new XMLHttpRequest();
+                        }
+                        else if (window.ActiveXObject){
+                            xmlHttp= new ActiveXObject("Microsoft.XMLHTTP");
+                        }
+                        if (xmlHttp==null){
+                            alert("Browser does not support XMLHTTP Request")
+                            return;
+                        }
+                        var url="/appointment_select/"+eid
+                        xmlHttp.onreadystatechange = stateChange;
+                        xmlHttp.open("GET", url, true);
+                        xmlHttp.send(null);
+                    }
+
+                    function stateChange(){
+                        if(xmlHttp.readyState==4 || xmlHttp.readyState=="complete"){
+                            document.getElementById("d").innerHTML=xmlHttp.responseText
+
+                        }
+                    }
+        </script>
+{% endblock footer %}
+
+
+{#<script type="text/javascript">#}
+{#var xmlHttp;#}
+{#            function adds(eid){#}
+{##}
+{#                if (typeof XMLHttpRequest != "undefined"){#}
+{#                xmlHttp= new XMLHttpRequest();#}
+{#                }#}
+{#                else if (window.ActiveXObject){#}
+{#                    xmlHttp= new ActiveXObject("Microsoft.XMLHTTP");#}
+{#                }#}
+{#                if (xmlHttp==null){#}
+{#                    alert("Browser does not support XMLHTTP Request")#}
+{#                    return;#}
+{#                }#}
+{#                var url="/appointment_select/"+eid#}
+{#                xmlHttp.onreadystatechange = stateChange;#}
+{#                xmlHttp.open("GET", url, true);#}
+{#                xmlHttp.send(null);#}
+{#            }#}
+{##}
+{#            function stateChange(){#}
+{#                if(xmlHttp.readyState==4 || xmlHttp.readyState=="complete"){#}
+{#                    document.getElementById("d").innerHTML=xmlHttp.responseText#}
+{##}
+{#                }#}
+{#            }#}
+{#</script>#}
+{#</head>#}
+{#<body>#}
+{#	<form action="/user/appointment/submit" method="post">#}
+{#        <h3>Register for Appointment</h3>#}
+{#	<h3>Patient Details</h3>#}
+{#<pre>#}
+{#    Patient Name :  <input type="text" name="patient-name" id="patient-name" value="{{ usr[0]['name'] }}"/><br /><br />#}
+{#    Age :           <input type="text" name="patient-age" id="patient-age" value="{{ age }}"/><br /><br />#}
+{#    Address :       <textarea name="patient-address" cols="25" rows="5">#}
+{#"{{ usr[0]['house_name'] }}"#}
+{#{{ usr[0]['place'] }}#}
+{#{{ usr[0]['district'] }}, {{ usr[0]['state'] }}#}
+{#PIN: {{ usr[0]['pin'] }}#}
+{#                </textarea><br /><br />#}
+{#    Email Address : <input type="text" name="patient-email" id="patient-email" value="{{ usr[0]['email_address'] }}" readonly/><br /><br />#}
+{#    Mobile Number : <input type="text" name="patient-mobile" id="patient-mobile" value="{{ usr[0]['mobile_number'] }}"/>#}
+{#</pre>#}
+{##}
+{#<h3>Appointment Details</h3>#}
+{#<pre>#}
+{#    Doctor Name :           <input type="text" name="dr-name" id="dr-name" value="{{ dr['name'] }}" readonly/><br /><br />#}
+{#    Doctor Address :        <textarea name="dr-address" id="dr-address" cols="25" rows="5">{{ dr['hospital_name'] }}</textarea><br /><br />#}
+{##}
+{#    Appointment Date :      <select name="option-date" id="option-date" onchange="adds(this.value)">#}
+{#                                <option value="--select--">--select--</option>#}
+{#                                {% for x in app %}#}
+{#                                <option value="{{ x['schedule_date'] }}">{{ x['schedule_date'] }}({{ x['schedule_day'] }})</option>#}
+{#                                {% endfor %}#}
+{#                            </select>#}
+{#    <p id="d"></p>#}
+{#</pre>#}
+{##}
+{#<h3>Prediction Information</h3>#}
+{#<pre>#}
+{#    Symptoms:           {{ usr[0]['symptoms'] }} <input type="hidden" name="symptoms" id="symptoms" value="{{ usr[0]['symptoms'] }}">#}
+{##}
+{#    Predicted Disease:#}
+{#                        {% for p in pred %}#}
+{#                            {{ p[0] }}  :   {{ p[1] }} <input type="hidden" name="prediction{{ loop.index }}" id="prediction{{ loop.index }}" value="{{ p[0] }}  :   {{ p[1] }}">#}
+{#                        {% endfor %}#}
+{#    Predicted on {{ usr[0]['date'] }} <input type="hidden" name="prediction-date" id="prediction-date" value="{{ usr[0]['date'] }}">#}
+{#    <input type="hidden" name="pred-id" id="pred-id" value="{{ usr[0]['prediction_id'] }}">#}
+{#    <input type="hidden" name="dr-id" id="dr-id" value="{{ dr['doctor_id'] }}">#}
+{#    <input type="hidden" name="patient-username" id="patient-username" value="{{ usr[0]['username'] }}">#}
+{#</pre>#}
+{##}
+{#        <input type="submit" value="Book">#}
+{#        <button><a>Cancel</a></button>#}
+{#    </form>#}
+{#</body>#}
+{#</html>#}

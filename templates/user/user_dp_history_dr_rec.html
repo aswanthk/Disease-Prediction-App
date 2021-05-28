@@ -1,36 +1,86 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    <h2>You may contact this Doctor</h2>
-    <table width="624" border="2" cellspacing="2" cellpadding="2">
-  <tr>
-    <th width="11" scope="col">#</th>
-    <th width="44" scope="col">Dr. Name</th>
-    <th width="27" scope="col">Username</th>
-    <th width="36" scope="col">Email Address</th>
-    <th width="48" scope="col">License ID</th>
-    <th width="48" scope="col">Qualification</th>
-    <th width="79" scope="col">Category</th>
-    <th width="102" scope="col">&nbsp;</th>
-  </tr>
-        {% for data in qry1 %}
-  <tr>
-  	<td>{{ loop.index }}</td>
-    <td>{{data["name"]}} <img src="{{ data["photo"] }}" height="100" width="50"/></td>
-    <td>{{ data["username"] }}</td>
-    <td>&nbsp;{{ data["email_address"] }}</td>
-    <td>{{ data["license_id"] }}</td>
-    <td>&nbsp;{{ data["qualification"] }}</td>
-    <td>&nbsp;{{ data["category"] }}</td>
-    <td>
-    	<a href="/user/dr/appointment/{{ data['doctor_id'] }}">Register Now</a>
-    </td>
-  </tr>
+{% extends 'user/user_base.html' %}
+
+{% block content %}
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h4">Doctor Recommendation</h1>
+        </div>
+        <p class="h5">You may contact this Doctor:</p> <br>
+        {% for n in l %}
+            {% if n>0 %}
+                <table class="table">
+                  <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Dr. Name</th>
+                        <th>Qualification</th>
+                        <th>Category</th>
+                        <th>Address</th>
+                        <th>Contact Number</th>
+                        <th>Fee</th>
+                        <th></th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    {% for data in qry1 %}
+                      <tr>
+                        <th>{{ loop.index }}</th>
+                        <td><b>{{data["name"]}}</b> <br><img src="{{ data["photo"] }}" height="100" width="50"/></td>
+                        <td>{{ data["qualification"] }}</td>
+                        <td>{{ data["category"] }}</td>
+                        <td>
+                            {{ data["hospital_name"] }} <br>
+                            {{ data["place"] }} <br>
+                            {{ data["district"] }} <br>
+                            {{ data["state"] }} <br>
+                            {{ data["post"] }} <br>
+                            PIN : {{ data["pin"] }} <br>
+                        </td>
+                        <td>{{ data["contact_number"] }}</td>
+                        <td>{{ data["admission_fee"] }}</td>
+                        <td>
+                            <a href="/user/dr/appointment/{{ data['doctor_id'] }}">Register Now</a>
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+            {% endif %}
+
+            {% if n==0 %}
+                <p>No data found</p>
+            {% endif %}
         {% endfor %}
-  </table>
-</body>
-</html>
+<footer class="page-footer font-small unique-color-dark pt-4">
+    <div class="footer-copyright text-center py-3">Copyright &copy 2021</div>
+</footer>
+
+{#    <table width="624" border="2" cellspacing="2" cellpadding="2">#}
+{#  <tr>#}
+{#    <th width="11" scope="col">#</th>#}
+{#    <th width="44" scope="col">Dr. Name</th>#}
+{#    <th width="27" scope="col">Username</th>#}
+{#    <th width="36" scope="col">Email Address</th>#}
+{#    <th width="48" scope="col">License ID</th>#}
+{#    <th width="48" scope="col">Qualification</th>#}
+{#    <th width="79" scope="col">Category</th>#}
+{#    <th width="102" scope="col"></th>#}
+{#  </tr>#}
+{#        {% for data in qry1 %}#}
+{#  <tr>#}
+{#  	<td>{{ loop.index }}</td>#}
+{#    <td>{{data["name"]}} <img src="{{ data["photo"] }}" height="100" width="50"/></td>#}
+{#    <td>{{ data["username"] }}</td>#}
+{#    <td>&nbsp;{{ data["email_address"] }}</td>#}
+{#    <td>{{ data["license_id"] }}</td>#}
+{#    <td>&nbsp;{{ data["qualification"] }}</td>#}
+{#    <td>&nbsp;{{ data["category"] }}</td>#}
+{#    <td>#}
+{#    	<a href="/user/dr/appointment/{{ data['doctor_id'] }}">Register Now</a>#}
+{#    </td>#}
+{#  </tr>#}
+{#        {% endfor %}#}
+{#  </table>#}
+
+    </main>
+{% endblock content %}

@@ -38,10 +38,127 @@
 {#</body>#}
 {#</html>#}
 
-{% block head %}
 
+{% block content %}
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h4">Search Doctor</h1>
+        </div>
+
+        <form action="/search_doctor_post" method="post">
+            <div class="form-group">
+                <label for="option" class="form-label">Select By</label>
+                <select class="form-select" name="option" id="select" aria-label="Default select example" onchange="adds(this.value)">
+                    <option value="select" selected>Select option</option>
+                    <option value="name">Name</option>
+                    <option value="specialisation">Specialisation</option>
+                    <option value="experience">Experience</option>
+                    <option value="location">Location</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="d"></div>
+            <br>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+        <br>
+        <p class="h5">Search Results:</p>
+        {% for n in l %}
+            {% if n>0 %}
+                <table class="table">
+                  <thead class="table-light">
+                      <tr>
+                        <th>#</th>
+                        <th>Dr. Name</th>
+                        <th>Qualification</th>
+                        <th>Category</th>
+                        <th>Address</th>
+                        <th>Contact Number</th>
+                        <th>Fee</th>
+                        <th></th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      {% for data in qry1 %}
+                      <tr>
+                        <td>{{ loop.index }}</td>
+                        <td><b>{{data["name"]}}</b> <br> <img src="{{ data["photo"] }}" height="100" width="50"/></td>
+                        <td>{{ data["qualification"] }}</td>
+                        <td>{{ data["category"] }}</td>
+                        <td>
+                                {{ data["hospital_name"] }} <br>
+                                {{ data["place"] }} <br>
+                                {{ data["district"] }} <br>
+                                {{ data["state"] }} <br>
+                                {{ data["post"] }} <br>
+                                PIN : {{ data["pin"] }} <br>
+                            </td>
+                        <td>{{ data["contact_number"] }}</td>
+                        <td>{{ data["admission_fee"] }}</td>
+                          <td><a href="#">Register Now</a></td>
+                      </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+                {% endif %}
+                {% if n==0 %}
+                    <p>No data found</p>
+                {% endif %}
+        {% endfor %}
+
+        <footer class="page-footer font-small unique-color-dark pt-4">
+            <div class="footer-copyright text-center py-3">Copyright &copy 2021</div>
+        </footer>
+    </main>
+{% endblock content %}
+
+
+{#        <form action="/search_doctor_post" method="post">#}
+{#    	<p>Select By</p>#}
+{#    	<select name="option" onchange="adds(this.value)">#}
+{#        	<option value="--select--">--select--</option>#}
+{#            <option value="name">Name</option>#}
+{#            <option value="specialisation">Specialisation</option>#}
+{#            <option value="experience">Experience</option>#}
+{#            <option value="location">Location</option>#}
+{#        </select> <br><br>#}
+{#     <div id="d">#}
+{##}
+{#     </div>#}
+{#        <br /><br />#}
+{#        <input type="submit" value="Search" />#}
+{#    </form> <br>#}
+{#<table width="624" border="2" cellspacing="2" cellpadding="2">#}
+{#  <tr>#}
+{#    <th width="11" scope="col">#</th>#}
+{#    <th width="44" scope="col">Dr. Name</th>#}
+{#    <th width="27" scope="col">Username</th>#}
+{#    <th width="36" scope="col">Email Address</th>#}
+{#    <th width="48" scope="col">License ID</th>#}
+{#    <th width="48" scope="col">Qualification</th>#}
+{#    <th width="79" scope="col">Category</th>#}
+{#    <th width="79" scope="col"></th>#}
+{#  </tr>#}
+{#  {% for data in qry1 %}#}
+{#      <tr>#}
+{#      <td>{{ loop.index }}</td>#}
+{#    <td>{{data["name"]}} <img src="{{ data["photo"] }}" height="100" width="50"/></td>#}
+{##}
+{#    <td>{{ data["username"] }}</td>#}
+{#    <td>&nbsp;{{ data["email_address"] }}</td>#}
+{#    <td>{{ data["license_id"] }}</td>#}
+{#    <td>&nbsp;{{ data["qualification"] }}</td>#}
+{#    <td>&nbsp;{{ data["category"] }}</td>#}
+{#      <td><a href="#">Register Now</a></td>#}
+{#  {% endfor %}#}
+{#</table>#}
+{#    </main>#}
+{##}
+{#{% endblock content %}#}
+
+{% block footer %}
     <script type="text/javascript">
-var xmlHttp;
+        var xmlHttp;
             function adds(eid){
 
                 if (typeof XMLHttpRequest != "undefined"){
@@ -66,54 +183,5 @@ var xmlHttp;
 
                 }
             }
-</script>
-
-{% endblock head %}
-
-{% block content %}
-<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="h4">Search Doctor</h1>
-        </div>
-        <form action="/search_doctor_post" method="post">
-    	<p>Select By</p>
-    	<select name="option" onchange="adds(this.value)">
-        	<option value="--select--">--select--</option>
-            <option value="name">Name</option>
-            <option value="specialisation">Specialisation</option>
-            <option value="experience">Experience</option>
-            <option value="location">Location</option>
-        </select> <br><br>
-     <div id="d">
-
-     </div>
-        <br /><br />
-        <input type="submit" value="Search" />
-    </form> <br>
-<table width="624" border="2" cellspacing="2" cellpadding="2">
-  <tr>
-    <th width="11" scope="col">#</th>
-    <th width="44" scope="col">Dr. Name</th>
-    <th width="27" scope="col">Username</th>
-    <th width="36" scope="col">Email Address</th>
-    <th width="48" scope="col">License ID</th>
-    <th width="48" scope="col">Qualification</th>
-    <th width="79" scope="col">Category</th>
-    <th width="79" scope="col"></th>
-  </tr>
-  {% for data in qry1 %}
-      <tr>
-      <td>{{ loop.index }}</td>
-    <td>{{data["name"]}} <img src="{{ data["photo"] }}" height="100" width="50"/></td>
-
-    <td>{{ data["username"] }}</td>
-    <td>&nbsp;{{ data["email_address"] }}</td>
-    <td>{{ data["license_id"] }}</td>
-    <td>&nbsp;{{ data["qualification"] }}</td>
-    <td>&nbsp;{{ data["category"] }}</td>
-      <td><a href="#">Register Now</a></td>
-  {% endfor %}
-</table>
-    </main>
-
-{% endblock content %}
+    </script>
+{% endblock footer %}
