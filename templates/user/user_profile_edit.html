@@ -3,7 +3,8 @@
 {% block content %}
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="h4">Edit Profile ({{ data['name'] }})</h1>
+            <h1 class="h4">Edit Profile</h1>
+            <h1 class="h4" style="text-align: center">{{ data['name'] }}</h1>
             <form method="post" action="/user/profile/edit-post" enctype="multipart/form-data">
             <button type="submit" class="btn btn-primary" style="text-align: right">Save</button>
         </div>
@@ -38,7 +39,7 @@
               </div>
               <div class="col">
                 <label for="mobile-number" class="form-label">Mobile Number</label>
-                <input type="text" class="form-control" id="mobile-number" name="mobile-number" placeholder="Mobile Number" aria-label="Name" value="{{ data['mobile_number'] }}" required>
+                <input type="text" class="form-control" id="mobile-number" name="mobile-number" placeholder="Mobile Number" aria-label="Mobile Number" value="{{ data['mobile_number'] }}" required>
               </div>
             </div>
             <br>
@@ -49,13 +50,13 @@
 {#                    <div class="form-check">#}
                       <input class="form-check-input" type="radio" name="gender" id="male" value="Male" {{ 'checked' if data['gender']=='Male' }}>
                       <label class="form-check-label" for="male">
-                        Male
+                        Male &nbsp; &nbsp;
                       </label>
 {#                    </div>#}
 {#                    <div class="form-check">#}
                       <input class="form-check-input" type="radio" name="gender" id="female" value="Female" {{ 'checked' if data['gender']=='Female' }}>
                       <label class="form-check-label" for="female">
-                        Female
+                        Female &nbsp; &nbsp;
                       </label>
 {#                    </div>#}
                       <input class="form-check-input" type="radio" name="gender" id="other" value="Other" {{ 'checked' if data['gender']=='Other' }}>
@@ -74,7 +75,7 @@
 
             <br>
             <fieldset>
-                <legend style="font-size: 16px"><b>ADDRESS</b></legend>
+                <legend style="font-size: 14px"><b>ADDRESS</b></legend>
                 <div class="row g-3">
               <div class="col">
                 <label for="house-name" class="form-label">House Name</label>

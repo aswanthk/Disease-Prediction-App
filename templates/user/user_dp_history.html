@@ -19,13 +19,13 @@
             <tr>
                 <th rowspan="2">#</th>
                 <th rowspan="2">Symptoms</th>
-                <th colspan="2">Disease Prediction</th>
+                <th colspan="2"><div align="center">Disease Prediction</div></th>
                 <th rowspan="2">Date/Time</th>
                 <th rowspan="2"></th>
               </tr>
               <tr>
-                <th><div align="center">Algorithm</div></th>
-                <th><div align="center">Disease</div></th>
+                <th>Algorithm</th>
+                <th>Disease</th>
               </tr>
           </thead>
           <tbody>
@@ -47,8 +47,9 @@
                         {% endfor %}
                    </td>
                    <td rowspan="3">
-                       <a href="/user/dp_history/rm/{{row["prediction_id"]}}">Remove</a><br><br>
-                       <a href="/user/dp_history/dr_rec/{{row["prediction_id"]}}">Dr. Recommendation</a>
+                       <a href="/user/dp_history/dr_rec/{{row["prediction_id"]}}"><button class="btn btn-primary btn-sm">Dr. Recommendation</button></a>
+                       <br><br>
+                       <a href="/user/dp_history/rm/{{row["prediction_id"]}}"><button class="btn btn-danger btn-sm">Remove</button></a><br><br>
                    </td>
                       </tr>
                       {% endif %}

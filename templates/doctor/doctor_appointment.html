@@ -1,56 +1,173 @@
-{% extends 'doctor/doctor_home.html' %}
-{% block body %}
-{#<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">#}
-{#<html xmlns="http://www.w3.org/1999/xhtml">#}
-{#<head>#}
-{#<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />#}
-{#<title>Untitled Document</title>#}
-{#</head>#}
-{##}
-{#<body>#}
-	<h2>Appointment Management</h2>
-    <p><b>Appointment List</b></p>
-    <a href="/doctor/appointment"><button>Refresh</button></a>
-    <form action="/doctor/search/app-date" method="post">
-{#    	<input type="date" name="date1" id="date1" class="form-control"/>#}
-        <input type="date" name="date1" id="date1" />
-        <input type="date" name="date2" id="date2" />
-{#        <input type="submit" value="Search" class="btn btn-danger" />#}
-        <input type="submit" value="Search" />
-    </form>
-    <form action="/doctor/search/app-name" method="post">
-    	<input type="text" name="qry-name" id="qry-name" />
-        <input type="submit" value="Search" />
-    </form>
-    <table width="513" border="2" cellspacing="2" cellpadding="2">
-  <tr>
-    <th width="41" scope="col">Appointment No.</th>
-    <th width="65" scope="col">Patient Name</th>
-    <th width="63" scope="col">Appointment Date</th>
-    <th width="58" scope="col">Appointment Time</th>
-    <th width="78" scope="col">Appointment Day</th>
-    <th width="83" scope="col">Appointment Status</th>
-    <th width="63" scope="col">Action</th>
-  </tr>
-    {% for x in qry %}
-  <tr>
-    <td>{{ x['appointment_id'] }}</td>
-    <td>{{ x['patient_name'] }}</td>
-    <td>{{ x['schedule_date'] }}</td>
-    <td>{{ x['schedule_day'] }}</td>
-    <td>{{ x['start_time'] }} - {{ x['end_time'] }}</td>
-    <td>{{ x['status'] }}</td>
-    <td>
-        <a href="/doctor/appointment/more/{{ x['appointment_id'] }}">View more</a><br><br>
-        {% if x['status'] != 'Booked' %}
-            <p><a href="/doctor/appointment/approve/{{ x['appointment_id'] }}">Approve</a></p>
-    <p><a href="/doctor/appointment/reject/{{ x['appointment_id'] }}">Reject</a></p>
-        {% endif %}
-    </td>
-  </tr>
-    {% endfor %}
-</table>
+{% extends 'doctor/doctor_base.html' %}
 
+{% block content %}
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h4">Appointment Management</h1>
+        </div>
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+{#            <div class="row g-3">#}
+{#                <div class="col-2">#}
+{#                    <div style="display: inline-block">#}
+{#                    <form class="form-horizontal" action="/doctor/search/app-date" method="post">#}
+{#                        <div class="form-group">#}
+{#                            <div class="col-sm-10">#}
+{#                                <input type="date" name="date1" id="date1" class="form-control form-control-static"/>#}
+{#                                <input type="date" name="date2" id="date2" class="form-control form-control-static"/>#}
+{#                                <input type="submit" value="Search" />#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </form>#}
+            <div class="container-fluid">
+                <form action="/doctor/search/app-date" method="post">
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <input type="date" name="date1" id="date1" class="form-control"/>
+                                </div>
+                                <div class="col-sm-2">
+                                    <input type="date" name="date2" id="date2" class="form-control"/>
+                                </div>
+                                <div class="col-sm-2">
+                                    <input type="submit" value="Search" class="btn btn-primary"/>
+                                </div>
+                                <div class="col-sm-2">
+                                    <input type="text" name="qry-name" id="qry-name" placeholder="Search name" class="form-control"/>
+                                </div>
+                                <div class="col-sm-2">
+                                    <input type="submit" value="Search" class="btn btn-primary"/>
+                                </div>
+                            </div>
+                        </form>
+            </div>
+
+{#                        <div style="text-align: right">#}
+{#                <span style="text-align: right">#}
+{#                    <form action="/doctor/search/app-name" method="post">
+                                <div class="col-sm-2">
+                                    <input type="text" name="qry-name" id="qry-name" class="form-control"/>
+                                </div>
+                                <div class="col-sm-2">
+                                    <input type="submit" value="Search" class="btn btn-primary"/>
+                                </div>
+                            </form>#}
+{#                </span>#}
+
+{#                        </div>#}
+            </div>
+
+
+{#                    <div class="container-fluid m-2">#}
+{#                        #}
+{#                        <form action="/doctor/search/app-date" method="post" class="form-inline">#}
+{#                            <input type="date" name="date1" id="date1" class="form-control m-2"/>#}
+{#                            <input type="date" name="date2" id="date2" class="form-control m-2"/>#}
+{#                            <input type="submit" value="Search" class="btn btn-primary m-2"/>#}
+{#                        </form>#}
+{#                    </div>#}
+{#                    </div>#}
+{#                </div>#}
+
+{#            </div>#}
+{#            <div class="row g-3" style="text-align: right">#}
+
+
+
+{#                <div class="col-2" style="text-align: right">#}
+{#                    <form action="/doctor/search/app-name" method="post">#}
+{#                    <input type="text" name="qry-name" id="qry-name" class="form-control"/>#}
+{#                    <input type="submit" value="Search" />#}
+{#                </form>#}
+{#                </div>#}
+
+
+
+{#            </div>#}
+
+        <table class="table">
+          <thead class="table-light">
+            <tr>
+            <th>Appointment No.</th>
+            <th>Patient Name</th>
+            <th>Appointment Date</th>
+            <th>Appointment Time</th>
+            <th>Appointment Day</th>
+            <th>Appointment Status</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+          <tbody>
+            {% for x in qry %}
+              <tr>
+                <th>{{ x['appointment_id'] }}</th>
+                <td>{{ x['patient_name'] }}</td>
+                <td>{{ x['schedule_date'] }}</td>
+                <td>{{ x['schedule_day'] }}</td>
+                <td>{{ x['start_time'] }} - {{ x['end_time'] }}</td>
+                <td>{{ x['status'] }}</td>
+                <td>
+                    <a href="/doctor/appointment/more/{{ x['appointment_id'] }}"><button class="btn btn-primary btn-sm">View more</button></a>
+                       <br><br>
+                        {% if x['status'] != 'Booked' %}
+                            <a href="/doctor/appointment/approve/{{ x['appointment_id'] }}"><button class="btn btn-success btn-sm">Approve</button></a><br><br>
+                            <a href="/doctor/appointment/reject/{{ x['appointment_id'] }}"><button class="btn btn-danger btn-sm">Reject</button></a>
+                        {% endif %}
+                </td>
+              </tr>
+                {% endfor %}
+          </tbody>
+</table>
+    </main>
+<footer class="page-footer font-small unique-color-dark pt-4">
+    <div class="footer-copyright text-center py-3">Copyright &copy 2021</div>
+</footer>
+{% endblock content %}
+
+
+
+{#{% block body %}#}
+{#	<h2>Appointment Management</h2>#}
+{#    <p><b>Appointment List</b></p>#}
+{#    <a href="/doctor/appointment"><button>Refresh</button></a>#}
+{#    <form action="/doctor/search/app-date" method="post">#}
+{#    	<input type="date" name="date1" id="date1" class="form-control"/>#}
+{#        <input type="date" name="date1" id="date1" />#}
+{#        <input type="date" name="date2" id="date2" />#}
+{#        <input type="submit" value="Search" class="btn btn-danger" />#}
+{#        <input type="submit" value="Search" />#}
+{#    </form>#}
+{#    <form action="/doctor/search/app-name" method="post">#}
+{#    	<input type="text" name="qry-name" id="qry-name" />#}
+{#        <input type="submit" value="Search" />#}
+{#    </form>#}
+{#    <table width="513" border="2" cellspacing="2" cellpadding="2">#}
+{#  <tr>#}
+{#    <th width="41" scope="col">Appointment No.</th>#}
+{#    <th width="65" scope="col">Patient Name</th>#}
+{#    <th width="63" scope="col">Appointment Date</th>#}
+{#    <th width="58" scope="col">Appointment Time</th>#}
+{#    <th width="78" scope="col">Appointment Day</th>#}
+{#    <th width="83" scope="col">Appointment Status</th>#}
+{#    <th width="63" scope="col">Action</th>#}
+{#  </tr>#}
+{#    {% for x in qry %}#}
+{#  <tr>#}
+{#    <td>{{ x['appointment_id'] }}</td>#}
+{#    <td>{{ x['patient_name'] }}</td>#}
+{#    <td>{{ x['schedule_date'] }}</td>#}
+{#    <td>{{ x['schedule_day'] }}</td>#}
+{#    <td>{{ x['start_time'] }} - {{ x['end_time'] }}</td>#}
+{#    <td>{{ x['status'] }}</td>#}
+{#    <td>#}
+{#        <a href="/doctor/appointment/more/{{ x['appointment_id'] }}">View more</a><br><br>#}
+{#        {% if x['status'] != 'Booked' %}#}
+{#            <p><a href="/doctor/appointment/approve/{{ x['appointment_id'] }}">Approve</a></p>#}
+{#    <p><a href="/doctor/appointment/reject/{{ x['appointment_id'] }}">Reject</a></p>#}
+{#        {% endif %}#}
+{#    </td>#}
+{#  </tr>#}
+{#    {% endfor %}#}
+{#</table>#}
+{##}
 {#</body>#}
 {#</html>#}
-{% endblock body %}
+{#{% endblock body %}#}

@@ -1,116 +1,342 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Untitled Document</title>
-</head>
+{% extends 'user/user_base.html' %}
 
-<body>
-<h2>Edit Profile ({{ data['username'] }})</h2>
-<form action="/doctor/profile/edit/post" method="post" enctype="multipart/form-data">
-<table width="344" height="284" border="2"  cellpadding="2" cellspacing="2">
-  <tr>
-    <td>Username</td>
-    <td>
-      <input type="text" name="username" id="username" value="{{ data['username'] }}" readonly />
-    </td>
-  </tr>
-  <tr>
-    <td>Name</td>
-    <td><input type="text" name="name" id="name" value="{{ data['name'] }}" /></td>
-  </tr>
-  <tr>
-    <td>Photo</td>
-    <td>
-      <input type="file" name="photo" id="photo" />
-    </td>
-  </tr>
-    <tr>
-    <td>Email Address</td>
-      <td><input type="text" name="email-address" id="email-address" value="{{ data['email_address'] }}" readonly /></td>
-  </tr>
-   <tr>
-    <td>Contact Number</td>
-    <td><input type="text" name="contact-number" id="contact-number" value="{{ data['contact_number'] }}" /></td>
-  </tr>
-  <tr>
-    <td>Gender</td>
-        <td><input type="radio" name="gender" id="male" value="Male" {{ 'checked' if data['gender']=='Male' }}/>Male
-        <input type="radio" name="gender" id="female" value="Female" {{ 'checked' if data['gender']=='Female' }}/>Female
-        <input type="radio" name="gender" id="other" value="Other" {{ 'checked' if data['gender']=='Other' }}/>Other
-    </td>
-  </tr>
-    <tr>
-    <td>Date of Birth</td>
-    <td><input type="date" name="dob" id="dob" value="{{ data['dob'] }}" /></td>
-  </tr>
-  <tr>
-    <td>License ID</td>
-      <td><input type="text" name="license-id" id="license-id" value="{{ data['license_id'] }}" /></td>
-  </tr>
-  <tr>
-    <td>Qualification</td>
-      <td><input type="text" name="qualification" id="qualification" value="{{ data['qualification'] }}" /></td>
-  </tr>
+{% block content %}
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h4">Edit Profile</h1>
+            <h1 class="h4" style="text-align: center">{{ data['name'] }}</h1>
+            <form action="/doctor/profile/edit/post" method="post" enctype="multipart/form-data">
+            <button type="submit" class="btn btn-primary" style="text-align: right">Save</button>
+        </div>
+            <div class="row g-3">
+              <div class="col">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="Username" aria-label="Username" value="{{ data['username'] }}" required>
+              </div>
+              <div class="col">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Name" aria-label="Name" value="{{ data['name'] }}" required>
+              </div>
+            </div>
+            <br>
 
-  <tr>
-    <th><label for="category">Category</label></th>
-      <td>
-            <label for="cat1">Category 1</label>
-            <input type="checkbox" name="category" id="cat1" value="category1" {% if "category1" in category %} checked {% endif %}>
-            <label for="cat2">Category 2</label>
-            <input type="checkbox" name="category" id="cat2" value="category2" {% if "category2" in category %} checked {% endif %}>
-            <label for="cat3">Category 3</label>
-            <input type="checkbox" name="category" id="cat3" value="category3" {% if "category3" in category %} checked {% endif %}>
-            <label for="cat4">Category 4</label>
-            <input type="checkbox" name="category" id="cat4" value="category4" {% if "category4" in category %} checked {% endif %}>
-      </td>
-  </tr>
+            <div class="form-group">
+            <label for="photo">Photo</label>
+            <input type="file" class="form-control-file" id="photo" name="photo">
+          </div>
 
-    <tr>
-    <td>Hospital/ Clinic name</td>
-    <td>
-      <input type="text" name="hospital-name" id="hospital-name" value="{{ data['hospital_name'] }}" />
-    </td>
-  </tr>
- <tr>
-    <td>Place</td>
-   <td> <input type="text" name="place" id="place"  value="{{ data['place'] }}"/></td>
-  </tr>
-  <tr>
-    <td>District</td>
-   <td> <input type="text" name="district" id="district"  value="{{ data['district'] }}"/></td>
-  </tr>
-  <tr>
-    <td>State</td>
-   <td> <input type="text" name="state" id="state"  value="{{ data['state'] }}"/></td>
-  </tr>
-   <tr>
-    <td>Post</td>
-   <td> <input type="text" name="post" id="post"  value="{{ data['post'] }}"/></td>
-  </tr>
-  <tr>
-    <td>pin</td>
-    <td>
-      <input type="text" name="pin" id="pin" value="{{ data['pin'] }}"/>
-    </td>
-  </tr>
+            <br>
+            <div class="row g-3">
+              <div class="col">
+                <label for="email-address" class="form-label">Email Address</label>
+                <input type="text" class="form-control" id="email-address" name="email-address" placeholder="Email Address" aria-label="Username" value="{{ data['email_address'] }}" required>
+              </div>
+              <div class="col">
+                <label for="contact-number" class="form-label">Contact Number</label>
+                <input type="text" class="form-control" id="contact-number" name="contact-number" placeholder="Contact Number" aria-label="Contact Number" value="{{ data['contact_number'] }}" required>
+              </div>
+            </div>
 
-  <tr>
-    <td>Admission fee</td>
-      <td><input type="text" name="admission-fee" id="admission-fee" value="{{ data['admission_fee'] }}" /></td>
-  </tr>
-  <tr>
-    <td>Profession started Year</td>
-      <td><input type="text" name="pro-started-yr" id="pro-started-yr" value="{{ data['pro_started_yr'] }}" /></td>
-  </tr>
-  <tr>
-    <td>&nbsp;</td>
-    <td>
-      <input type="submit" value="EDIT" />
-    </td>
-  </tr>
-</table>
-</form>
-</body>
-</html>
+            <br>
+            <div class="col-12">
+                <label for="dob" class="form-label">Date of Birth</label>
+                <input type="date" class="form-control" id="dob" name="dob" value="{{ data['dob'] }}" required>
+            </div>
+
+            <br>
+            <fieldset class="form-group">
+                <div class="row">
+                  <legend class="col-form-label col-sm-2 pt-0">Gender</legend>
+                  <div class="col-sm-10">
+{#                    <div class="form-check">#}
+                      <input class="form-check-input" type="radio" name="gender" id="male" value="Male" {{ 'checked' if data['gender']=='Male' }}>
+                      <label class="form-check-label" for="male">
+                        Male &nbsp; &nbsp;
+                      </label>
+{#                    </div>#}
+{#                    <div class="form-check">#}
+                      <input class="form-check-input" type="radio" name="gender" id="female" value="Female" {{ 'checked' if data['gender']=='Female' }}>
+                      <label class="form-check-label" for="female">
+                        Female &nbsp; &nbsp;
+                      </label>
+{#                    </div>#}
+                      <input class="form-check-input" type="radio" name="gender" id="other" value="Other" {{ 'checked' if data['gender']=='Other' }}>
+                      <label class="form-check-label" for="other">
+                        Other
+                      </label>
+                  </div>
+                </div>
+              </fieldset>
+
+            <br>
+            <div class="row g-3">
+                <div class="col">
+                <label for="qualification" class="form-label">Qualification</label>
+                <input type="text" class="form-control" id="qualification" name="qualification" placeholder="Qualification" aria-label="Qualification" value="{{ data['qualification'] }}" required>
+              </div>
+
+                <div class="col">
+                <label for="license-id" class="form-label">License ID</label>
+                <input type="text" class="form-control" id="license-id" name="license-id" placeholder="License ID" aria-label="License ID" value="{{ data['license_id'] }}" required>
+              </div>
+            </div>
+
+
+            <br>
+            <fieldset class="form-group">
+                <div class="row">
+                  <legend class="col-form-label col-sm-2 pt-0">Category</legend>
+                  <div class="col-sm-10">
+                        <input class="form-check-input" type="checkbox" name="category" id="dermatologist" value="Dermatologist" {% if "Dermatologist" in category %} checked {% endif %}>
+                          <label class="form-check-label" for="dermatologist">
+                            Dermatologist &nbsp; &nbsp;
+                          </label>
+                          <input class="form-check-input" type="checkbox" name="category" id="allergist" value="Allergist" {% if "Allergist" in category %} checked {% endif %}>
+                          <label class="form-check-label" for="allergist">
+                            Allergist &nbsp; &nbsp;
+                          </label>
+                        <input class="form-check-input" type="checkbox" name="category" id="gastroenterologist" value="Gastroenterologist" {% if "Gastroenterologist" in category %} checked {% endif %}>
+                          <label class="form-check-label" for="gastroenterologist">
+                            Gastroenterologist &nbsp; &nbsp;
+                          </label>
+                          <input class="form-check-input" type="checkbox" name="category" id="hepatologist" value="Hepatologist" {% if "Hepatologist" in category %} checked {% endif %}>
+                          <label class="form-check-label" for="hepatologist">
+                            Hepatologist &nbsp; &nbsp;
+                          </label>
+                            <input class="form-check-input" type="checkbox" name="category" id="internists" value="Internists" {% if "Internists" in category %} checked {% endif %}>
+                          <label class="form-check-label" for="internists">
+                            Internists
+                          </label><br><br>
+
+                        <input class="form-check-input" type="checkbox" name="category" id="osteopaths" value="Osteopaths" {% if "Osteopaths" in category %} checked {% endif %}>
+                          <label class="form-check-label" for="osteopaths">
+                            Osteopaths &nbsp; &nbsp;
+                          </label>
+                          <input class="form-check-input" type="checkbox" name="category" id="diabetologist" value="Diabetologist" {% if "Diabetologist" in category %} checked {% endif %}>
+                          <label class="form-check-label" for="diabetologist">
+                            Diabetologist &nbsp; &nbsp;
+                          </label>
+                        <input class="form-check-input" type="checkbox" name="category" id="endocrinologist" value="Endocrinologist" {% if "Endocrinologist" in category %} checked {% endif %}>
+                          <label class="form-check-label" for="endocrinologist">
+                            Endocrinologist &nbsp; &nbsp;
+                          </label>
+                          <input class="form-check-input" type="checkbox" name="category" id="pulmonologist" value="Pulmonologist" {% if "Pulmonologist" in category %} checked {% endif %}>
+                          <label class="form-check-label" for="pulmonologist">
+                            Pulmonologist &nbsp; &nbsp;
+                          </label>
+                            <input class="form-check-input" type="checkbox" name="category" id="cardiologist" value="Cardiologist" {% if "Cardiologist" in category %} checked {% endif %}>
+                          <label class="form-check-label" for="cardiologist">
+                            Cardiologist
+                          </label><br><br>
+
+                        <input class="form-check-input" type="checkbox" name="category" id="psychologist" value="Psychologist" {% if "Psychologist" in category %} checked {% endif %}>
+                          <label class="form-check-label" for="psychologist">
+                            Psychologist &nbsp; &nbsp;
+                          </label>
+                          <input class="form-check-input" type="checkbox" name="category" id="neurologist" value="Neurologist" {% if "Neurologist" in category %} checked {% endif %}>
+                          <label class="form-check-label" for="neurologist">
+                            Neurologist &nbsp; &nbsp;
+                          </label>
+                        <input class="form-check-input" type="checkbox" name="category" id="general-physician" value="General Physician" {% if "General Physician" in category %} checked {% endif %}>
+                          <label class="form-check-label" for="general-physician">
+                            General Physician &nbsp; &nbsp;
+                          </label>
+                          <input class="form-check-input" type="checkbox" name="category" id="surgeon" value="Surgeon" {% if "Surgeon" in category %} checked {% endif %}>
+                          <label class="form-check-label" for="surgeon">
+                            Surgeon &nbsp; &nbsp;
+                          </label>
+                            <input class="form-check-input" type="checkbox" name="category" id="vascular-surgeon" value="Vascular Surgeon" {% if "Vascular Surgeon" in category %} checked {% endif %}>
+                          <label class="form-check-label" for="vascular-surgeon">
+                            Vascular Surgeon
+                          </label><br><br>
+
+                        <input class="form-check-input" type="checkbox" name="category" id="endocrinologist" value="Endocrinologist" {% if "Endocrinologist" in category %} checked {% endif %}>
+                          <label class="form-check-label" for="endocrinologist">
+                            Endocrinologist &nbsp; &nbsp;
+                          </label>
+                          <input class="form-check-input" type="checkbox" name="category" id="orthopedic-specialist" value="Orthopedic Specialist" {% if "Orthopedic Specialist" in category %} checked {% endif %}>
+                          <label class="form-check-label" for="orthopedic-specialist">
+                            Orthopedic Specialist &nbsp; &nbsp;
+                          </label>
+                        <input class="form-check-input" type="checkbox" name="category" id="ent" value="ENT" {% if "ENT" in category %} checked {% endif %}>
+                          <label class="form-check-label" for="ent">
+                            ENT &nbsp; &nbsp;
+                          </label>
+                          <input class="form-check-input" type="checkbox" name="category" id="urologist" value="Urologist" {% if "Urologist" in category %} checked {% endif %}>
+                          <label class="form-check-label" for="urologist">
+                            Urologist &nbsp; &nbsp;
+                          </label>
+                            <input class="form-check-input" type="checkbox" name="category" id="paediatrician" value="Paediatrician" {% if "Paediatrician" in category %} checked {% endif %}>
+                          <label class="form-check-label" for="paediatrician">
+                            Paediatrician
+                          </label><br><br>
+                    </div>
+                </div>
+            </fieldset>
+
+            <br>
+            <div class="row g-3">
+              <div class="col">
+                <label for="admission-fee" class="form-label">Admission Fee</label>
+                <input type="number" class="form-control" id="admission-fee" name="admission-fee" placeholder="Admission Fee" aria-label="Admission Fee" value="{{ data['admission_fee'] }}" required>
+              </div>
+              <div class="col">
+                <label for="pro-started-yr" class="form-label">Prefession Started Year</label>
+                <input type="year" class="form-control" id="pro-started-yr" name="pro-started-yr" placeholder="Prefession Started Year" aria-label="Prefession Started Year" value="{{ data['pro_started_yr'] }}" required>
+              </div>
+            </div>
+
+            <br>
+            <fieldset>
+                <legend style="font-size: 14px"><b>ADDRESS</b></legend>
+                <div class="row g-3">
+              <div class="col">
+                <label for="hospital-name" class="form-label">Hospital/Clinic Name</label>
+                <input type="text" class="form-control" id="hospital-name" name="hospital-name" placeholder="Hospital/Clinic Name" aria-label="Hospital Name" value="{{ data['hospital_name'] }}" required>
+              </div>
+              <div class="col">
+                <label for="place" class="form-label">Place</label>
+                <input type="text" class="form-control" id="place" name="place" placeholder="Place" aria-label="Place" value="{{ data['place'] }}" required>
+              </div>
+            </div>
+        <br>
+            <div class="row g-3">
+              <div class="col">
+                <label for="district" class="form-label">District</label>
+                <input type="text" class="form-control" id="district" name="district" placeholder="District" aria-label="District" value="{{ data['district'] }}" required>
+              </div>
+              <div class="col">
+                <label for="state" class="form-label">State</label>
+                <input type="text" class="form-control" id="state" name="state" placeholder="State" aria-label="State" value="{{ data['state'] }}" required>
+              </div>
+            </div>
+        <br>
+            <div class="row g-3">
+              <div class="col">
+                <label for="post" class="form-label">Post</label>
+                <input type="text" class="form-control" id="post" name="post" placeholder="Post" aria-label="Post" value="{{ data['post'] }}" required>
+              </div>
+              <div class="col">
+                <label for="pin" class="form-label">PIN</label>
+                <input type="text" class="form-control" id="pin" name="pin" placeholder="PIN" aria-label="PIN" value="{{ data['pin'] }}" required>
+              </div>
+            </div>
+            </fieldset>
+
+        </form>
+
+    </main>
+    <footer class="page-footer font-small unique-color-dark pt-4">
+        <div class="footer-copyright text-center py-3">Copyright &copy 2021</div>
+    </footer>
+{% endblock content %}
+
+..................
+{#<h2>Edit Profile ({{ data['username'] }})</h2>#}
+{#<form action="/doctor/profile/edit/post" method="post" enctype="multipart/form-data">#}
+{#<table width="344" height="284" border="2"  cellpadding="2" cellspacing="2">#}
+{#  <tr>#}
+{#    <td>Username</td>#}
+{#    <td>#}
+{#      <input type="text" name="username" id="username" value="{{ data['username'] }}" readonly />#}
+{#    </td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <td>Name</td>#}
+{#    <td><input type="text" name="name" id="name" value="{{ data['name'] }}" /></td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <td>Photo</td>#}
+{#    <td>#}
+{#      <input type="file" name="photo" id="photo" />#}
+{#    </td>#}
+{#  </tr>#}
+{#    <tr>#}
+{#    <td>Email Address</td>#}
+{#      <td><input type="text" name="email-address" id="email-address" value="{{ data['email_address'] }}" readonly /></td>#}
+{#  </tr>#}
+{#   <tr>#}
+{#    <td>Contact Number</td>#}
+{#    <td><input type="text" name="contact-number" id="contact-number" value="{{ data['contact_number'] }}" /></td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <td>Gender</td>#}
+{#        <td><input type="radio" name="gender" id="male" value="Male" {{ 'checked' if data['gender']=='Male' }}/>Male#}
+{#        <input type="radio" name="gender" id="female" value="Female" {{ 'checked' if data['gender']=='Female' }}/>Female#}
+{#        <input type="radio" name="gender" id="other" value="Other" {{ 'checked' if data['gender']=='Other' }}/>Other#}
+{#    </td>#}
+{#  </tr>#}
+{#    <tr>#}
+{#    <td>Date of Birth</td>#}
+{#    <td><input type="date" name="dob" id="dob" value="{{ data['dob'] }}" /></td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <td>License ID</td>#}
+{#      <td><input type="text" name="license-id" id="license-id" value="{{ data['license_id'] }}" /></td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <td>Qualification</td>#}
+{#      <td><input type="text" name="qualification" id="qualification" value="{{ data['qualification'] }}" /></td>#}
+{#  </tr>#}
+{##}
+{#  <tr>#}
+{#    <th><label for="category">Category</label></th>#}
+{#      <td>#}
+{#            <label for="cat1">Category 1</label>#}
+{#            <input type="checkbox" name="category" id="cat1" value="category1" {% if "category1" in category %} checked {% endif %}>#}
+{#            <label for="cat2">Category 2</label>#}
+{#            <input type="checkbox" name="category" id="cat2" value="category2" {% if "category2" in category %} checked {% endif %}>#}
+{#            <label for="cat3">Category 3</label>#}
+{#            <input type="checkbox" name="category" id="cat3" value="category3" {% if "category3" in category %} checked {% endif %}>#}
+{#            <label for="cat4">Category 4</label>#}
+{#            <input type="checkbox" name="category" id="cat4" value="category4" {% if "category4" in category %} checked {% endif %}>#}
+{#      </td>#}
+{#  </tr>#}
+{##}
+{#    <tr>#}
+{#    <td>Hospital/ Clinic name</td>#}
+{#    <td>#}
+{#      <input type="text" name="hospital-name" id="hospital-name" value="{{ data['hospital_name'] }}" />#}
+{#    </td>#}
+{#  </tr>#}
+{# <tr>#}
+{#    <td>Place</td>#}
+{#   <td> <input type="text" name="place" id="place"  value="{{ data['place'] }}"/></td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <td>District</td>#}
+{#   <td> <input type="text" name="district" id="district"  value="{{ data['district'] }}"/></td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <td>State</td>#}
+{#   <td> <input type="text" name="state" id="state"  value="{{ data['state'] }}"/></td>#}
+{#  </tr>#}
+{#   <tr>#}
+{#    <td>Post</td>#}
+{#   <td> <input type="text" name="post" id="post"  value="{{ data['post'] }}"/></td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <td>pin</td>#}
+{#    <td>#}
+{#      <input type="text" name="pin" id="pin" value="{{ data['pin'] }}"/>#}
+{#    </td>#}
+{#  </tr>#}
+{##}
+{#  <tr>#}
+{#    <td>Admission fee</td>#}
+{#      <td><input type="text" name="admission-fee" id="admission-fee" value="{{ data['admission_fee'] }}" /></td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <td>Profession started Year</td>#}
+{#      <td><input type="text" name="pro-started-yr" id="pro-started-yr" value="{{ data['pro_started_yr'] }}" /></td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <td>&nbsp;</td>#}
+{#    <td>#}
+{#      <input type="submit" value="EDIT" />#}
+{#    </td>#}
+{#  </tr>#}
+{#</table>#}
+{#</form>#}
+{#</body>#}
+{#</html>#}

@@ -1,34 +1,58 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Untitled Document</title>
-</head>
+{% extends 'doctor/doctor_base.html' %}
 
-<body>
-<h2>Add Doctor Schedule Data</h2>
-     <form action="/doctor_schedule_add_post" method="post">
-     <table width="279" border="2" cellspacing="2" cellpadding="2">
-  <tr>
-    <th width="115" scope="row">Schedule Date</th>
-    <td width="142"><input type="date" id="schedule_date" name="schedule_date"/></td>
-  </tr>
-  <tr>
-    <th scope="row">Start Time</th>
-    <td><input type="time" id="start_time" name="start_time"/></td>
-  </tr>
-  <tr>
-    <th scope="row">End Time</th>
-    <td><input type="time" id="end_time" name="end_time"/></td>
-  </tr>
-  <tr>
-    <th scope="row">&nbsp;</th>
-    <td><input type="submit" value="Add"/>
-    &nbsp;
-    <input type="reset" value="Close"/>
-    </td>
-  </tr>
-</table>
-     </form>
-</body>
-</html>
+{% block content %}
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h4">Add Doctor Schedule Data</h1>
+        </div>
+
+        <form action="/doctor_schedule_add_post" method="post">
+            <div class="form-group">
+            <label for="schedule_date">Schedule Date</label>
+            <input type="date" class="form-control" name="schedule_date" id="schedule_date" required>
+        </div>
+        <div class="form-group">
+            <label for="end_time">End Time</label>
+            <input type="time" class="form-control" name="end_time" id="end_time" required>
+        </div>
+        <div class="form-group">
+            <label for="start_time">Password</label>
+            <input type="time" class="form-control" name="start_time" id="start_time" required>
+        </div>
+        <br>
+            <button type="submit" class="btn btn-primary">Add</button>
+            <button type="reset" class="btn btn-secondary">Reset</button>
+        </form>
+        </main>
+<footer class="page-footer font-small unique-color-dark pt-4">
+    <div class="footer-copyright text-center py-3">Copyright &copy 2021</div>
+</footer>
+{% endblock content %}
+
+
+{#<h2>Add Doctor Schedule Data</h2>#}
+{#     <form action="/doctor_schedule_add_post" method="post">#}
+{#     <table width="279" border="2" cellspacing="2" cellpadding="2">#}
+{#  <tr>#}
+{#    <th width="115" scope="row">Schedule Date</th>#}
+{#    <td width="142"><input type="date" id="schedule_date" name="schedule_date"/></td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <th scope="row">Start Time</th>#}
+{#    <td><input type="time" id="start_time" name="start_time"/></td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <th scope="row">End Time</th>#}
+{#    <td><input type="time" id="end_time" name="end_time"/></td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <th scope="row">&nbsp;</th>#}
+{#    <td><input type="submit" value="Add"/>#}
+{#    &nbsp;#}
+{#    <input type="reset" value="Close"/>#}
+{#    </td>#}
+{#  </tr>#}
+{#</table>#}
+{#     </form>#}
+{#</body>#}
+{#</html>#}

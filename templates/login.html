@@ -115,20 +115,33 @@
 
     <div class="checkbox mb-3">
       <label>
-        <input type="checkbox" name="checkbox" id="checkbox" value="remember-me" onclick="password_visible()"> Show Password
+        <input type="checkbox" name="checkbox" id="checkbox" value="show-me" onclick="password_visible()"> Show Password
       </label>
     </div>
     <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
       <br><br>
     </form>
       <p><b>Don't have an Account?</b></p>
+    
+    <div class="dropdown show">
+      <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Dropdown link
+      </a>
+
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        <a class="dropdown-item" href="#">Action</a>
+        <a class="dropdown-item" href="#">Another action</a>
+        <a class="dropdown-item" href="#">Something else here</a>
+      </div>
+    </div>
+
       <form action="/signup_post" method="post">
     <b>Register as</b>
         <select name="sign-up" id="sign-up">
             <option value="user" selected>User</option>
             <option value="doctor">Doctor</option>
         </select>
-        <input type="submit" value="Sign-Up" class="btn btn-danger">
+        <input type="submit" value="Sign-Up" class="btn btn-success btn-sm">
     </form>
       <br>
       <p><a href="/forgot_password" id="forgot-link">Forgot password?</a></p>
@@ -143,7 +156,7 @@
             x.type = "text";
         }
         else {
-            x.type = "password"
+            x.type = "password";
         }
     }
 </script>

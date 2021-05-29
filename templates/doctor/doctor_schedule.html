@@ -1,51 +1,85 @@
-{% extends 'doctor/doctor_home.html' %}
-{#<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">#}
-{#<html xmlns="http://www.w3.org/1999/xhtml">#}
-{#<head>#}
-{#<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />#}
-{#<title>Untitled Document</title>#}
-{#</head>#}
+{% extends 'doctor/doctor_base.html' %}
+
+{% block content %}
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h4">Doctor Schedule Management</h1>
+            <a href="/doctor_schedule_add"><button type="button" class="btn btn-primary" style="text-align: right">Add</button></a>
+        </div>
+
+
+        <table class="table">
+          <thead class="table-light">
+            <tr>
+                <th>#</th>
+                <th>Schedule Date</th>
+                <th>Schedule Day</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Action</th>
+              </tr>
+          </thead>
+          <tbody>
+            {% for data in qry %}
+              <tr>
+            <th>{{ loop.index }}</th>
+            <td>{{ data["schedule_date"] }}</td>
+            <td>{{ data["schedule_day"] }}</td>
+            <td>{{ data["start_time"] }}</td>
+            <td>{{ data["end_time"] }}</td>
+            <td>
+                <a href="#"><button class="btn btn-primary btn-sm">Edit</button></a>
+               <br><br>
+               <a href="/doctor/schedule/rm/{{ data['schedule_id'] }}"><button class="btn btn-danger btn-sm">Remove</button></a>
+            </td>
+          </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+    </main>
+<footer class="page-footer font-small unique-color-dark pt-4">
+    <div class="footer-copyright text-center py-3">Copyright &copy 2021</div>
+</footer>
+{% endblock content %}
+
+
+{#{% block body %}#}
+{#    <h2>Doctor Schedule Management</h2>#}
 {##}
-{#<body>#}
-
-
-{% block body %}
-    <h2>Doctor Schedule Management</h2>
-
-    <div class="card-header py-3">
-                        	<div class="row">
-                            	<div class="col">
-                            		<h6 class="m-0 font-weight-bold text-primary">Doctor Schedule List</h6>
-                            	</div>
-                            	<div class="col" align="right">
+{#    <div class="card-header py-3">#}
+{#                        	<div class="row">#}
+{#                            	<div class="col">#}
+{#                            		<h6 class="m-0 font-weight-bold text-primary">Doctor Schedule List</h6>#}
+{#                            	</div>#}
+{#                            	<div class="col" align="right">#}
 {#                            		<button type="button" name="add_exam" id="add_doctor_schedule" class="btn btn-success btn-circle btn-sm"><i class="fas fa-plus"></i></button>#}
-                            	    <p><a href="/doctor_schedule_add"><button>Add</button></a></p>
-                                </div>
-                            </div>
-                        </div>
-    <div class="card-body">
-        <table class="table-responsive">
-            <table class="table table-striped table-bordered" width="510" border="2" cellspacing="2" cellpadding="2">
-  <tr>
-    <th width="66" scope="col">Schedule Date</th>
-    <th width="64" scope="col">Schedule Day</th>
-    <th width="74" scope="col">Start Time</th>
-    <th width="71" scope="col">End Time</th>
-    <th width="52" scope="col">Action</th>
-  </tr>
-  {% for data in qry %}
-      <tr>
-    <td>{{ data["schedule_date"] }}</td>
-    <td>{{ data["schedule_day"] }}</td>
-    <td>{{ data["start_time"] }}</td>
-    <td>{{ data["end_time"] }}</td>
-    <td><p><a href="#">Edit</a></p>
-    <p><a href="/doctor/schedule/rm/{{ data['schedule_id'] }}">Remove</a></p></td>
-  </tr>
-  {% endfor %}
-    </table>
-</table>
-{% endblock body %}
+{#                            	    <p><a href="/doctor_schedule_add"><button>Add</button></a></p>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#    <div class="card-body">#}
+{#        <table class="table-responsive">#}
+{#            <table class="table table-striped table-bordered" width="510" border="2" cellspacing="2" cellpadding="2">#}
+{#  <tr>#}
+{#    <th width="66" scope="col">Schedule Date</th>#}
+{#    <th width="64" scope="col">Schedule Day</th>#}
+{#    <th width="74" scope="col">Start Time</th>#}
+{#    <th width="71" scope="col">End Time</th>#}
+{#    <th width="52" scope="col">Action</th>#}
+{#  </tr>#}
+{#  {% for data in qry %}#}
+{#      <tr>#}
+{#    <td>{{ data["schedule_date"] }}</td>#}
+{#    <td>{{ data["schedule_day"] }}</td>#}
+{#    <td>{{ data["start_time"] }}</td>#}
+{#    <td>{{ data["end_time"] }}</td>#}
+{#    <td><p><a href="#">Edit</a></p>#}
+{#    <p><a href="/doctor/schedule/rm/{{ data['schedule_id'] }}">Remove</a></p></td>#}
+{#  </tr>#}
+{#  {% endfor %}#}
+{#    </table>#}
+{#</table>#}
+{#{% endblock body %}#}
 
 
 {#</body>#}

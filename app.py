@@ -152,11 +152,13 @@ def reset_password_post():
 @app.route('/change_pass')
 def change_pass():
     db = Db()
-    utype = db.select("select user_type from login where login_id='"+str(session['lid'])+"'")
-    if utype[0]['user_type']=="user":
+    utype = db.selectOne("select user_type from login where login_id='"+str(session['lid'])+"'")
+    if utype['user_type']=="user":
         return render_template("user/user_change_pass.html")
-    elif utype[0]['user_type']=="doctor":
+    elif utype['user_type']=="doctor":
         return render_template("doctor/doctor_change_pass.html")
+    elif utype['user_type']=="admin":
+        return render_template("admin/admin_change_pass.html")
 
 @app.route('/change_pass_post', methods=['POST'])
 def change_pass_post():
@@ -182,7 +184,7 @@ def change_pass_post():
 @app.route('/admin_home')
 def admin_home():
     if session['log'] == "login":
-        return render_template("admin/admin_home.html")
+        return render_template("admin/admin_base.html")
     else:
         return redirect('/')
 
@@ -854,15 +856,117 @@ def user_disease_prediction():
     syms = f"{symptoms[0]},{symptoms[1]},{symptoms[2]},{symptoms[3]},{symptoms[4]}"
     syms = syms.rstrip(',')
     algo = ["Decision Tree", "Random Forest", "Naive Bayes"]
-    predictions = f"{algo[0]}:{res1},{algo[1]}:{res2},{algo[2]}:{res3}"
-    print(predictions)
-    print(type(predictions))
 
-    category = "category3"
-    dates = datetime.datetime.now().strftime("%Y-%m-%d.%H:%M:%S")
+    res1 = res1.strip()
+    res2 = res2.strip()
+    res3 = res3.strip()
+
+    predictions = f"{algo[0]}:{res1},{algo[1]}:{res2},{algo[2]}:{res3}"
+    #print(predictions)
+    #print(type(predictions))
+
     db = Db()
 
-    qry2 = db.select("select * from doctor, login where login.login_id=doctor.doctor_id and login.user_type='doctor' and doctor.category like '%"+ category +"%'")
+    # Dr Recommendation Algorithm
+
+    disease_category = {
+                'Fungal infection': 'Dermatologist',
+                'Allergy': 'Allergist',
+                'GERD': 'Gastroenterologist',
+                'Chronic cholestasis': ['Gastroenterologist', 'Hepatologist'],
+                'Drug Reaction': 'Allergist',
+                'Peptic ulcer diseae': 'Gastroenterologist',
+                'AIDS': ['Internist', 'Osteopaths'],
+                'Diabetes': ['Diabetologist', 'Endocrinologist'],
+                'Gastroenteritis': 'Gastroenterologist',
+                'Bronchial Asthma': ['Pulmonologist', 'Allergist'],
+                'Hypertension': ['Cardiologist', 'Psychologist'],
+                'Migraine': 'Neurologist',
+                'Cervical spondylosis': ['Neurologist', 'Orthopedic Specialist'],
+                'Paralysis (brain hemorrhage)': 'Neurologist',
+                'Jaundice': 'Gastroenterologist',
+                'Malaria': 'General Physician',
+                'Chicken pox': 'General Physician',
+                'Dengue': 'General Physician',
+                'Typhoid': 'General Physician',
+                'hepatitis A': ['Gastroenterologist', 'Hepatologist'],
+                'Hepatitis B': ['Gastroenterologist', 'Hepatologist'],
+                'Hepatitis C': ['Gastroenterologist', 'Hepatologist'],
+                'Hepatitis D': ['Gastroenterologist', 'Hepatologist'],
+                'Hepatitis E': ['Gastroenterologist', 'Hepatologist'],
+                'Alcoholic hepatitis': ['Gastroenterologist', 'Hepatologist'],
+                'Tuberculosis': ['General Physician', 'Pulmonologist'],
+                'Common Cold': 'General Physician',
+                'Pneumonia': ['General Physician', 'Pulmonologist'],
+                'Dimorphic hemmorhoids(piles)': ['Gastroenterologist', 'Surgeon'],
+                'Heart attack': 'Cardiologist',
+                'Varicose veins': ['Vascular Surgeon', 'Dermatologist'],
+                'Hypothyroidism': 'Endocrinologist',
+                'Hyperthyroidism': 'Endocrinologist',
+                'Hypoglycemia': 'Endocrinologist',
+                'Osteoarthristis': 'Orthopedic Specialist',
+                'Arthritis': 'Orthopedic Specialist',
+                '(vertigo) Paroymsal  Positional Vertigo': 'ENT',
+                'Acne': 'Dermatologist',
+                'Urinary tract infection': 'Urologist',
+                'Psoriasis': 'Dermatologist',
+                'Impetigo': 'Dermatologist'
+    }
+
+    recommended_category = []
+    if isinstance(disease_category[res1], list):
+        recommended_category.extend(disease_category[res1])
+    elif isinstance(disease_category[res1], str):
+        recommended_category.append(disease_category[res1])
+
+    if isinstance(disease_category[res2], list):
+        recommended_category.extend(disease_category[res2])
+    elif isinstance(disease_category[res2], str):
+        recommended_category.append(disease_category[res2])
+
+    if isinstance(disease_category[res3], list):
+        recommended_category.extend(disease_category[res3])
+    elif isinstance(disease_category[res3], str):
+        recommended_category.append(disease_category[res3])
+
+    if len(recommended_category) == 0:
+        recommended_category.append('General Physician')
+
+    lid = session['lid']
+    qry5 = db.selectOne("select * from user where user_id='" + str(lid) + "'")
+    this_year = datetime.date.today().year
+    age = this_year - int(qry5['dob'].split('-')[0])
+
+    if age < 18:
+        recommended_category.append('Paediatrician')
+
+    recommended_category = set(recommended_category)
+    recommended_category = list(recommended_category)
+
+    print(recommended_category)
+
+    dates = datetime.datetime.now().strftime("%Y-%m-%d.%H:%M:%S")
+
+    if 'Paediatrician' in recommended_category:
+        qry2 = db.select(
+            "select * from doctor, login where login.login_id=doctor.doctor_id and login.user_type='doctor' and doctor.category like '%" + 'Paediatrician' + "%'")
+    else:
+        qry2 = []
+        for category in recommended_category:
+            drs = db.select(
+                "select * from doctor, login where login.login_id=doctor.doctor_id and login.user_type='doctor' and doctor.category like '%" + category + "%'")
+            qry2.extend(drs)
+
+
+    qry3 = []
+    for i in range(len(qry2)):
+        if qry2[i] not in qry2[i + 1:]:
+            qry3.append(qry2[i])
+
+    import random
+    random.shuffle(qry3)
+
+    qry2 = qry3
 
     if len(qry2) > 5:
         qry2 = qry2[0:5]
@@ -878,7 +982,7 @@ def user_disease_prediction():
     # qry1 = db.select("SELECT * FROM login, doctor WHERE login.login_id=doctor.doctor_id AND login.user_type='doctor'")
 
     for x in qry2:
-        db.insert("INSERT INTO dr_recommendation VALUES('','" + str(dp_row) + "', '" + str(x['doctor_id']) + "', '" + category + "')")
+        db.insert("INSERT INTO dr_recommendation VALUES('','" + str(dp_row) + "', '" + str(x['doctor_id']) + "', '" + x['category'] + "')")
 
 
     return render_template("user/user_disease_predictions.html", res1=res1, res2=res2, res3=res3, qry=symptoms, qry1=qry2, l=[len(qry2)])

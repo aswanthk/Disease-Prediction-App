@@ -35,7 +35,7 @@
 </head>
 
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#"><b>USER</b></a>
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#"><b>DOCTOR</b></a>
     <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -48,66 +48,54 @@
 </header>
 
 <div class="container-fluid">
-    <div class="row">
-        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-            <div class="position-sticky pt-3">
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/user_home">
-                            <span data-feather="home"></span>
-                            User Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/user/profile">
-                            <span data-feather="file"></span>
-                            My Profile
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/user/add_symptoms">
-                            <span data-feather="shopping-cart"></span>
-                            Disease Prediction
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/user/my_appointment">
-                            <span data-feather="shopping-cart"></span>
-                            My Appointment
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/search_doctor">
-                            <span data-feather="users"></span>
-                            Search Doctor
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/change_pass">
-                            <span data-feather="bar-chart-2"></span>
-                            Change Password
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/user/dp_history">
-                            <span data-feather="layers"></span>
-                            Prediction History
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/user_send_feedback">
-                            <span data-feather="layers"></span>
-                            Feedbacks
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+  <div class="row">
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="position-sticky pt-3">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link active {% if doctor_home %}active {% endif %}" aria-current="page" href="/doctor_home">
+              <span data-feather="home"></span>
+              Doctor Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link  {% if doctor_profile %}active {% endif %}" href="/doctor/profile">
+              <span data-feather="file"></span>
+              My Profile
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if doctor_schedule %}active {% endif %}" href="/doctor_schedule">
+              <span data-feather="shopping-cart"></span>
+              Doctor Schedule
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if doctor_appointment %}active {% endif %}" href="/doctor/appointment">
+              <span data-feather="users"></span>
+              Appointment
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if change_pass %}active {% endif %}" href="/change_pass">
+              <span data-feather="users"></span>
+              Change Password
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span data-feather="layers"></span>
+              Feedbacks
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
 
-        {% block content %}
-        {% endblock content %}
+    {% block content %}
+    {% endblock content %}
 
-    </div>
+  </div>
 </div>
 
 
