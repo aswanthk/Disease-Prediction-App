@@ -7,39 +7,43 @@
             <a href="/doctor_schedule_add"><button type="button" class="btn btn-primary" style="text-align: right">Add</button></a>
         </div>
 
+        {% for n in l %}
+            {% if n>0 %}
+                <table class="table">
+                  <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Schedule Date</th>
+                        <th>Schedule Day</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Action</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    {% for data in qry %}
+                      <tr>
+                    <th>{{ loop.index }}</th>
+                    <td>{{ data["schedule_date"] }}</td>
+                    <td>{{ data["schedule_day"] }}</td>
+                    <td>{{ data["start_time"] }}</td>
+                    <td>{{ data["end_time"] }}</td>
+                    <td>
+                        <a href="/doctor/schedule/edit/{{ data['schedule_id'] }}"><button class="btn btn-primary btn-sm">Edit</button></a>
+                       <a href="/doctor/schedule/rm/{{ data['schedule_id'] }}"><button class="btn btn-danger btn-sm">Remove</button></a>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+            {% endif %}
+            {% if n==0 %}
+                    <br>
+                    <p> Not schedule data</p>
+                {% endif %}
+        {% endfor %}
 
-        <table class="table">
-          <thead class="table-light">
-            <tr>
-                <th>#</th>
-                <th>Schedule Date</th>
-                <th>Schedule Day</th>
-                <th>Start Time</th>
-                <th>End Time</th>
-                <th>Action</th>
-              </tr>
-          </thead>
-          <tbody>
-            {% for data in qry %}
-              <tr>
-            <th>{{ loop.index }}</th>
-            <td>{{ data["schedule_date"] }}</td>
-            <td>{{ data["schedule_day"] }}</td>
-            <td>{{ data["start_time"] }}</td>
-            <td>{{ data["end_time"] }}</td>
-            <td>
-                <a href="#"><button class="btn btn-primary btn-sm">Edit</button></a>
-               <br><br>
-               <a href="/doctor/schedule/rm/{{ data['schedule_id'] }}"><button class="btn btn-danger btn-sm">Remove</button></a>
-            </td>
-          </tr>
-          {% endfor %}
-          </tbody>
-        </table>
     </main>
-<footer class="page-footer font-small unique-color-dark pt-4">
-    <div class="footer-copyright text-center py-3">Copyright &copy 2021</div>
-</footer>
 {% endblock content %}
 
 

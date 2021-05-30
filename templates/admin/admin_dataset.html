@@ -1,0 +1,133 @@
+{% extends 'admin/admin_base.html' %}
+
+{% block content %}
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h4">Manage Dataset</h1>
+        </div>
+
+
+{#    <form action="#" method="post">#}
+{#                        <div class="row">#}
+{#                            <div class="col-sm-2">#}
+{#                                <input type="text" name="search_disease" id="search_disease" class="form-control"/>#}
+{#                            </div>#}
+{#                            <div class="col-sm-2">#}
+{#                                <input type="submit" value="Search" class="btn btn-primary"/>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </form>#}
+
+
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <form action="#" method="post">
+                        <input type="text" class="form-control-sm" name="search_disease" id="search_disease" placeholder="Search a disease">
+                        <input class="btn btn-primary btn-sm" type="submit" value="Search">
+                    </form>
+                </div>
+                <div class="col" align="right">
+                    <form action="/add_dataset" method="post" enctype="multipart/form-data" onsubmit="return confirm('Do you want to add dataset?')">
+                        <label for="dataset_csv"><b>Dataset(.CSV)</b></label>
+                        <input class="form-control-sm" type="file" name="dataset_csv" id="dataset_csv">
+                        <input class="btn btn-primary btn-sm" type="submit" value="Add">
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+{#        <div class="container-fluid">#}
+{#            <form action="#" method="post">#}
+{#                    <div class="row">#}
+{#                        <div class="col-sm-2">#}
+{#                            <input type="text" name="search_disease" id="search_disease" class="form-control"/>#}
+{#                        </div>#}
+{#                        <div class="col-sm-2">#}
+{#                            <input type="submit" value="Search" class="btn btn-primary"/>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </form>#}
+{#            </div>#}
+
+    <table class="table">
+      <thead class="table-light">
+        <tr>
+            <th>#</th>
+            <th>Disease</th>
+            <th>Symptoms</th>
+            <th>Recommended Specialist</th>
+            <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for x in qry %}
+            <tr>
+                <th>{{ loop.index }}</th>
+                <td>{{ x['disease'] }}</td>
+                <td>
+                    {% for s in x['symptoms'] %}
+                        {{ s }} <br>
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for s in x['category'] %}
+                        {{ s }} <br>
+                    {% endfor %}
+                </td>
+                <td>
+                    <a href="/edit_dataset/{{ x['dataset_id'] }}"><button class="btn btn-primary btn-sm">Edit</button></a>
+                    <a href=""><button class="btn btn-danger btn-sm">Delete</button></a>
+                </td>
+            </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+        </main>
+{% endblock content %}
+
+{#    <form action="#" method="">#}
+{#    <table>#}
+{#  	<tr>#}
+{#   	 	<td><input type="text" name="search_disease" id="search_disease"></td>#}
+{#    	<td><input type="submit" value="Search" /></td>#}
+{#  	</tr>#}
+{#	</table>#}
+{#    </form>#}
+{#    <form action="/add_dataset" method="post" enctype="multipart/form-data" onsubmit="return confirm('Do you want to add dataset?')">#}
+{#    <table>#}
+{#  <tr>#}
+{#    <td>Add Dataset(.CSV)</td>#}
+{#    <td><input type="file" name="dataset_csv" id="dataset_csv" /></td>#}
+{#    <td><input type="submit" value="Add" /></td>#}
+{#  </tr>#}
+{#</table>#}
+{#    </form>#}
+
+{#    <table width="488" height="113" border="2" cellpadding="2" cellspacing="2">#}
+{#	  <tr>#}
+{#	    <th width="18" height="44" scope="col">#</th>#}
+{#	    <th width="104" scope="col">Disease Name</th>#}
+{#	    <th width="100" scope="col">Category</th>#}
+{#	    <th width="300" scope="col">Symptoms</th>#}
+{#          <th width="300" scope="col">Count of Occurrence</th>#}
+{#	    <th width="115" scope="col">Action</th>#}
+{#      </tr>#}
+{#	  {% for data in qry %}#}
+{#      <tr>#}
+{#	    <td height="63">&nbsp;{{ loop.index }} </td>#}
+{#	    <td>{{ data["disease"] }}</td>#}
+{#	    <td>&nbsp;{{ data["category"] }}</td>#}
+{#      <td>#}
+{#          {% for sym in symptoms[loop.index - 1] %}#}
+{#            {{ sym }} <br/>#}
+{#          {% endfor %}#}
+{#      </td>#}
+{#      <td>&nbsp;{{ data["count_of_occurrence"] }}</td>#}
+{##}
+{#	    <td><p><a href="/edit_dataset/{{ data['dataset_id'] }}">Edit</a></p>#}
+{#        <p><a href="#">Delete</a></p></td>#}
+{#      </tr>#}
+{#      {% endfor %}#}
+{#</table>#}

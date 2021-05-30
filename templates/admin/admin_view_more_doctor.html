@@ -1,12 +1,15 @@
-{% extends 'doctor/doctor_base.html' %}
+{% extends 'admin/admin_base.html' %}
 
 {% block content %}
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="h4">My Profile</h1>
-            <h1 class="h4" style="text-align: center">{{ q['name'] }}</h1>
-            <a href="/doctor/profile/edit"><button type="button" class="btn btn-primary" style="text-align: right">Edit</button></a>
+            <h1 class="h4">Doctor Details ({{ q["name"] }})</h1>
+            {% if status == "pending" %}
+                <span><a href="/admin/approve_dr/{{ q["doctor_id"] }}"><button class="btn btn-success btn-sm">Approve</button></a>
+                <a href="/admin/reject_dr/{{ q["doctor_id"] }}"><button class="btn btn-danger btn-sm">Reject</button></a></span>
+            {% endif %}
         </div>
+
         <div style="text-align: center">
             <img src="{{ q['photo'] }}" alt="{{ q['username'] }}'s-photo" height="200px" width="150px"/>
         </div>
@@ -105,73 +108,51 @@
               </table>
         </div>
 
-    </main>
-{% endblock content %}
 
-
-{#{% block content %}#}
-{#	<h2>{{ q['name'] }} - Profile</h2>#}
-{#    <p><a href="/doctor/profile/edit">Edit Profile ({{ q['username'] }})</a></p>#}
-{#    <img src="{{ q['photo'] }}" alt="{{ q['username'] }}'s-photo" height="200px" width="150px"/>#}
-{#<h3>{{ q['name'] }}</h3>#}
-{#    <table width="200" border="2" cellspacing="2" cellpadding="2">#}
+{#        <img src="{{ qry["photo"] }}"/>#}
+{#<h3>{{ qry["name"] }}</h3>#}
+{#<table width="200" border="2" cellspacing="2" cellpadding="2">#}
 {#  <tr>#}
-{#    <th scope="row">Username</th>#}
-{#    <td>&nbsp;{{ q['username'] }}</td>#}
+{#    <td>Username</td>#}
+{#    <td>{{ qry["username"] }}</td>#}
 {#  </tr>#}
 {#  <tr>#}
-{#    <th scope="row">Email Address</th>#}
-{#    <td>&nbsp;{{ q['email_address'] }}</td>#}
-{#  </tr>#}
-{#   <tr>#}
-{#    <th scope="row">Contact Number</th>#}
-{#    <td>&nbsp;{{ q['contact_number'] }}</td>#}
-{#  </tr>#}
-{#   <tr>#}
-{#    <th scope="row">Gender</th>#}
-{#    <td>&nbsp;{{ q['gender'] }}</td>#}
+{#    <td>Email Address</td>#}
+{#    <td>{{ qry["email_address"] }}</td>#}
 {#  </tr>#}
 {#  <tr>#}
-{#    <th scope="row">Age</th>#}
-{#    <td>&nbsp;{{ age }}</td>#}
+{#    <td>License ID</td>#}
+{#    <td>&nbsp;{{ qry["license_id"] }}</td>#}
 {#  </tr>#}
 {#  <tr>#}
-{#    <th scope="row">Address</th>#}
-{#    <td> {{ q['hospital_name'] }} <br/>#}
-{#        {{ q['place'] }} <br/>#}
-{#        {{ q['district'] }} <br/>#}
-{#         {{ q['state'] }} <br/>#}
-{#        (P.O) {{ q['post'] }} <br/>#}
-{#        PIN:  {{ q['pin'] }}#}
-{#    </td>#}
+{#    <td>Qualification</td>#}
+{#    <td>{{ qry["qualification"] }}</td>#}
 {#  </tr>#}
 {#  <tr>#}
-{#    <th scope="row">Contact Number</th>#}
-{#    <td>&nbsp;{{ q['contact_number'] }}</td>#}
+{#    <td>Category</td>#}
+{#    <td>{{ qry["category"] }}</td>#}
 {#  </tr>#}
 {#  <tr>#}
-{#    <th scope="row">License ID</th>#}
-{#    <td>{{ q['license_id'] }}</td>#}
+{#    <td>Address</td>#}
+{#    <td>&nbsp;{{ qry["address"] }}</td>#}
 {#  </tr>#}
 {#  <tr>#}
-{#    <th scope="row">Qualification</th>#}
-{#    <td>&nbsp;{{ q['qualification'] }}</td>#}
+{#    <td>Age</td>#}
+{#    <td>&nbsp;{{ qry["age"] }}</td>#}
 {#  </tr>#}
 {#  <tr>#}
-{#    <th scope="row">Category</th>#}
-{#    <td>&nbsp;{{ q['category'] }}</td>#}
+{#    <td>Experience</td>#}
+{#    <td>{{ qry["experience"] }}</td>#}
 {#  </tr>#}
 {#  <tr>#}
-{#    <th scope="row">Admission fee</th>#}
-{#    <td>&nbsp;{{ q['admission_fee'] }}</td>#}
+{#    <td>Admission Fee</td>#}
+{#    <td>&nbsp;{{ qry["admission_fee"] }}</td>#}
 {#  </tr>#}
 {#  <tr>#}
-{#    <th scope="row">Profession Started Year</th>#}
-{#    <td>&nbsp;{{ q['pro_started_yr'] }}</td>#}
+{#    <td>Mobile number</td>#}
+{#    <td>&nbsp;{{ qry["mobile_number"] }}</td>#}
 {#  </tr>#}
 {#</table>#}
-{#{% endblock content %}#}
 
-{#</body>#}
-{#</html>#}
-
+    </main>
+{% endblock content %}

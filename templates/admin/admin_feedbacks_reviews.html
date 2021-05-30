@@ -1,0 +1,45 @@
+{% extends 'admin/admin_base.html' %}
+
+{% block content %}
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h4">Reviews</h1>
+            <a href="/admin/feedbacks"><button type="button" class="btn btn-primary" style="text-align: right">Ratings</button></a>
+        </div>
+
+
+        <div class="container">
+            <p class="h5">User's Reviews</p>
+            <div class="row">
+                    {% for usr in user_reviews %}
+                <div class="col-4">
+                    <div class="card bg-light mb-3" style="max-width: 18rem;">
+                      <div class="card-header">{{ usr['username'] }} [user]</div>
+                      <div class="card-body">
+                        <h5 class="card-title">{{ usr['rate'] }} star rating</h5>
+                        <p class="card-text">{{ usr['review'] }}</p>
+                      </div>
+                    </div>
+                    </div>
+                {% endfor %}
+                </div>
+                <p class="h5">Doctor's Reviews</p>
+                <div class="row">
+                    {% for usr in dr_reviews %}
+                    <div class="col-4">
+                        <div class="card bg-light mb-3" style="max-width: 18rem;">
+                          <div class="card-header">{{ usr['username'] }} [doctor]</div>
+                          <div class="card-body">
+                            <h5 class="card-title">{{ usr['rate'] }} star rating</h5>
+                            <p class="card-text">{{ usr['review'] }}</p>
+                          </div>
+                        </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+            </div>
+        </div>
+
+
+    </main>
+{% endblock content %}

@@ -4,8 +4,14 @@
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 class="h4">Appointment Management</h1>
+            <span>
+                <form action="/doctor/search/app-name" method="post">
+                    <input type="text" name="qry-name" id="qry-name" placeholder="Search name" class="form-control-sm"/>
+                    <input type="submit" value="Search" class="btn btn-primary btn-sm"/>
+                </form>
+            </span>
         </div>
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+{#        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">#}
 {#            <div class="row g-3">#}
 {#                <div class="col-2">#}
 {#                    <div style="display: inline-block">#}
@@ -18,26 +24,20 @@
 {#                            </div>#}
 {#                        </div>#}
 {#                    </form>#}
-            <div class="container-fluid">
-                <form action="/doctor/search/app-date" method="post">
-                            <div class="row">
-                                <div class="col-sm-2">
-                                    <input type="date" name="date1" id="date1" class="form-control"/>
+            <div class="container">
+                <div class="row">
+                    <form action="/doctor/search/app-date" method="post">
+                            <div class="col">
+                                    <input type="date" name="date1" id="date1" class="form-control-sm"/>
+                                    <input type="date" name="date2" id="date2" class="form-control-sm"/>
+                                    <input type="submit" value="Search" class="btn btn-primary btn-sm"/>
                                 </div>
-                                <div class="col-sm-2">
-                                    <input type="date" name="date2" id="date2" class="form-control"/>
-                                </div>
-                                <div class="col-sm-2">
-                                    <input type="submit" value="Search" class="btn btn-primary"/>
-                                </div>
-                                <div class="col-sm-2">
-                                    <input type="text" name="qry-name" id="qry-name" placeholder="Search name" class="form-control"/>
-                                </div>
-                                <div class="col-sm-2">
-                                    <input type="submit" value="Search" class="btn btn-primary"/>
-                                </div>
-                            </div>
+{#                                <div class="col"  align="right">#}
+{#                                    <input type="text" name="qry-name" id="qry-name" placeholder="Search name" class="form-control-sm"/>#}
+{#                                    <input type="submit" value="Search" class="btn btn-primary btn-sm"/>#}
+{#                                </div>#}
                         </form>
+                </div>
             </div>
 
 {#                        <div style="text-align: right">#}
@@ -53,7 +53,7 @@
 {#                </span>#}
 
 {#                        </div>#}
-            </div>
+
 
 
 {#                    <div class="container-fluid m-2">#}
@@ -83,43 +83,52 @@
 
 {#            </div>#}
 
-        <table class="table">
-          <thead class="table-light">
-            <tr>
-            <th>Appointment No.</th>
-            <th>Patient Name</th>
-            <th>Appointment Date</th>
-            <th>Appointment Time</th>
-            <th>Appointment Day</th>
-            <th>Appointment Status</th>
-            <th>Action</th>
-          </tr>
-          </thead>
-          <tbody>
-            {% for x in qry %}
-              <tr>
-                <th>{{ x['appointment_id'] }}</th>
-                <td>{{ x['patient_name'] }}</td>
-                <td>{{ x['schedule_date'] }}</td>
-                <td>{{ x['schedule_day'] }}</td>
-                <td>{{ x['start_time'] }} - {{ x['end_time'] }}</td>
-                <td>{{ x['status'] }}</td>
-                <td>
-                    <a href="/doctor/appointment/more/{{ x['appointment_id'] }}"><button class="btn btn-primary btn-sm">View more</button></a>
-                       <br><br>
-                        {% if x['status'] != 'Booked' %}
-                            <a href="/doctor/appointment/approve/{{ x['appointment_id'] }}"><button class="btn btn-success btn-sm">Approve</button></a><br><br>
-                            <a href="/doctor/appointment/reject/{{ x['appointment_id'] }}"><button class="btn btn-danger btn-sm">Reject</button></a>
-                        {% endif %}
-                </td>
-              </tr>
-                {% endfor %}
-          </tbody>
-</table>
+
+
+    {% for n in l %}
+        {% if n>0 %}
+            <table class="table">
+                  <thead class="table-light">
+                    <tr>
+                    <th>Appointment No.</th>
+                    <th>Patient Name</th>
+                    <th>Appointment Date</th>
+                    <th>Appointment Time</th>
+                    <th>Appointment Day</th>
+                    <th>Appointment Status</th>
+                    <th>Action</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                    {% for x in qry %}
+                      <tr>
+                        <th>{{ x['appointment_id'] }}</th>
+                        <td>{{ x['patient_name'] }}</td>
+                        <td>{{ x['schedule_date'] }}</td>
+                        <td>{{ x['schedule_day'] }}</td>
+                        <td>{{ x['start_time'] }} - {{ x['end_time'] }}</td>
+                        <td>{{ x['status'] }}</td>
+                        <td>
+                            <a href="/doctor/appointment/consult/{{ x['appointment_id'] }}"><button class="btn btn-primary btn-sm">View More</button></a>
+                               <br><br>
+                                {% if x['status'] != 'Booked' %}
+                                    <a href="/doctor/appointment/approve/{{ x['appointment_id'] }}"><button class="btn btn-success btn-sm">Approve</button></a>
+                                    {% if x['status'] != 'Rejected' %}
+                                        <a href="/doctor/appointment/reject/{{ x['appointment_id'] }}"><button class="btn btn-danger btn-sm">Reject</button></a>
+                                    {% endif %}
+                                {% endif %}
+                        </td>
+                      </tr>
+                        {% endfor %}
+                  </tbody>
+        </table>
+        {% endif %}
+        {% if n==0 %}
+            <br>
+            <p>No data found</p>
+        {% endif %}
+    {% endfor %}
     </main>
-<footer class="page-footer font-small unique-color-dark pt-4">
-    <div class="footer-copyright text-center py-3">Copyright &copy 2021</div>
-</footer>
 {% endblock content %}
 
 

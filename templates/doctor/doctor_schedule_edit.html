@@ -1,0 +1,28 @@
+{% extends 'doctor/doctor_base.html' %}
+
+{% block content %}
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h4">Edit Doctor Schedule</h1>
+        </div>
+
+        <form action="/doctor_schedule_add_post" method="post">
+            <div class="form-group">
+            <label for="schedule_date">Schedule Date</label>
+            <input type="date" class="form-control" name="schedule_date" id="schedule_date" value="{{ qry['schedule_date'] }}" required>
+        </div>
+        <div class="form-group">
+            <label for="start_time">Start Time</label>
+            <input type="time" class="form-control" name="start_time" id="start_time" value="{{ qry['start_time'] }}" required>
+        </div>
+        <div class="form-group">
+            <label for="end_time">End Time</label>
+            <input type="time" class="form-control" name="end_time" id="end_time" value="{{ qry['end_time'] }}" required>
+        </div>
+        <br>
+            <button type="submit" class="btn btn-primary">Add</button>
+            <button type="reset" class="btn btn-secondary">Reset</button>
+        </form>
+        </main>
+
+{% endblock content %}

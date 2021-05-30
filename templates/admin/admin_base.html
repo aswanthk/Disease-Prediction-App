@@ -27,6 +27,14 @@
           font-size: 3.5rem;
         }
       }
+      .overlay {
+        width: 100%;
+        height: 100vh;
+        left: 0;
+        top: 0;
+        background: #ffffff;
+        z-index: 10;
+      }
     </style>
 
 
@@ -64,21 +72,21 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/dataset">
+            <a class="nav-link" href="/admin/dataset">
               <span data-feather="file"></span>
               Manage Dataset
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/doctors">
+            <a class="nav-link" href="/admin/doctors">
               <span data-feather="shopping-cart"></span>
-              Doctors List
+              Manage Doctors
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/patients">
+            <a class="nav-link" href="/admin/patients">
               <span data-feather="users"></span>
-              Patients List
+              Manage Patients
             </a>
           </li>
           <li class="nav-item">
@@ -88,7 +96,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/feedbacks">
+            <a class="nav-link" href="/admin/feedbacks">
               <span data-feather="layers"></span>
               Feedbacks
             </a>
@@ -99,6 +107,10 @@
 
     {% block content %}
     {% endblock content %}
+
+    <footer class="page-footer font-small unique-color-dark pt-4">
+        <div class="footer-copyright text-center py-3"></div>
+    </footer>
   </div>
 </div>
 

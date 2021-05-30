@@ -1,0 +1,108 @@
+{% extends 'admin/admin_base.html' %}
+
+{% block content %}
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h4">Pending Doctors</h1>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <form action="/admin/search_pending_dr" method="post">
+                        <input type="text" class="form-control-sm" name="search_pending_dr" id="search_pending_dr" placeholder="Search a doctor">
+                        <input class="btn btn-primary btn-sm" type="submit" value="Search">
+                    </form>
+                </div>
+            </div>
+        </div>
+
+{#        <form action="/search_pending_dr" method="post">#}
+{#    <table>#}
+{#  	<tr>#}
+{#   	 	<td><input type="text" name="search_pending_dr" id="search_pending_dr"></td>#}
+{#    	<td><input type="submit" value="Search" /></td>#}
+{#  	</tr>#}
+{#	</table>#}
+{#    </form>#}
+
+    {% for n in l %}
+            {% if n>0 %}
+                <table class="table">
+                  <thead class="table-light">
+                      <tr>
+                        <th>#</th>
+                        <th>Dr. Name</th>
+                          <th>License ID</th>
+                          <th>Qualification</th>
+                          <th>Category</th>
+                          <th>Address</th>
+                          <th>Contact Number</th>
+                        <th>Action</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      {% for data in qry1 %}
+                      <tr>
+                        <td>{{ loop.index }}</td>
+                        <td><b>{{data["name"]}}</b> <br> <img src="{{ data["photo"] }}" height="100" width="50"/></td>
+                        <td>{{ data["admission_fee"] }}</td>
+                          <td>{{ data["qualification"] }}</td>
+                        <td>{{ data["category"] }}</td>
+                        <td>
+                                {{ data["hospital_name"] }} <br>
+                                {{ data["place"] }} <br>
+                                {{ data["district"] }} <br>
+                                {{ data["state"] }} <br>
+                                {{ data["post"] }} <br>
+                                PIN : {{ data["pin"] }} <br>
+                            </td>
+                        <td>{{ data["contact_number"] }}</td>
+                          <td>
+                              <a href="/admin/view_more_dr/{{data["doctor_id"]}}"><button class="btn btn-primary btn">View More</button></a><br><br>
+                             <a href="/admin/approve_dr/{{ data["doctor_id"] }}"><button class="btn btn-success btn-sm">Approve</button></a>
+                                <a href="/admin/reject_dr/{{ data["doctor_id"] }}"><button class="btn btn-danger btn-sm">Reject</button></a>
+
+                        </td>
+                      </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+                {% endif %}
+                {% if n==0 %}
+                    <br>
+                    <p> &nbsp;  &nbsp; &nbsp; &nbsp; No data found</p>
+                {% endif %}
+        {% endfor %}
+
+{#    <table width="624" border="2" cellspacing="2" cellpadding="2">#}
+{#  <tr>#}
+{#    <th width="11" scope="col">#</th>#}
+{#    <th width="44" scope="col">Dr. Name</th>#}
+{#    <th width="27" scope="col">Username</th>#}
+{#    <th width="36" scope="col">Email Address</th>#}
+{#    <th width="48" scope="col">License ID</th>#}
+{#    <th width="48" scope="col">Qualification</th>#}
+{#    <th width="79" scope="col">Category</th>#}
+{#    <th width="102" scope="col">&nbsp;</th>#}
+{#  </tr>#}
+{#  {% for data in qry1 %}#}
+{#      <tr>#}
+{#      <td>{{ loop.index }}</td>#}
+{#    <td>{{data["name"]}} <img src="{{ data["photo"] }}" height="100" width="50"/></td>#}
+{##}
+{#    <td>{{ data["username"] }}</td>#}
+{#    <td>&nbsp;{{ data["email_address"] }}</td>#}
+{#    <td>{{ data["license_id"] }}</td>#}
+{#    <td>&nbsp;{{ data["qualification"] }}</td>#}
+{#    <td>&nbsp;{{ data["category"] }}</td>#}
+{#    <td>#}
+{#        <p><a href="/approve_dr/{{ data["doctor_id"] }}">Approve</a></p>#}
+{#    <p><a href="/reject_dr/{{ data["doctor_id"] }}">Reject</a></p>#}
+{#    <p><a href="/view_more_dr/{{data["doctor_id"]}}">View More</a></p></td>#}
+{#  </tr>#}
+{#  {% endfor %}#}
+{#</table>#}
+
+    </main>
+{% endblock content %}
