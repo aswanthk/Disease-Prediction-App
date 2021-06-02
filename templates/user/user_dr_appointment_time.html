@@ -1,6 +1,9 @@
-Appointment Time : <select id="option-time" name="option-time">
-        <option value="--select--">--select--</option>
-        {% for x in times %}
-        <option value="{{ x['start_time'] }}-{{ x['end_time'] }}">{{ x['start_time'] }} to {{ x['end_time'] }}</option>
-        {% endfor %}
-    </select>
+{#<p class="h6">Appointment Time</p>#}
+<br>
+<label class="h6" for="option-time">Appointment Time</label> <br>
+<select class="form-select" aria-label="Option Time" id="option-time" name="option-time" required>
+    <option value="" selected disabled >Choose Appointment Time</option>
+    {% for x in times %}
+    <option value="{{ x['schedule_id'] }}">{{ x['start_time'] }} to {{ x['end_time'] }}</option>
+    {% endfor %}
+</select>

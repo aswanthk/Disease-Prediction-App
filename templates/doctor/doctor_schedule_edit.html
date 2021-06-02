@@ -6,7 +6,7 @@
             <h1 class="h4">Edit Doctor Schedule</h1>
         </div>
 
-        <form action="/doctor_schedule_add_post" method="post">
+        <form action="/doctor/schedule/edit_post" method="post">
             <div class="form-group">
             <label for="schedule_date">Schedule Date</label>
             <input type="date" class="form-control" name="schedule_date" id="schedule_date" value="{{ qry['schedule_date'] }}" required>
@@ -20,7 +20,8 @@
             <input type="time" class="form-control" name="end_time" id="end_time" value="{{ qry['end_time'] }}" required>
         </div>
         <br>
-            <button type="submit" class="btn btn-primary">Add</button>
+            <input type="hidden" name="schedule_id" id="schedule_id" value="{{ qry['schedule_id'] }}">
+            <button type="submit" class="btn btn-primary">Edit</button>
             <button type="reset" class="btn btn-secondary">Reset</button>
         </form>
         </main>

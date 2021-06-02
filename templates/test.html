@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Recovery</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="static/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+    <!-- Custom styles for this template -->
+    <link href="static/css/signin.css" rel="stylesheet">
+  </head>
+    <body class="text-center">
+        <div class="container">
+        <h2>Reset Password</h2>
+            <main class="form-signin">
+              <form action="/reset_password_post" method="post">
+                  <p style="font-size: 15px">Check your email to get account reset code</p>
+                  <div style="text-align: left">
+                      <div class="col">
+                    <label style="font-size: 14px" for="reset-code" class="form-label">Reset Code</label>
+                    <input type="text" class="form-control" name="reset-code" id="reset-code" placeholder="Reset Code" required>
+                  </div>
+                  <div class="col">
+                    <label style="font-size: 14px" for="new-password" class="form-label">New Password</label>
+                    <input type="password" class="form-control" id="new-password" name="new-password" placeholder="New Password" required>
+                  </div>
+                  <div class="col">
+                    <label style="font-size: 14px" for="re-new-password" class="form-label">Re-enter Password</label>
+                    <input type="password" class="form-control" id="re-new-password" name="re-new-password" placeholder="Re-enter Password" required>
+                  </div>
+                  </div>
+                  <button class="btn btn-sm btn-primary" type="submit">Submit</button>
+                </form>
+            </main>
+        </div>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+  </body>
+</html>

@@ -14,7 +14,7 @@
                     {% for usr in user_reviews %}
                 <div class="col-4">
                     <div class="card bg-light mb-3" style="max-width: 18rem;">
-                      <div class="card-header">{{ usr['username'] }} [user]</div>
+                      <div class="card-header">{{ usr['username'] }}</div>
                       <div class="card-body">
                         <h5 class="card-title">{{ usr['rate'] }} star rating</h5>
                         <p class="card-text">{{ usr['review'] }}</p>
@@ -28,7 +28,7 @@
                     {% for usr in dr_reviews %}
                     <div class="col-4">
                         <div class="card bg-light mb-3" style="max-width: 18rem;">
-                          <div class="card-header">{{ usr['username'] }} [doctor]</div>
+                          <div class="card-header">{{ usr['username'] }}</div>
                           <div class="card-body">
                             <h5 class="card-title">{{ usr['rate'] }} star rating</h5>
                             <p class="card-text">{{ usr['review'] }}</p>

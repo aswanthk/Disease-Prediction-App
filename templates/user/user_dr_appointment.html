@@ -5,54 +5,198 @@
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 class="h4">Register for Appointment</h1>
         </div>
-        <form action="/user/appointment/submit" method="post">
 
-            <h3>Patient Details</h3>
-<pre>
-    Patient Name :  <input type="text" name="patient-name" id="patient-name" value="{{ usr[0]['name'] }}"/><br /><br />
-    Age :           <input type="text" name="patient-age" id="patient-age" value="{{ age }}"/><br /><br />
-    Address :       <textarea name="patient-address" cols="25" rows="5">
-"{{ usr[0]['house_name'] }}"
-{{ usr[0]['place'] }}
-{{ usr[0]['district'] }}, {{ usr[0]['state'] }}
-PIN: {{ usr[0]['pin'] }}
-                </textarea><br /><br />
-    Email Address : <input type="text" name="patient-email" id="patient-email" value="{{ usr[0]['email_address'] }}" readonly/><br /><br />
-    Mobile Number : <input type="text" name="patient-mobile" id="patient-mobile" value="{{ usr[0]['mobile_number'] }}"/>
-</pre>
+        <form action="/user/appointment/submit" method="post" onsubmit="return confirm('Do you want to book appointment?')">
 
-<h3>Appointment Details</h3>
-<pre>
-    Doctor Name :           <input type="text" name="dr-name" id="dr-name" value="{{ dr['name'] }}" readonly/><br /><br />
-    Doctor Address :        <textarea name="dr-address" id="dr-address" cols="25" rows="5">{{ dr['hospital_name'] }}</textarea><br /><br />
+            <div class="container">
+          <div class="row">
+            <div class="col">
+              <p class="h5">Patient Details: </p>
+            </div>
+            <div class="col">
+              <p class="h5">Prediction Information: </p>
+            </div>
+          </div>
+            </div>
+            <br>
 
-    Appointment Date :      <select name="option-date" id="option-date" onchange="adds(this.value)">
-                                <option value="--select--">--select--</option>
-                                {% for x in app %}
-                                <option value="{{ x['schedule_date'] }}">{{ x['schedule_date'] }}({{ x['schedule_day'] }})</option>
-                                {% endfor %}
-                            </select>
-    <p id="d"></p>
-</pre>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+              <table class="table">
+              <tbody>
+                <tr>
+                  <td>Name</td>
+                  <td>{{ usr['name'] }}</td>
+                </tr>
+                <tr>
 
-<h3>Prediction Information</h3>
-<pre>
-    Symptoms:           {{ usr[0]['symptoms'] }} <input type="hidden" name="symptoms" id="symptoms" value="{{ usr[0]['symptoms'] }}">
+                  <td>Gender</td>
+                  <td>{{ usr['gender'] }}</td>
+                </tr>
+                <tr>
 
-    Predicted Disease:
-                        {% for p in pred %}
-                            {{ p[0] }}  :   {{ p[1] }} <input type="hidden" name="prediction{{ loop.index }}" id="prediction{{ loop.index }}" value="{{ p[0] }}  :   {{ p[1] }}">
-                        {% endfor %}
-    Predicted on {{ usr[0]['date'] }} <input type="hidden" name="prediction-date" id="prediction-date" value="{{ usr[0]['date'] }}">
-    <input type="hidden" name="pred-id" id="pred-id" value="{{ usr[0]['prediction_id'] }}">
-    <input type="hidden" name="dr-id" id="dr-id" value="{{ dr['doctor_id'] }}">
-    <input type="hidden" name="patient-username" id="patient-username" value="{{ usr[0]['username'] }}">
-</pre>
+                  <td>Age</td>
+                  <td>{{ age }}</td>
+                </tr>
+                <tr>
 
-        <input type="submit" value="Book">
-        <button><a>Cancel</a></button>
+                  <td>Address</td>
+                  <td>{{ usr['house_name'] }}<br>{{ usr['place'] }}, {{ usr['district'] }}</td>
+                </tr>
+                <tr>
 
+                  <td>Contact Number</td>
+                  <td>{{ usr['mobile_number'] }}</td>
+                </tr>
+              </tbody>
+            </table>
+            </div>
+            <div class="col">
+              <table class="table">
+              <tbody>
+
+                {% for pd in pred_dict['prediction'] %}
+                    <tr>
+                  <td>Based on <b>{{ pd[0] }}</b></td>
+                  <td><span style="color: #8b0000"><b>{{ pd[1] }}</b></span> disease</td>
+                    </tr>
+                {% endfor %}
+                <tr>
+
+                  <td>Symptoms</td>
+                  <td>{% for s in pred_dict['symptoms'] %}{{ s }}<br>{% endfor %}</td>
+                </tr>
+                <tr>
+
+                  <td>Predicted on</td>
+                  <td>{{ pred_dict['date'][0] }}, {{ pred_dict['date'][1] }}</td>
+                </tr>
+              </tbody>
+            </table>
+            </div>
+          </div>
+        </div>
+            <br>
+            <div class="container">
+          <div class="row">
+            <div class="col">
+              <p class="h5">Doctor Details: </p>
+            </div>
+            <div class="col">
+              <p class="h5">Appointment Time: </p>
+            </div>
+          </div>
+            </div>
+            <br>
+
+            <div class="container">
+          <div class="row">
+            <div class="col">
+              <table class="table">
+              <tbody>
+                <tr>
+                  <td>Doctor Name</td>
+                  <td>{{ dr['name'] }}</td>
+                </tr>
+                <tr>
+
+                  <td>Qualification</td>
+                  <td>{{ dr['qualification'] }}</td>
+                </tr>
+                <tr>
+
+                  <td>Category</td>
+                  <td>{% for x in cat %}{{ x }}<br>{% endfor %}</td>
+                </tr>
+                <tr>
+
+                  <td>Hospital/Clinic Address</td>
+                  <td>{{ dr['house_name'] }}<br>{{ dr['place'] }}, {{ dr['district'] }}</td>
+                </tr>
+              <tr>
+                  <td>Contact Number</td>
+                  <td>{{ dr['contact_number'] }}</td>
+                </tr>
+              </tbody>
+            </table>
+            </div>
+            <div class="col">
+{#            <p class="h6">Appointment Date </p><br>#}
+            <label class="h6" for="option-date">Appointment Time</label> <br>
+              <select class="form-select" aria-label="Option Date" name="option-date" id="option-date" onchange="adds(this.value)" required>
+                <option value="" selected disabled >Choose Appointment Date</option>
+                {% for x in sd %}
+                <option value="{{ x[0] }}">{{ x[0] }} ({{ x[1] }})</option>
+                {% endfor %}
+            </select>
+            <div id="d"></div>
+            </div>
+          </div>
+            </div>
+                <input type="hidden" name="user-id" id="user-id" value="{{ usr['user_id'] }}">
+            <input type="hidden" name="doctor-id" id="doctor-id" value="{{ dr['doctor_id'] }}">
+            <input type="hidden" name="prediction-id" id="prediction-id" value="{{ pred_dict['prediction_id'] }}">
+            <div class="container">
+          <div class="row">
+            <div class="col">
+              <button type="submit" class="btn btn-primary">Book</button>
+                <button type="reset" class="btn btn-secondary">Cancel</button>
+            </div>
+          </div>
+            </div>
         </form>
+
+
+{#            <h3>Patient Details</h3>#}
+{#<pre>#}
+{#    Patient Name :  <input type="text" name="patient-name" id="patient-name" value="{{ usr[0]['name'] }}"/><br /><br />#}
+{#    Age :           <input type="text" name="patient-age" id="patient-age" value="{{ age }}"/><br /><br />#}
+{#    Address :       <textarea name="patient-address" cols="25" rows="5">#}
+{#"{{ usr[0]['house_name'] }}"#}
+{#{{ usr[0]['place'] }}#}
+{#{{ usr[0]['district'] }}, {{ usr[0]['state'] }}#}
+{#PIN: {{ usr[0]['pin'] }}#}
+{#                </textarea><br /><br />#}
+{#    Email Address : <input type="text" name="patient-email" id="patient-email" value="{{ usr[0]['email_address'] }}" readonly/><br /><br />#}
+{#    Mobile Number : <input type="text" name="patient-mobile" id="patient-mobile" value="{{ usr[0]['mobile_number'] }}"/>#}
+{#</pre>#}
+{##}
+{#<h3>Appointment Details</h3>#}
+{#<pre>#}
+{#    Doctor Name :           <input type="text" name="dr-name" id="dr-name" value="{{ dr['name'] }}" readonly/><br /><br />#}
+{#    Doctor Address :        <textarea name="dr-address" id="dr-address" cols="25" rows="5">{{ dr['hospital_name'] }}</textarea><br /><br />#}
+{##}
+{#    Appointment Date :      <select name="option-date" id="option-date" onchange="adds(this.value)">#}
+{#                                <option value="--select--">--select--</option>#}
+{#                                {% for x in app %}#}
+{#                                <option value="{{ x['schedule_date'] }}">{{ x['schedule_date'] }}({{ x['schedule_day'] }})</option>#}
+{#                                {% endfor %}#}
+{#                            </select>#}
+{#    <p id="d"></p>#}
+{#</pre>#}
+{##}
+{#<h3>Prediction Information</h3>#}
+{#<pre>#}
+{#    Symptoms:           {{ usr[0]['symptoms'] }} <input type="hidden" name="symptoms" id="symptoms" value="{{ usr[0]['symptoms'] }}">#}
+{##}
+{#    Predicted Disease:#}
+{#                        {% for p in pred %}#}
+{#                            {{ p[0] }}  :   {{ p[1] }} <input type="hidden" name="prediction{{ loop.index }}" id="prediction{{ loop.index }}" value="{{ p[0] }}  :   {{ p[1] }}">#}
+{#                        {% endfor %}#}
+{#    Predicted on {{ usr[0]['date'] }} <input type="hidden" name="prediction-date" id="prediction-date" value="{{ usr[0]['date'] }}">#}
+{#    <input type="hidden" name="pred-id" id="pred-id" value="{{ usr[0]['prediction_id'] }}">#}
+{#    <input type="hidden" name="dr-id" id="dr-id" value="{{ dr['doctor_id'] }}">#}
+{#    <input type="hidden" name="patient-username" id="patient-username" value="{{ usr[0]['username'] }}">#}
+{#</pre>#}
+{##}
+{#        <input type="submit" value="Book">#}
+{#        <button><a>Cancel</a></button>#}
+{##}
+{#        </form>#}
+
+
+
     </main>
 {% endblock content %}
 

@@ -62,7 +62,7 @@
             <button type="submit" class="btn btn-primary">Search</button>
         </form>
         <br>
-        <p class="h5">Search Results:</p>
+        <p class="h5">Search Results {% if cat=="cat" %} for '{{ sp }}' Specialists {% endif %}</p>
         {% for n in l %}
             {% if n>0 %}
                 <table class="table">
@@ -72,6 +72,9 @@
                         <th>Dr. Name</th>
                         <th>Qualification</th>
                         <th>Category</th>
+                          {% if exp == "exp" %}
+                              <th>Experience</th>
+                           {% endif %}
                         <th>Address</th>
                         <th>Contact Number</th>
                         <th>Fee</th>
@@ -85,6 +88,12 @@
                         <td><b>{{data["name"]}}</b> <br> <img src="{{ data["photo"] }}" height="100" width="50"/></td>
                         <td>{{ data["qualification"] }}</td>
                         <td>{{ data["category"] }}</td>
+
+                          {% if exp == "exp" %}
+                                  <td>
+                                {{ year - data["pro_started_yr"] }}
+                                  </td>
+                                {% endif %}
                         <td>
                                 {{ data["hospital_name"] }} <br>
                                 {{ data["place"] }} <br>

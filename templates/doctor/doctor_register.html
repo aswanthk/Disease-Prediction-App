@@ -1,144 +1,317 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Doctor Registration</title>
-</head>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Doctor Register</title>
 
-<body>
-<h1>Doctor Registration</h1>
-<form action="/doctor/register_post" method="post" enctype="multipart/form-data">
-<table width="344" height="284" border="2"  cellpadding="2" cellspacing="2">
-  <tr>
-    <td>Username</td>
-    <td>
-      <input type="text" name="username" id="username" />
-    </td>
-  </tr>
-    <tr>
-    <td>Name</td>
-    <td><input type="text" name="name" id="name" /></td>
-  </tr>
-  <tr>
-    <td>Photo</td>
-    <td>
-      <input type="file" name="photo" id="photo" />
-    </td>
-  </tr>
-    <tr>
-    <td>Email Address</td>
-      <td><input type="text" name="email-address" id="email-address" /></td>
-  </tr>
-    <tr>
-    <td>Contact Number</td>
-    <td><input type="text" name="contact-number" id="contact-number" /></td>
-  </tr>
+    <!-- Bootstrap core CSS -->
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
 
-    <tr>
-    <td>Gender</td>
-    <td><input type="radio" name="gender" id="male" value="Male"/>Male
-        <input type="radio" name="gender" id="female" value="Female"/>Female
-        <input type="radio" name="gender" id="other" value="Other"/>Other
-    </td>
-  </tr>
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
 
-    <tr>
-    <td>Date of Birth</td>
-    <td><input type="date" name="dob" id="dob" /></td>
-  </tr>
-  <tr>
-    <td>License ID</td>
-      <td><input type="text" name="license-id" id="license-id" /></td>
-  </tr>
-  <tr>
-    <td>Qualification</td>
-      <td><input type="text" name="qualification" id="qualification" /></td>
-  </tr>
-  <tr>
-    <th><label for="category">Category</label></th>
-      <td>
-            <label for="cat1">Category 1</label>
-            <input type="checkbox" name="category" id="cat1" value="category1">
-            <label for="cat2">Category 2</label>
-            <input type="checkbox" name="category" id="cat2" value="category2">
-            <label for="cat3">Category 3</label>
-            <input type="checkbox" name="category" id="cat3" value="category3">
-            <label for="cat4">Category 4</label>
-            <input type="checkbox" name="category" id="cat4" value="category4">
-      </td>
-  </tr>
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
 
-    <tr>
-    <td>Hospital/ Clinic Name</td>
-    <td>
-        <input type="text" name="hospital-name" id="hospital-name" />
-    </td>
-  </tr>
-    <tr>
-    <td>Place</td>
-    <td>
-        <input type="text" name="place" id="place" />
-    </td>
-  </tr>
-    <tr>
-    <td>District</td>
-    <td>
-        <input type="text" name="district" id="district" />
-    </td>
-  </tr>
-    <tr>
-    <td>State</td>
-    <td>
-        <input type="text" name="state" id="state" />
-    </td>
-  </tr>
-    <tr>
-    <td>Post</td>
-    <td>
-        <input type="text" name="post" id="post" />
-    </td>
-  </tr>
-    <tr>
-    <td>PIN</td>
-    <td>
-        <input type="text" name="pin" id="pin" />
-    </td>
-  </tr>
-  <tr>
-    <td>Admission fee</td>
-      <td><input type="text" name="admission-fee" id="admission-fee" /></td>
-  </tr>
-  <tr>
-    <td>Profession started Year</td>
-      <td><input type="text" name="pro-started-yr" id="pro-started-yr" /></td>
-  </tr>
-    <tr>
-    <td>LATITUDE</td>
-    <td><input type="text" name="latitude" id="latitude" class="form-control" required/></td>
-  </tr>
-  <tr>
-    <td>LONGITUDE</td>
-    <td><input type="text" name="longitude" id="longitude" class="form-control" required/></td>
-  </tr>
-  <tr>
-    <td>Password</td>
-    <td><input type="password" name="password" id="password" /></td>
-  </tr>
-  <tr>
-    <td>Re-Enter Password</td>
-    <td><input type="password" name="re-password" id="re-password" /></td>
-  </tr>
-  <tr>
-    <td>&nbsp;</td>
-    <td>
-      <input type="submit" value="Register" />
-    </td>
-  </tr>
-</table>
-</form>
-<div id="gmap"></div>
-</body>
+
+    <!-- Custom styles for this template -->
+    <link href="{{ url_for('static', filename='css/register.css') }}" rel="stylesheet">
+  </head>
+  <body class="bg-light">
+
+<div class="container">
+  <main>
+    <div class="py-5 text-center">
+      <h2>Doctor Registration Form</h2>
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <div class="col-md-7 col-lg-8">
+
+        <form action="/doctor/register_post" method="post" enctype="multipart/form-data">
+
+            <div class="row g-3">
+              <div class="col">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="Username" aria-label="Username" required>
+              </div>
+              <div class="col">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Name" aria-label="Name" required>
+              </div>
+            </div>
+            <br>
+
+            <div class="form-group">
+            <label for="photo">Photo</label>
+            <input type="file" class="form-control-file" id="photo" name="photo">
+          </div>
+
+            <br>
+            <div class="row g-3">
+              <div class="col">
+                <label for="email-address" class="form-label">Email Address</label>
+                <input type="text" class="form-control" id="email-address" name="email-address" placeholder="Email Address" aria-label="Username" required>
+              </div>
+              <div class="col">
+                <label for="contact-number" class="form-label">Contact Number</label>
+                <input type="text" class="form-control" id="contact-number" name="contact-number" placeholder="Contact Number" aria-label="Contact Number" required>
+              </div>
+            </div>
+
+            <br>
+            <div class="col-12">
+                <label for="dob" class="form-label">Date of Birth</label>
+                <input type="date" class="form-control" id="dob" name="dob" required>
+            </div>
+
+            <br>
+            <fieldset class="form-group">
+                <div class="row">
+                  <legend class="col-form-label col-sm-2 pt-0">Gender</legend>
+                  <div class="col-sm-10">
+{#                    <div class="form-check">#}
+                      <input class="form-check-input" type="radio" name="gender" id="male" value="Male" required>
+                      <label class="form-check-label" for="male">
+                        Male &nbsp; &nbsp;
+                      </label>
+{#                    </div>#}
+{#                    <div class="form-check">#}
+                      <input class="form-check-input" type="radio" name="gender" id="female" value="Female">
+                      <label class="form-check-label" for="female">
+                        Female &nbsp; &nbsp;
+                      </label>
+{#                    </div>#}
+                      <input class="form-check-input" type="radio" name="gender" id="other" value="Other">
+                      <label class="form-check-label" for="other">
+                        Other
+                      </label>
+                  </div>
+                </div>
+              </fieldset>
+
+            <br>
+            <div class="row g-3">
+                <div class="col">
+                <label for="qualification" class="form-label">Qualification</label>
+                <input type="text" class="form-control" id="qualification" name="qualification" placeholder="Qualification" aria-label="Qualification" required>
+              </div>
+
+                <div class="col">
+                <label for="license-id" class="form-label">License ID</label>
+                <input type="text" class="form-control" id="license-id" name="license-id" placeholder="License ID" aria-label="License ID" required>
+              </div>
+            </div>
+
+
+            <br>
+            <fieldset class="form-group">
+                <div class="row">
+                  <legend class="col-form-label col-sm-2 pt-0">Category</legend>
+                  <div class="col-sm-10">
+                        <input class="form-check-input" type="checkbox" name="category" id="dermatologist" value="Dermatologist">
+                          <label class="form-check-label" for="dermatologist">
+                            Dermatologist
+                          </label>
+                          <input class="form-check-input" type="checkbox" name="category" id="allergist" value="Allergist">
+                          <label class="form-check-label" for="allergist">
+                            Allergist
+                          </label>
+                        <input class="form-check-input" type="checkbox" name="category" id="gastroenterologist" value="Gastroenterologist">
+                          <label class="form-check-label" for="gastroenterologist">
+                            Gastroenterologist
+                          </label>
+                          <input class="form-check-input" type="checkbox" name="category" id="hepatologist" value="Hepatologist">
+                          <label class="form-check-label" for="hepatologist">
+                            Hepatologist
+                          </label><br><br>
+                            <input class="form-check-input" type="checkbox" name="category" id="internists" value="Internists">
+                          <label class="form-check-label" for="internists">
+                            Internists
+                          </label>
+
+                        <input class="form-check-input" type="checkbox" name="category" id="osteopaths" value="Osteopaths">
+                          <label class="form-check-label" for="osteopaths">
+                            Osteopaths
+                          </label>
+                          <input class="form-check-input" type="checkbox" name="category" id="diabetologist" value="Diabetologist">
+                          <label class="form-check-label" for="diabetologist">
+                            Diabetologist
+                          </label>
+                        <input class="form-check-input" type="checkbox" name="category" id="endocrinologist" value="Endocrinologist">
+                          <label class="form-check-label" for="endocrinologist">
+                            Endocrinologist
+                          </label><br><br>
+                          <input class="form-check-input" type="checkbox" name="category" id="pulmonologist" value="Pulmonologist">
+                          <label class="form-check-label" for="pulmonologist">
+                            Pulmonologist
+                          </label>
+                            <input class="form-check-input" type="checkbox" name="category" id="cardiologist" value="Cardiologist">
+                          <label class="form-check-label" for="cardiologist">
+                            Cardiologist
+                          </label>
+
+                        <input class="form-check-input" type="checkbox" name="category" id="psychologist" value="Psychologist">
+                          <label class="form-check-label" for="psychologist">
+                            Psychologist
+                          </label>
+                          <input class="form-check-input" type="checkbox" name="category" id="neurologist" value="Neurologist">
+                          <label class="form-check-label" for="neurologist">
+                            Neurologist
+                          </label><br><br>
+                        <input class="form-check-input" type="checkbox" name="category" id="general-physician" value="General Physician">
+                          <label class="form-check-label" for="general-physician">
+                            General Physician
+                          </label>
+                          <input class="form-check-input" type="checkbox" name="category" id="surgeon" value="Surgeon">
+                          <label class="form-check-label" for="surgeon">
+                            Surgeon
+                          </label>
+                            <input class="form-check-input" type="checkbox" name="category" id="vascular-surgeon" value="Vascular Surgeon">
+                          <label class="form-check-label" for="vascular-surgeon">
+                            Vascular Surgeon
+                          </label>
+
+                        <input class="form-check-input" type="checkbox" name="category" id="endocrinologist" value="Endocrinologist">
+                          <label class="form-check-label" for="endocrinologist">
+                            Endocrinologist
+                          </label><br><br>
+                          <input class="form-check-input" type="checkbox" name="category" id="orthopedic-specialist" value="Orthopedic Specialist">
+                          <label class="form-check-label" for="orthopedic-specialist">
+                            Orthopedic Specialist
+                          </label>
+                        <input class="form-check-input" type="checkbox" name="category" id="ent" value="ENT">
+                          <label class="form-check-label" for="ent">
+                            ENT
+                          </label>
+                          <input class="form-check-input" type="checkbox" name="category" id="urologist" value="Urologist">
+                          <label class="form-check-label" for="urologist">
+                            Urologist
+                          </label>
+                            <input class="form-check-input" type="checkbox" name="category" id="paediatrician" value="Paediatrician">
+                          <label class="form-check-label" for="paediatrician">
+                            Paediatrician
+                          </label>
+                    </div>
+                </div>
+            </fieldset>
+
+            <br>
+            <div class="row g-3">
+              <div class="col">
+                <label for="admission-fee" class="form-label">Admission Fee</label>
+                <input type="number" class="form-control" id="admission-fee" name="admission-fee" placeholder="Admission Fee" aria-label="Admission Fee" required>
+              </div>
+              <div class="col">
+                <label for="pro-started-yr" class="form-label">Prefession Started Year</label>
+                <input type="year" class="form-control" id="pro-started-yr" name="pro-started-yr" placeholder="Prefession Started Year" aria-label="Prefession Started Year" required>
+              </div>
+            </div>
+
+            <br>
+            <fieldset>
+                <legend style="font-size: 14px"><b>ADDRESS</b></legend>
+                <div class="row g-3">
+              <div class="col">
+                <label for="hospital-name" class="form-label">Hospital/Clinic Name</label>
+                <input type="text" class="form-control" id="hospital-name" name="hospital-name" placeholder="Hospital/Clinic Name" aria-label="Hospital Name" required>
+              </div>
+              <div class="col">
+                <label for="place" class="form-label">Place</label>
+                <input type="text" class="form-control" id="place" name="place" placeholder="Place" aria-label="Place" required>
+              </div>
+            </div>
+        <br>
+            <div class="row g-3">
+              <div class="col">
+                <label for="district" class="form-label">District</label>
+                <input type="text" class="form-control" id="district" name="district" placeholder="District" aria-label="District" required>
+              </div>
+              <div class="col">
+                <label for="state" class="form-label">State</label>
+                <input type="text" class="form-control" id="state" name="state" placeholder="State" aria-label="State" required>
+              </div>
+            </div>
+        <br>
+            <div class="row g-3">
+              <div class="col">
+                <label for="post" class="form-label">Post</label>
+                <input type="text" class="form-control" id="post" name="post" placeholder="Post" aria-label="Post" required>
+              </div>
+              <div class="col">
+                <label for="pin" class="form-label">PIN</label>
+                <input type="text" class="form-control" id="pin" name="pin" placeholder="PIN" aria-label="PIN" required>
+              </div>
+            </div>
+            </fieldset>
+
+            <br>
+             <div class="row g-3">
+              <div class="col">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Password" aria-label="Password" required>
+              </div>
+              <div class="col">
+                <label for="re-password" class="form-label">Re-Enter Password</label>
+                <input type="password" class="form-control" id="re-password" name="re-password" placeholder="Re-Enter Password" aria-label="Re-Enter Password" required>
+              </div>
+            </div>
+
+            <hr class="my-4">
+
+          <button class="w-100 btn btn-primary btn-lg" type="submit">Register</button>
+
+            <hr class="my-4">
+
+          <h4 class="mb-3">Location</h4>
+
+            <div class="row g-3">
+                        <div class="col">
+              <label for="latitude" class="form-label">Latitude</label>
+              <input type="text" class="form-control" name="latitude" id="latitude" placeholder="Latitude" required>
+            </div>
+
+            <div class="col">
+              <label for="longitude" class="form-label">Longitude</label>
+              <input type="text" class="form-control" name="longitude" id="longitude" placeholder="Longitude" required>
+            </div>
+        </div>
+            <br>
+
+          <div class="row gy-3">
+
+              <div id="gmap"></div>
+
+          </div>
+
+        </form>
+      </div>
+    </div>
+
+  </main>
+
+</div>
+<footer class="page-footer font-small unique-color-dark pt-4">
+    <div class="footer-copyright text-center py-3"></div>
+</footer>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+
+  </body>
 </html>
+
 <style type="text/css">
 html { height: 100% }
 body { height: 100%; margin: 0; padding: 0 }

@@ -19,12 +19,10 @@
 <br>
 <label for="specialisation" class="form-label">Specialisation</label>
 <select class="form-select" name="specialisation" id="specialisation">
-    <option value="" selected>Select option</option>
-    <option value="general">General</option>
-    <option value="bds">BDS</option>
-    <option value="mbbs">MBBS</option>
-    <option value="cardiology">Cardiology</option>
-    <option value="ent">ENT</option>
+    <option value="select" selected>Select option</option>
+    {% for cat in category %}
+        <option value="{{ cat }}">{{ cat }}</option>
+    {% endfor %}
 </select>
 
 {#<select id="specialisation" name="specialisation">#}

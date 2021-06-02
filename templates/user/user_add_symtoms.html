@@ -8,7 +8,7 @@
 
         <form method="POST" action="/user/disease_prediction">
             <div class="form-group">
-                <label for="symptoms1" class="form-label">Symptom 1</label>
+                <label for="symptoms1" class="form-label">Symptom 1 <span style="color: red">*</span></label>
                 <input class="form-control" list="symptoms" id="symptoms1" name="symptoms1" placeholder="Type to search..." required>
                 <datalist id="symptoms">
                     {% for s in l1 %}
@@ -18,7 +18,7 @@
             </div>
 
             <div class="form-group">
-                <label for="symptoms2" class="form-label">Symptom 2</label>
+                <label for="symptoms2" class="form-label">Symptom 2 <span style="color: red">*</span></label>
                 <input class="form-control" list="symptoms" id="symptoms2" name="symptoms2" placeholder="Type to search..." required>
                 <datalist id="symptoms">
                     {% for s in l1 %}
@@ -28,7 +28,7 @@
             </div>
 
             <div class="form-group">
-                <label for="symptoms3" class="form-label">Symptom 3</label>
+                <label for="symptoms3" class="form-label">Symptom 3 <span style="color: red">*</span></label>
                 <input class="form-control" list="symptoms" id="symptoms3" name="symptoms3" placeholder="Type to search..." required>
                 <datalist id="symptoms">
                     {% for s in l1 %}

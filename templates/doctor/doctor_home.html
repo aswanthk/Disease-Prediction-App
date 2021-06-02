@@ -6,20 +6,31 @@
             <h1 class="h2">Dashboard</h1>
         </div>
 
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
-                      <div class="card-header">Header</div>
+       <div class="container">
+
+                <div class="row">
+                    <div class="col-4">
+                    <div class="card text-white bg-dark bg-primary mb-3" style="max-width: 18rem;">
+                      <div class="card-header">Appointments</div>
                       <div class="card-body">
-                        <h5 class="card-title">Primary card title</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <h5 class="card-title"></h5>
+                        <p class="card-text">{{ apps[0] }} &nbsp; &nbsp; {{ apps[1] }}</p>
                       </div>
                     </div>
                     </div>
+                    {% for x in dash %}
+                <div class="col-4">
+                    <div class="card text-white bg-dark bg-primary mb-3" style="max-width: 18rem;">
+                      <div class="card-header">{{ x[0] }}</div>
+                      <div class="card-body">
+                        <h5 class="card-title"></h5>
+                        <p class="card-text">{{ x[1] }}</p>
+                      </div>
+                    </div>
+                    </div>
+                    {% endfor %}
                 </div>
-            </div>
-        </div>
+       </div>
     </main>
 {% endblock content %}
 

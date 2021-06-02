@@ -1,0 +1,160 @@
+{% extends 'user/user_base.html' %}
+
+{% block content %}
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h4">Appointment Details</h1>
+            <a href="#"><button class="btn btn-primary">Download</button></a>
+        </div>
+
+            <div class="container">
+          <div class="row">
+            <div class="col">
+              <p class="h5">Patient Details: </p>
+            </div>
+            <div class="col">
+              <p class="h5">Prediction Information: </p>
+            </div>
+          </div>
+            </div>
+            <br>
+
+        <div class="container">
+            <div class="row">
+                <div class="col">
+              <table class="table">
+              <tbody>
+                <tr>
+                  <td>Name</td>
+                  <td>{{ app['user']['name'] }}</td>
+                </tr>
+                <tr>
+
+                  <td>Gender</td>
+                  <td>{{ app['user']['gender'] }}</td>
+                </tr>
+                <tr>
+
+                  <td>Age</td>
+                  <td>{{ age }}</td>
+                </tr>
+                <tr>
+
+                  <td>Address</td>
+                  <td>{{ app['user']['house_name'] }}<br>{{ app['user']['place'] }}, {{ app['user']['district'] }}</td>
+                </tr>
+                <tr>
+
+                  <td>Contact Number</td>
+                  <td>{{ app['user']['mobile_number'] }}</td>
+                </tr>
+              </tbody>
+            </table>
+            </div>
+            <div class="col">
+              <table class="table">
+              <tbody>
+
+                {% for pd in pred_dict['prediction'] %}
+                    <tr>
+                  <td>Based on <b>{{ pd[0] }}</b></td>
+                  <td><span style="color: #8b0000"><b>{{ pd[1] }}</b></span> disease</td>
+                    </tr>
+                {% endfor %}
+                <tr>
+
+                  <td>Symptoms</td>
+                  <td>{% for s in pred_dict['symptoms'] %}{{ s }}<br>{% endfor %}</td>
+                </tr>
+                <tr>
+
+                  <td>Predicted on</td>
+                  <td>{{ pred_dict['date'][0] }}, {{ pred_dict['date'][1] }}</td>
+                </tr>
+              </tbody>
+            </table>
+            </div>
+          </div>
+        </div>
+            <br>
+            <div class="container">
+          <div class="row">
+            <div class="col">
+              <p class="h5">Doctor Details: </p>
+            </div>
+            <div class="col">
+              <p class="h5">Appointment Time: </p>
+            </div>
+          </div>
+            </div>
+            <br>
+
+            <div class="container">
+          <div class="row">
+            <div class="col">
+              <table class="table">
+              <tbody>
+                <tr>
+                  <td>Doctor Name</td>
+                  <td>{{ app['doctor']['name'] }}</td>
+                </tr>
+                <tr>
+
+                  <td>Qualification</td>
+                  <td>{{ app['doctor']['qualification'] }}</td>
+                </tr>
+                <tr>
+
+                  <td>Category</td>
+                  <td>{% for x in cat %}{{ x }}<br>{% endfor %}</td>
+                </tr>
+                <tr>
+
+                  <td>Hospital/Clinic Address</td>
+                  <td>{{ app['doctor']['house_name'] }}<br>{{ app['doctor']['place'] }}, {{ app['doctor']['district'] }}</td>
+                </tr>
+              <tr>
+                  <td>Contact Number</td>
+                  <td>{{ app['doctor']['contact_number'] }}</td>
+                </tr>
+              </tbody>
+            </table>
+            </div>
+            <div class="col">
+                 <table class="table">
+              <tbody>
+                <tr>
+                  <td>Appointment Date</td>
+                  <td>{{ app['schedule']['schedule_date'] }} ({{ app['schedule']['schedule_day'] }})</td>
+                </tr>
+                <tr>
+                  <td>Appointment Time</td>
+                  <td>{{ app['schedule']['start_time'] }} to {{ app['schedule']['end_time'] }}</td>
+                </tr>
+                <tr>
+                  <td>Status</td>
+                  <td>{{ app['status'] }}</td>
+                </tr>
+               </tbody>
+            </table>
+                {% if app['status'] == 'Pending' %}
+                    <a href="/user/my_appointment/cancel/{{ app['appointment_id'] }}>"><button class="btn btn-danger">Cancel</button></a>
+                {% endif %}
+            </div>
+          </div>
+            </div>
+
+{#            <div class="container">#}
+{#          <div class="row">#}
+{#            <div class="col">#}
+{#                <a href=""><button class="btn btn-primary">Download</button></a>#}
+{#                {% if app['status'] == 'Pending' %}#}
+{#                    <a href="/user/my_appointment/cancel/<{{ app['appointment_id'] }}>"><button class="btn btn-danger">Cancel</button></a>#}
+{#                {% endif %}#}
+{##}
+{#            </div>#}
+{#          </div>#}
+{#            </div>#}
+
+    </main>
+{% endblock content %}

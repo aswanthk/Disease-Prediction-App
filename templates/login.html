@@ -102,7 +102,7 @@
 <main class="form-signin">
   <form method="post" action="/login_post">
     <img class="mb-4" src="static/images/dp_icon_logo.png" alt="">
-    <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+    <h1 class="h3 mb-3 fw-normal">Sign in</h1>
 
     <div class="form-floating">
       <input type="text" class="form-control" id="floatingInput" name="username" placeholder="Username" required>
@@ -113,27 +113,14 @@
       <label for="floatingPassword">Password</label>
     </div>
 
-    <div class="checkbox mb-3">
-      <label>
-        <input type="checkbox" name="checkbox" id="checkbox" value="show-me" onclick="password_visible()"> Show Password
-      </label>
-    </div>
+{#    <div class="checkbox mb-3">#}
+{#      <label>#}
+{#        <input type="checkbox" name="checkbox" id="checkbox" value="show-me" onclick="password_visible()"> Show Password#}
+{#      </label>#}
+{#    </div>#}
     <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
       <br><br>
     </form>
-      <p><b>Don't have an Account?</b></p>
-    
-    <div class="dropdown show">
-      <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Dropdown link
-      </a>
-
-      <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-        <a class="dropdown-item" href="#">Action</a>
-        <a class="dropdown-item" href="#">Another action</a>
-        <a class="dropdown-item" href="#">Something else here</a>
-      </div>
-    </div>
 
       <form action="/signup_post" method="post">
     <b>Register as</b>
@@ -144,9 +131,9 @@
         <input type="submit" value="Sign-Up" class="btn btn-success btn-sm">
     </form>
       <br>
-      <p><a href="/forgot_password" id="forgot-link">Forgot password?</a></p>
+      <p><a style="text-decoration: none" href="/forgot_password" id="forgot-link">Forgot password?</a></p>
 
-    <p class="mt-5 mb-3 text-muted">&copy; 2017–2021</p>
+{#    <p class="mt-5 mb-3 text-muted">&copy; 2019–2021</p>#}
 </main>
 
 <script>

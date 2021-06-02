@@ -13,7 +13,8 @@
             <h1 class="h4">My Appointment List</h1>
         </div>
 
-        <table class="table">
+        {% if l != 0 %}
+            <table class="table">
           <thead class="table-light">
             <tr>
                 <th>Appointment No.</th>
@@ -21,30 +22,52 @@
                 <th>Appointment Date</th>
                 <th>Appointment Time</th>
                 <th>Appointment Day</th>
-                <th>Appointment Status</th>
+                <th>Status</th>
                 <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            {% for x in qry %}
+            {% for x in apps %}
               <tr>
                 <th>{{ x['appointment_id'] }}</th>
-                <td>{{ x['patient_name'] }} **</td>
-                <td>{{ x['schedule_date'] }}</td>
-                <td>{{ x['schedule_day'] }}</td>
-                <td>{{ x['start_time'] }} - {{ x['end_time'] }}</td>
+                <td>{{ x['doctor']['name'] }}</td>
+                <td>{{ x['schedule']['schedule_date'] }}</td>
+                <td>{{ x['schedule']['schedule_day'] }}</td>
+                <td>{{ x['schedule']['start_time'] }} - {{ x['schedule']['end_time'] }}</td>
                 <td>{{ x['status'] }}</td>
                 <td>
-                    <a href="/user/myappointment/more/{{ x['appointment_id'] }}">View More</a><br><br>
-                    <a href="/user/myappointment/download/{{ x['appointment_id'] }}">Download</a><br><br>
+                    <a href="/user/myappointment/more/{{ x['appointment_id'] }}"><button class="btn btn-sm btn-primary">Details</button></a><br><br>
+                    <a href="/user/myappointment/download/{{ x['appointment_id'] }}"><button class="btn btn-sm btn-success">Download</button></a><br><br>
                     {% if x['status'] != 'Booked' %}
-                        <p><a href="/user/myappointment/cancel/{{ x['appointment_id'] }}">Cancel</a></p>
+                        <a href="/user/my_appointment/cancel/{{ x['appointment_id'] }}"><button class="btn btn-sm btn-danger">Cancel</button></a>
                     {% endif %}
                 </td>
               </tr>
                 {% endfor %}
+
+{#                      {% for x in qry %}#}
+{#              <tr>#}
+{#                <th>{{ x['appointment_id'] }}</th>#}
+{#                <td>{{ x['patient_name'] }} **</td>#}
+{#                <td>{{ x['schedule_date'] }}</td>#}
+{#                <td>{{ x['schedule_day'] }}</td>#}
+{#                <td>{{ x['start_time'] }} - {{ x['end_time'] }}</td>#}
+{#                <td>{{ x['status'] }}</td>#}
+{#                <td>#}
+{#                    <a href="/user/myappointment/more/{{ x['appointment_id'] }}">View More</a><br><br>#}
+{#                    <a href="/user/myappointment/download/{{ x['appointment_id'] }}">Download</a><br><br>#}
+{#                    {% if x['status'] != 'Booked' %}#}
+{#                        <p><a href="/user/myappointment/cancel/{{ x['appointment_id'] }}">Cancel</a></p>#}
+{#                    {% endif %}#}
+{#                </td>#}
+{#              </tr>#}
+{#                {% endfor %}#}
           </tbody>
         </table>
+        {% endif %}
+        {% if l == 0 %}
+            <p>No data found</p>
+        {% endif %}
 
 {#    <table width="513" border="2" cellspacing="2" cellpadding="2">#}
 {#  <tr>#}
