@@ -11,8 +11,8 @@
 {% block content %}
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="h4">My Profile</h1>
-            <h1 class="h4" style="text-align: center">{{ q['name'] }}</h1>
+            <h1 class="h4">My Profile ({{ q['name'] }})</h1>
+{#            <h1 class="h4" style="text-align: center"></h1>#}
             <a href="/user/profile/edit"><button type="button" class="btn btn-primary" style="text-align: right">Edit</button></a>
         </div>
         <div style="text-align: center">

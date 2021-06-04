@@ -1,0 +1,110 @@
+:root {
+    --prime: #f47814;
+    --secondary: #1b1e27;
+    --text: #fff;
+}
+
+html, body {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    background-image: url('../images/dp3.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+}
+
+#form1 {
+    min-height: 400px;
+    padding: 20px;
+}
+
+.dark-background {
+    background: rgba(0, 0, 51, 0.90);
+    border-radius: 15px;
+    box-shadow: 3px 3px 3px 3px #000033;
+    min-width: 350px;
+    z-index: 21;
+
+}
+
+.main-logo {
+
+}
+
+a:link {
+    text-decoration: none;
+}
+
+.bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+@media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+    }
+}
+
+.form-signin {
+    width: 100%;
+    max-width: 330px;
+    padding: 10px;
+    margin: auto;
+}
+
+.form-signin .checkbox {
+    font-weight: 400;
+}
+
+.form-signin .form-floating:focus-within {
+    z-index: 2;
+}
+
+.form-signin input[type="text"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.form-signin input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.custom-button {
+    background-color: var(--prime);
+    color: white;
+}
+
+.custom-text {
+    color: var(--prime);
+}
+
+.login-overlay {
+    position: fixed; /* Sit on top of the page content */
+    display: block; /* Hidden by default */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /*background-color: rgba(244, 120, 20, .5); !* Black background with opacity *!*/
+    z-index: 1;
+}
+*, ::after, ::before {
+    box-sizing: border-box;
+    z-index: 22 !important;
+}
+.txt {
+    color: white;
+}

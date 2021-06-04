@@ -206,14 +206,14 @@ def admin_home():
         db = Db()
         tdr = db.selectOne("select count(login_id) from login where user_type='doctor'")
         pdr = db.selectOne("select count(login_id) from login where user_type='pending'")
-        dash.append(("Doctors", f"{tdr['count(login_id)']} ({pdr['count(login_id)']})"))
+        dash.append(("Doctors", f"Total: {tdr['count(login_id)']} Pending: {pdr['count(login_id)']}"))
         tusr = db.selectOne("select count(login_id) from login where user_type='user'")
         dash.append(("Patients", str(tusr['count(login_id)'])))
         tset = db.selectOne("select count(dataset_id) from disease_dataset")
         dash.append(("Dataset", str(tset['count(dataset_id)'])))
         tf = db.selectOne("select sum(rate), count(rate) from feedbacks")
         avgr = int(tf['sum(rate)']) / int(tf['count(rate)'])
-        dash.append(("Reviews", f"{round(avgr, 2)}/5 ({tf['count(rate)']})"))
+        dash.append(("Reviews", f"{round(avgr, 2)}/5 average on {tf['count(rate)']} reviews"))
         dash.append(("Session", str(a)))
 
         return render_template("admin/admin_home.html", dash=dash)
@@ -701,8 +701,31 @@ def doctor_appointment():
     if session['log'] == "dlogin":
         db = Db()
         qry = db.select("select * from dr_appointment where doctor_id='"+str(session['lid'])+"' and status!='Cancelled' order by appointment_id desc")
+        apps = []
+        if len(qry) != 0:
+            for app in qry:
+                ap = dict()
+                ap['appointment_id'] = app['appointment_id']
 
-        return render_template('doctor/doctor_appointment.html', qry=qry, l=[len(qry)])
+                res = db.selectOne(
+                    "select * from prediction_results where prediction_id='" + str(app['prediction_id']) + "'")
+                ap['prediction'] = res
+
+                dr = db.selectOne(
+                    "select * from login, doctor where login.login_id=doctor.doctor_id and doctor.doctor_id='" + str(
+                        app[
+                            'doctor_id']) + "'")
+                ap['doctor'] = dr
+
+                usr = db.selectOne("select * from user where user_id='" + str(app['user_id']) + "'")
+                ap['user'] = usr
+
+                sch = db.selectOne(
+                    "select * from schedule where schedule_id='" + str(app['doctor_schedule_id']) + "'")
+                ap['schedule'] = sch
+                ap['status'] = app['status']
+                apps.append(ap)
+        return render_template('doctor/doctor_appointment.html', apps=apps, l=[len(qry)])
     else:
         return redirect('/')
 
@@ -811,6 +834,10 @@ def doctor_profile_edit_post():
         return doctor_profile()
     else:
         return redirect('/')
+
+@app.route('/doctor/feedbacks')
+def doctor_feedbacks():
+    return render_template("doctor/send_feedback.html")
 
 
 ############     U S E R     ###########################################################################################

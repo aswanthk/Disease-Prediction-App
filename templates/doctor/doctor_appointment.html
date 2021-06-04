@@ -100,13 +100,13 @@
                   </tr>
                   </thead>
                   <tbody>
-                    {% for x in qry %}
+                    {% for x in apps %}
                       <tr>
                         <th>{{ x['appointment_id'] }}</th>
-                        <td>{{ x['patient_name'] }}</td>
-                        <td>{{ x['schedule_date'] }}</td>
-                        <td>{{ x['schedule_day'] }}</td>
-                        <td>{{ x['start_time'] }} - {{ x['end_time'] }}</td>
+                        <td>{{ x['user']['name'] }}</td>
+                        <td>{{ x['schedule']['schedule_date'] }}</td>
+                        <td>{{ x['schedule']['schedule_day'] }}</td>
+                        <td>{{ x['schedule']['start_time'] }} - {{ x['schedule']['end_time'] }}</td>
                         <td>{{ x['status'] }}</td>
                         <td>
                             <a href="/doctor/appointment/consult/{{ x['appointment_id'] }}"><button class="btn btn-primary btn-sm">View More</button></a>

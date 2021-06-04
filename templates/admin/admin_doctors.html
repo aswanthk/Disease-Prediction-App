@@ -41,7 +41,7 @@
                       <tr>
                         <td>{{ loop.index }}</td>
                         <td><b>{{data["name"]}}</b> <br> <img src="{{ data["photo"] }}" height="100" width="50"/></td>
-                        <td>{{ data["admission_fee"] }}</td>
+                        <td>{{ data["license_id"] }}</td>
                           <td>{{ data["qualification"] }}</td>
                         <td>{{ data["category"] }}</td>
                         <td>
@@ -49,12 +49,10 @@
                                 {{ data["place"] }} <br>
                                 {{ data["district"] }} <br>
                                 {{ data["state"] }} <br>
-                                {{ data["post"] }} <br>
-                                PIN : {{ data["pin"] }} <br>
                             </td>
                         <td>{{ data["contact_number"] }}</td>
                           <td>
-                              <a href="/admin/view_more_dr/{{data["doctor_id"]}}"><button class="btn btn-primary btn">View More</button></a><br><br>
+                              <a href="/admin/view_more_dr/{{data["doctor_id"]}}"><button class="btn btn-primary btn-sm">View More</button></a><br><br>
                               {% if data["user_type"] == "pending" %}
                                 <a href="/admin/approve_dr/{{ data["doctor_id"] }}"><button class="btn btn-success btn-sm">Approve</button></a>
                                 <a href="/admin/reject_dr/{{ data["doctor_id"] }}"><button class="btn btn-danger btn-sm">Reject</button></a>
