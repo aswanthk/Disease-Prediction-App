@@ -31,15 +31,18 @@
 
     <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
     </form>
-      <form action="/signup_post" method="post">
+                <p><a href="/forgot_password" id="forgot-link">Forgot password?</a></p>
+{#      <form action="/signup_post" method="post">#}
     <b class="mb-3 fw-normal txt" >Register as</b>
-        <select name="sign-up" id="sign-up">
-            <option value="user" selected>User</option>
-            <option value="doctor">Doctor</option>
-        </select>
-        <input type="submit" value="Sign up" class="btn btn-success btn-sm">
-    </form>
-      <p><a href="/forgot_password" id="forgot-link">Forgot password?</a></p>
+                <a href="/signup_post/user" id="sign-up">User</a>
+                <b class="mb-3 fw-normal txt" >or</b>
+                <a href="/signup_post/doctor" id="sign-up">Doctor</a>
+{#        <select name="sign-up" id="sign-up">#}
+{#            <option value="user" selected>User</option>#}
+{#            <option value="doctor">Doctor</option>#}
+{#        </select>#}
+{#        <input type="submit" value="Sign up" class="btn btn-success btn-sm">#}
+{#    </form>#}
 
 </main>
         </div>

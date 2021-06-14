@@ -1,11 +1,4 @@
 {% extends 'user/user_base.html' %}
-{#<!DOCTYPE html>#}
-{#<html lang="en">#}
-{#<head>#}
-{#    <meta charset="UTF-8">#}
-{#    <title>Title</title>#}
-{#</head>#}
-{#<body>#}
 
 {% block content %}
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
@@ -37,7 +30,7 @@
                 <td>{{ x['status'] }}</td>
                 <td>
                     <a href="/user/myappointment/more/{{ x['appointment_id'] }}"><button class="btn btn-sm btn-primary">Details</button></a><br><br>
-                    <a href="/user/myappointment/download/{{ x['appointment_id'] }}"><button class="btn btn-sm btn-success">Download</button></a><br><br>
+                    <a href="#"><button class="btn btn-sm btn-success">Download</button></a><br><br>
                     {% if x['status'] != 'Booked' %}
                         <a href="/user/my_appointment/cancel/{{ x['appointment_id'] }}"><button class="btn btn-sm btn-danger">Cancel</button></a>
                     {% endif %}

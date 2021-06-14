@@ -1,5 +1,20 @@
 {% extends 'doctor/doctor_base.html' %}
 
+{% block head %}
+    <style>
+        .btnt {
+            background-color: red;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .btnt.hover {
+            background-color: darkred;
+        }
+    </style>
+{% endblock head %}
+
 {% block content %}
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -30,7 +45,9 @@
                     <td>{{ data["end_time"] }}</td>
                     <td>
                         <a href="/doctor/schedule/edit/{{ data['schedule_id'] }}"><button class="btn btn-primary btn-sm">Edit</button></a>
-                       <a href="/doctor/schedule/rm/{{ data['schedule_id'] }}"><button class="btn btn-danger btn-sm">Remove</button></a>
+{#                       <a href="#"><button class="btnt"><i class="fa fa-trash"></i></button></a>#}
+                       <a href="#"><button class="btn btn-danger btn-sm">❌</button></a>
+{#                       <a href="/doctor/schedule/rm/{{ data['schedule_id'] }}"><button class="btn btn-danger btn-sm">Remove</button></a>#}
                     </td>
                   </tr>
                   {% endfor %}

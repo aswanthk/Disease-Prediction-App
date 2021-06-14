@@ -6,7 +6,12 @@
             <h1 class="h4">Appointment Management</h1>
             <span>
                 <form action="/doctor/search/app-name" method="post">
-                    <input type="text" name="qry-name" id="qry-name" placeholder="Search name" class="form-control-sm"/>
+                    {% if ns=="no_nsearch" %}
+                        <input type="text" name="qry-name" id="qry-name" placeholder="Search name" class="form-control-sm"/>
+                    {% endif %}
+                    {% if ns=="nsearch" %}
+                        <input type="text" name="qry-name" id="qry-name" placeholder="Search name" class="form-control-sm" value="{{ name }}"/>
+                    {% endif %}
                     <input type="submit" value="Search" class="btn btn-primary btn-sm"/>
                 </form>
             </span>
@@ -27,11 +32,20 @@
             <div class="container">
                 <div class="row">
                     <form action="/doctor/search/app-date" method="post">
-                            <div class="col">
+                            {% if s=="nosearch" %}
+                                <div class="col">
                                     <input type="date" name="date1" id="date1" class="form-control-sm"/>
                                     <input type="date" name="date2" id="date2" class="form-control-sm"/>
                                     <input type="submit" value="Search" class="btn btn-primary btn-sm"/>
                                 </div>
+                            {% endif %}
+                            {% if s=="search" %}
+                                <div class="col">
+                                    <input type="date" name="date1" id="date1" class="form-control-sm" value="{{ date1 }}"/>
+                                    <input type="date" name="date2" id="date2" class="form-control-sm" value="{{ date2 }}"/>
+                                    <input type="submit" value="Search" class="btn btn-primary btn-sm"/>
+                                </div>
+                            {% endif %}
 {#                                <div class="col"  align="right">#}
 {#                                    <input type="text" name="qry-name" id="qry-name" placeholder="Search name" class="form-control-sm"/>#}
 {#                                    <input type="submit" value="Search" class="btn btn-primary btn-sm"/>#}
@@ -107,16 +121,21 @@
                         <td>{{ x['schedule']['schedule_date'] }}</td>
                         <td>{{ x['schedule']['schedule_day'] }}</td>
                         <td>{{ x['schedule']['start_time'] }} - {{ x['schedule']['end_time'] }}</td>
-                        <td>{{ x['status'] }}</td>
                         <td>
-                            <a href="/doctor/appointment/consult/{{ x['appointment_id'] }}"><button class="btn btn-primary btn-sm">View More</button></a>
-                               <br><br>
-                                {% if x['status'] != 'Booked' %}
-                                    <a href="/doctor/appointment/approve/{{ x['appointment_id'] }}"><button class="btn btn-success btn-sm">Approve</button></a>
-                                    {% if x['status'] != 'Rejected' %}
-                                        <a href="/doctor/appointment/reject/{{ x['appointment_id'] }}"><button class="btn btn-danger btn-sm">Reject</button></a>
+                            {% if x['status']=='Booked' %}<b><p style="color: darkgreen">{{ x['status'] }}</p></b>{% endif %}
+                        {% if x['status']=='Consulted' %}<b><p style="color: darkgreen">{{ x['status'] }}✅</p></b>{% endif %}
+                      {% if x['status']=='Rejected' %}<b><p style="color: darkred">{{ x['status'] }}</p></b>{% endif %}
+                      {% if x['status']=='Pending' %}<b><p style="color: darkorange">{{ x['status'] }}</p></b>{% endif %}
+                        </td>
+                        <td>
+                        <a href="/doctor/appointment/consult/{{ x['appointment_id'] }}"><button class="btn btn-primary btn-sm">Details</button></a>
+                                {% if x['status'] == 'Pending' or x['status'] == 'Rejected' %}
+                                    <a href="/doctor/appointment/approve/{{ x['appointment_id'] }}"><button class="btn btn-success btn-sm">✔</button></a>
+                                    {% if x['status'] == 'Pending' %}
+                                        <a href="/doctor/appointment/reject/{{ x['appointment_id'] }}"><button class="btn btn-danger btn-sm">❌</button></a>
                                     {% endif %}
                                 {% endif %}
+
                         </td>
                       </tr>
                         {% endfor %}

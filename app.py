@@ -75,13 +75,14 @@ def logout():
     session['log'] = ""
     return redirect('/')
 
-@app.route('/signup_post', methods=['post', 'get'])
-def signup_post():
-    user_type = request.form['sign-up']
-    if user_type == "user":
+# @app.route('/signup_post', methods=['post', 'get'])
+@app.route('/signup_post/<i>')
+def signup_post(i):
+    # user_type = request.form['sign-up']
+    if i == "user":
         return redirect('/user/register')
         # return render_template('user/user_register.html')
-    elif user_type == "doctor":
+    elif i == "doctor":
         return redirect('/doctor/register')
         # return render_template('doctor/doctor_register.html')
 
@@ -478,7 +479,9 @@ def admin_view_more_dr(i):
         db = Db()
         qry = db.selectOne("SELECT * FROM doctor WHERE doctor_id = '" + i + "'")
         status = db.selectOne("select user_type from login where login_id='"+i+"'")
-        return render_template("admin/admin_view_more_doctor.html", q=qry, status=status["user_type"])
+        this_year = datetime.date.today().year
+        age = this_year - int(qry['dob'].split('-')[0])
+        return render_template("admin/admin_view_more_doctor.html", age=age, q=qry, status=status["user_type"])
     else:
         return redirect('/')
 
@@ -725,38 +728,152 @@ def doctor_appointment():
                 ap['schedule'] = sch
                 ap['status'] = app['status']
                 apps.append(ap)
-        return render_template('doctor/doctor_appointment.html', apps=apps, l=[len(qry)])
+        return render_template('doctor/doctor_appointment.html', ns="no_nsearch", s="nosearch", apps=apps, l=[len(qry)])
     else:
         return redirect('/')
+
+##test
+# @app.route('/user/myappointment/more/<i>')
+# def user_myappointment_more(i):
+#     db = Db()
+#     app = db.selectOne("select * from dr_appointment where appointment_id='" + str(i) + "'")
+#
+#     ap = dict()
+#     ap['appointment_id'] = app['appointment_id']
+#
+#     dr = db.selectOne(
+#         "select * from login, doctor where login.login_id=doctor.doctor_id and doctor.doctor_id='" + str(app[
+#                                                                                                              'doctor_id']) + "'")
+#     ap['doctor'] = dr
+#
+#     usr = db.selectOne("select * from user where user_id='" + str(session['lid']) + "'")
+#     ap['user'] = usr
+#
+#     sch = db.selectOne(
+#         "select * from schedule where schedule_id='" + str(app['doctor_schedule_id']) + "'")
+#     ap['schedule'] = sch
+#     ap['status'] = app['status']
+#     this_year = datetime.date.today().year
+#     age = this_year - int(ap['user']['dob'].split('-')[0])
+#     cat = ap['doctor']['category'].split(',')
+#
+#     if app['prediction_id'] != -1:
+#         res = db.selectOne("select * from prediction_results where prediction_id='" + str(app['prediction_id']) + "'")
+#         ap['prediction'] = res
+#         pred_dict = dict()
+#         # for data in qry:
+#         pred_dict["prediction_id"] = ap['prediction']["prediction_id"]
+#         sym_set = list(filter(lambda x: x != "", ap['prediction']["symptoms"].split(',')))
+#         pred_dict["symptoms"] = sym_set
+#         # sym_set1 = ", ".join(sym_set1)
+#         # sym_set1 = sym_set1.strip()
+#         abc = ap['prediction']["predicted_disease"].split(",")
+#         ll = []
+#         for dd in abc:
+#             d = tuple(dd.split(":"))
+#             ll.append(d)
+#         pred_dict["prediction"] = ll
+#         pred_dict["date"] = ap['prediction']["date"].split(".")
+#         return render_template('user/user_myappointment_more.html', app=ap, age=age, cat=cat, pred_dict=pred_dict, f=1)
+#
+#     return render_template('user/user_myappointment_more.html', app=ap, age=age, cat=cat, f=0)
 
 @app.route('/doctor/appointment/consult/<i>')
 def doctor_appointment_consult(i):
     if session['log'] == "dlogin":
         db = Db()
-        qry = db.selectOne("select * from dr_appointment where appointment_id='" + i + "'")
-        return render_template('doctor/doctor_appointment_consult.html', usr=qry)
+        app = db.selectOne("select * from dr_appointment where appointment_id='" + i + "'")
+        ap = dict()
+        ap['appointment_id'] = app['appointment_id']
+
+        dr = db.selectOne(
+            "select * from login, doctor where login.login_id=doctor.doctor_id and doctor.doctor_id='" + str(app[
+                                                                                                                 'doctor_id']) + "'")
+        ap['doctor'] = dr
+
+        usr = db.selectOne("select * from user where user_id='" + str(app['user_id']) + "'")
+        ap['user'] = usr
+
+        sch = db.selectOne(
+            "select * from schedule where schedule_id='" + str(app['doctor_schedule_id']) + "'")
+        ap['schedule'] = sch
+        ap['status'] = app['status']
+        this_year = datetime.date.today().year
+        age = this_year - int(ap['user']['dob'].split('-')[0])
+        cat = ap['doctor']['category'].split(',')
+
+        if app['prediction_id'] != -1:
+            res = db.selectOne(
+                "select * from prediction_results where prediction_id='" + str(app['prediction_id']) + "'")
+            ap['prediction'] = res
+            pred_dict = dict()
+            # for data in qry:
+            pred_dict["prediction_id"] = ap['prediction']["prediction_id"]
+            sym_set = list(filter(lambda x: x != "", ap['prediction']["symptoms"].split(',')))
+            pred_dict["symptoms"] = sym_set
+            # sym_set1 = ", ".join(sym_set1)
+            # sym_set1 = sym_set1.strip()
+            abc = ap['prediction']["predicted_disease"].split(",")
+            ll = []
+            for dd in abc:
+                d = tuple(dd.split(":"))
+                ll.append(d)
+            pred_dict["prediction"] = ll
+            pred_dict["date"] = ap['prediction']["date"].split(".")
+            return render_template('doctor/doctor_appointment_consult.html', pred_dict=pred_dict, app=ap, age=age, cat=cat, f=1)
+        return render_template('doctor/doctor_appointment_consult.html', app=ap, age=age, cat=cat, f=0)
     else:
         return redirect('/')
+
+@app.route('/doctor/appointment/consulted/<i>')
+def doctor_appointment_consulted(i):
+    db = Db()
+    db.update("UPDATE dr_appointment SET status='Consulted' WHERE appointment_id='" + i + "'")
+    return redirect('/doctor/appointment')
 
 @app.route('/doctor/appointment/approve/<i>')
 def doctor_appointment_approve(i):
     db = Db()
     db.update("UPDATE dr_appointment SET status='Booked' WHERE appointment_id='"+i+"'")
-    return doctor_appointment()
+    return redirect('/doctor/appointment')
 
 @app.route('/doctor/appointment/reject/<i>')
 def doctor_appointment_reject(i):
     db = Db()
     db.update("UPDATE dr_appointment SET status='Rejected' WHERE appointment_id='"+i+"'")
-    return doctor_appointment()
+    return redirect('/doctor/appointment')
 
 @app.route('/doctor/search/app-name', methods=['post'])
 def doctor_search_app_name():
     text = request.form['qry-name']
     db = Db()
     qry = db.select(
-        "SELECT * FROM dr_appointment WHERE doctor_id='"+str(session['lid'])+"' AND status!='Cancelled' AND patient_name like '%" + text + "%'  order by appointment_id desc")
-    return render_template('doctor/doctor_appointment.html', qry=qry, l=[len(qry)])
+        "SELECT * FROM dr_appointment, user WHERE dr_appointment.user_id=user.user_id and dr_appointment.doctor_id='"+str(session['lid'])+"' AND dr_appointment.status!='Cancelled' AND user.name like '%" + text + "%'  order by appointment_id desc")
+    apps = []
+    if len(qry) != 0:
+        for app in qry:
+            ap = dict()
+            ap['appointment_id'] = app['appointment_id']
+
+            res = db.selectOne(
+                "select * from prediction_results where prediction_id='" + str(app['prediction_id']) + "'")
+            ap['prediction'] = res
+
+            dr = db.selectOne(
+                "select * from login, doctor where login.login_id=doctor.doctor_id and doctor.doctor_id='" + str(
+                    app[
+                        'doctor_id']) + "'")
+            ap['doctor'] = dr
+
+            usr = db.selectOne("select * from user where user_id='" + str(app['user_id']) + "'")
+            ap['user'] = usr
+
+            sch = db.selectOne(
+                "select * from schedule where schedule_id='" + str(app['doctor_schedule_id']) + "'")
+            ap['schedule'] = sch
+            ap['status'] = app['status']
+            apps.append(ap)
+    return render_template('doctor/doctor_appointment.html', name=text, ns="nsearch", apps=apps, l=[len(qry)])
 
 @app.route('/doctor/search/app-date', methods=['post'])
 def doctor_search_app_date():
@@ -764,8 +881,32 @@ def doctor_search_app_date():
     date2 = request.form['date2']
     db = Db()
     qry = db.select(
-        "SELECT * FROM dr_appointment WHERE doctor_id='"+str(session['lid'])+"' AND status!='Cancelled' AND schedule_date between '"+date1+"' and '"+date2+"'  order by appointment_id desc")
-    return render_template('doctor/doctor_appointment.html', qry=qry, l=[len(qry)])
+        "SELECT * FROM dr_appointment, user, schedule WHERE dr_appointment.user_id=user.user_id and schedule.schedule_id=dr_appointment.doctor_schedule_id and dr_appointment.doctor_id='"+str(session['lid'])+"' AND dr_appointment.status!='Cancelled' AND schedule.schedule_date between '"+date1+"' and '"+date2+"'  order by dr_appointment.appointment_id desc")
+    apps = []
+    if len(qry) != 0:
+        for app in qry:
+            ap = dict()
+            ap['appointment_id'] = app['appointment_id']
+
+            res = db.selectOne(
+                "select * from prediction_results where prediction_id='" + str(app['prediction_id']) + "'")
+            ap['prediction'] = res
+
+            dr = db.selectOne(
+                "select * from login, doctor where login.login_id=doctor.doctor_id and doctor.doctor_id='" + str(
+                    app[
+                        'doctor_id']) + "'")
+            ap['doctor'] = dr
+
+            usr = db.selectOne("select * from user where user_id='" + str(app['user_id']) + "'")
+            ap['user'] = usr
+
+            sch = db.selectOne(
+                "select * from schedule where schedule_id='" + str(app['doctor_schedule_id']) + "'")
+            ap['schedule'] = sch
+            ap['status'] = app['status']
+            apps.append(ap)
+    return render_template('doctor/doctor_appointment.html', s="search", date1=date1, date2=date2, apps=apps, l=[len(qry)])
 
 @app.route('/doctor/profile')
 def doctor_profile():
@@ -797,7 +938,7 @@ def doctor_profile_edit_post():
         username = request.form['username']
         name = request.form['name']
         photo = request.files['photo']
-        email_address = request.form['email-address']
+        # email_address = request.form['email-address']
         contact_number = request.form['contact-number']
         gender = request.form['gender']
         dob = request.form['dob']
@@ -821,23 +962,55 @@ def doctor_profile_edit_post():
         if request.files is not None:
             if photo.filename != "":
                 qry = db.update(
-                    "UPDATE doctor SET username='" + username + "',name='" + name + "', photo='" + path + "', email_address='" + email_address + "', contact_number='" + contact_number + "', gender='" + gender + "', dob='" + dob + "', license_id='" + license_id + "', qualification='" + qualification + "', category='" + category + "', hospital_name='" + hospital_name + "', place='" + place + "', district='" + district + "', state='" + state + "', post='" + post + "', pin='" + pin + "', admission_fee='" + admission_fee + "', pro_started_yr='" + pro_started_yr + "' WHERE doctor_id='" + str(
+                    "UPDATE doctor SET username='" + username + "',name='" + name + "', photo='" + path + "', contact_number='" + contact_number + "', gender='" + gender + "', dob='" + dob + "', license_id='" + license_id + "', qualification='" + qualification + "', category='" + category + "', hospital_name='" + hospital_name + "', place='" + place + "', district='" + district + "', state='" + state + "', post='" + post + "', pin='" + pin + "', admission_fee='" + admission_fee + "', pro_started_yr='" + pro_started_yr + "' WHERE doctor_id='" + str(
                         session['lid']) + "'")
             else:
                 qry = db.update(
-                    "UPDATE doctor SET username='" + username + "',name='" + name + "', email_address='" + email_address + "', contact_number='" + contact_number + "', gender='" + gender + "', dob='" + dob + "', license_id='" + license_id + "', qualification='" + qualification + "', category='" + category + "', hospital_name='" + hospital_name + "', place='" + place + "', district='" + district + "', state='" + state + "', post='" + post + "', pin='" + pin + "', admission_fee='" + admission_fee + "', pro_started_yr='" + pro_started_yr + "' WHERE doctor_id='" + str(
+                    "UPDATE doctor SET username='" + username + "',name='" + name + "', contact_number='" + contact_number + "', gender='" + gender + "', dob='" + dob + "', license_id='" + license_id + "', qualification='" + qualification + "', category='" + category + "', hospital_name='" + hospital_name + "', place='" + place + "', district='" + district + "', state='" + state + "', post='" + post + "', pin='" + pin + "', admission_fee='" + admission_fee + "', pro_started_yr='" + pro_started_yr + "' WHERE doctor_id='" + str(
                         session['lid']) + "'")
         else:
             qry = db.update(
-                    "UPDATE doctor SET username='" + username + "',name='" + name + "', email_address='" + email_address + "', contact_number='" + contact_number + "', gender='" + gender + "', dob='" + dob + "', license_id='" + license_id + "', qualification='" + qualification + "', category='" + category + "', hospital_name='" + hospital_name + "', place='" + place + "', district='" + district + "', state='" + state + "', post='" + post + "', pin='" + pin + "', admission_fee='" + admission_fee + "', pro_started_yr='" + pro_started_yr + "' WHERE doctor_id='" + str(
+                    "UPDATE doctor SET username='" + username + "',name='" + name + "', contact_number='" + contact_number + "', gender='" + gender + "', dob='" + dob + "', license_id='" + license_id + "', qualification='" + qualification + "', category='" + category + "', hospital_name='" + hospital_name + "', place='" + place + "', district='" + district + "', state='" + state + "', post='" + post + "', pin='" + pin + "', admission_fee='" + admission_fee + "', pro_started_yr='" + pro_started_yr + "' WHERE doctor_id='" + str(
                         session['lid']) + "'")
         return doctor_profile()
     else:
         return redirect('/')
 
+
 @app.route('/doctor/feedbacks')
 def doctor_feedbacks():
-    return render_template("doctor/send_feedback.html")
+    if session['log'] == "dlogin":
+        db = Db()
+        lid = session.get('lid')
+        qry = db.selectOne("SELECT * FROM feedbacks WHERE user_id = '" + str(lid) + "'")
+        if qry is not None:
+            return render_template('doctor/send_feedback.html', qry=qry, content=True)
+        else:
+            return render_template('doctor/send_feedback.html', content=False)
+    else:
+        return redirect('/')
+
+
+@app.route('/doctor/feedbacks_post', methods=['post'])
+def doctor_feedbacks_post():
+    if session['log'] == "dlogin":
+        dates = datetime.datetime.now().strftime("%d/%m/%Y")
+        rate = request.form['stars']
+        review = request.form['review']
+        db = Db()
+        lid = session.get('lid')
+        qry = db.selectOne("SELECT * FROM feedbacks WHERE user_id = '" + str(lid) + "'")
+        if qry is not None:
+            qry1 = db.update(
+                "UPDATE feedbacks SET rate = '" + rate + "', review = '" + review + "' WHERE user_id = '" + str(
+                    lid) + "'")
+            return redirect('/doctor/feedbacks')
+        else:
+            qry1 = db.insert("INSERT INTO feedbacks VALUES('', '" + str(
+                lid) + "', '" + rate + "', '" + review + "', '" + dates + "')")
+            return redirect('/doctor/feedbacks')
+    else:
+        return redirect('/')
 
 
 ############     U S E R     ###########################################################################################
@@ -920,7 +1093,7 @@ def user_profile_edit_post():
         username = request.form['username']
         name = request.form['name']
         photo = request.files['photo']
-        email_address = request.form['email-address']
+        # email_address = request.form['email-address']
         mobile_number = request.form['mobile-number']
         gender = request.form['gender']
         dob = request.form['dob']
@@ -931,27 +1104,22 @@ def user_profile_edit_post():
         post = request.form['post']
         pin = request.form['pin']
         dates = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-        print(1)
         photo.save(path1 + dates + ".jpg")
-        print(2)
         path = "/static/images/" + dates + ".jpg"
         db = Db()
         if request.files is not None:
             if photo.filename != "":
-                print(3)
                 qry = db.update(
-                    "UPDATE login, user SET login.username='" + username + "',user.username='" + username + "',user.name='" + name + "', user.photo='" + path + "', user.email_address='" + email_address + "',user.mobile_number='" + mobile_number + "', user.gender='" + gender + "', user.dob='" + dob + "', user.house_name='" + house_name + "', user.place='" + place + "', user.district='" + district + "',user.state='" + state + "', user.post='" + post + "', user.pin='" + pin + "' WHERE login.login_id = user.user_id AND login.login_id='" + str(
+                    "UPDATE login, user SET login.username='" + username + "',user.username='" + username + "',user.name='" + name + "', user.photo='" + path + "', user.mobile_number='" + mobile_number + "', user.gender='" + gender + "', user.dob='" + dob + "', user.house_name='" + house_name + "', user.place='" + place + "', user.district='" + district + "',user.state='" + state + "', user.post='" + post + "', user.pin='" + pin + "' WHERE login.login_id = user.user_id AND login.login_id='" + str(
                         session.get('lid')) + "'")
-                print(4)
             else:
-                print(5)
                 qry = db.update(
-                    "UPDATE login, user SET login.username='" + username + "',user.username='" + username + "',user.name='" + name + "', user.email_address='" + email_address + "',user.mobile_number='" + mobile_number + "', user.gender='" + gender + "', user.dob='" + dob + "', user.house_name='" + house_name + "', user.place='" + place + "', user.district='" + district + "',user.state='" + state + "', user.post='" + post + "', user.pin='" + pin + "' WHERE login.login_id = user.user_id AND login.login_id='" + str(
+                    "UPDATE login, user SET login.username='" + username + "',user.username='" + username + "',user.name='" + name + "', user.mobile_number='" + mobile_number + "', user.gender='" + gender + "', user.dob='" + dob + "', user.house_name='" + house_name + "', user.place='" + place + "', user.district='" + district + "',user.state='" + state + "', user.post='" + post + "', user.pin='" + pin + "' WHERE login.login_id = user.user_id AND login.login_id='" + str(
                         session.get('lid')) + "'")
         else:
             print(6)
             qry = db.update(
-                "UPDATE login, user SET login.username='" + username + "',user.username='" + username + "',user.name='" + name + "', user.email_address='" + email_address + "',user.mobile_number='" + mobile_number + "', user.gender='" + gender + "', user.dob='" + dob + "', user.house_name='" + house_name + "', user.place='" + place + "', user.district='" + district + "',user.state='" + state + "', user.post='" + post + "', user.pin='" + pin + "' WHERE login.login_id = user.user_id AND login.login_id='" + str(
+                "UPDATE login, user SET login.username='" + username + "',user.username='" + username + "',user.name='" + name + "', user.mobile_number='" + mobile_number + "', user.gender='" + gender + "', user.dob='" + dob + "', user.house_name='" + house_name + "', user.place='" + place + "', user.district='" + district + "',user.state='" + state + "', user.post='" + post + "', user.pin='" + pin + "' WHERE login.login_id = user.user_id AND login.login_id='" + str(
                     session.get('lid')) + "'")
         return user_profile()
     else:
@@ -1273,6 +1441,8 @@ def user_disease_prediction():
             session['lid']) + "', '" + syms + "', '" + predictions + "', '" + dates + "')")
         # qry1 = db.select("SELECT * FROM login, doctor WHERE login.login_id=doctor.doctor_id AND login.user_type='doctor'")
 
+        session['pd_id'] = int(dp_row)
+
         for x in qry2:
             db.insert(
                 "INSERT INTO dr_recommendation VALUES('','" + str(dp_row) + "', '" + str(x['doctor_id']) + "', '" + x[
@@ -1402,6 +1572,40 @@ def NaiveBayes(symptom1=None, symptom2=None, symptom3=None, symptom4=None, sympt
 #         t3.insert(END, "Not Found")
 
 
+@app.route('/search_doctor/appointment/<i>')
+def search_doctor_appointment(i):
+    if session['log'] == "ulogin":
+        session['rec_dr'] = i
+        db = Db()
+        today = str(datetime.date.today())
+        qry = db.selectOne("select * from user where  user_id='" + str(session['lid']) + "'")
+        this_year = datetime.date.today().year
+        age = this_year - int(qry['dob'].split('-')[0])
+
+        today_date = str(datetime.date.today())
+
+        qry2 = db.selectOne(
+            "select * from doctor, login where  doctor.doctor_id=login.login_id and login.user_type='doctor' and doctor.doctor_id='" + str(
+                i) + "'")
+
+        qry3 = db.select("select * from schedule where doctor_id='" + str(i) + "' and schedule_date >= '" + today + "'")
+
+        ls=[]
+        for x in qry3:
+            ls.append([x['schedule_date'], x['schedule_day']])
+
+        lss=[]
+        for n in range(len(ls)):
+            if n < len(ls)-1 :
+                if ls[n][0] not in ls[n+1][0]:
+                    lss.append(ls[n])
+        cat=qry2['category'].split(',')
+
+        return render_template('user/search_doctor_appointment.html', usr=qry, age=age, dr=qry2, app=qry3, cat=cat, sd=lss)
+    else:
+        return redirect('/')
+
+
 @app.route('/user/dp_history')
 def user_dp_history():
     if session['log'] == "ulogin":
@@ -1440,7 +1644,6 @@ def user_dp_history_dr_rec(i):
         return render_template("user/user_dp_history_dr_rec.html", qry1=qry, l=[len(qry)])
     else:
         return redirect('/')
-
 
 @app.route('/user/dr/appointment/<i>')
 def user_dr_appointment(i):
@@ -1500,6 +1703,7 @@ def user_dr_appointment(i):
         return render_template('user/user_dr_appointment.html', usr=qry, age=age, dr=qry2, app=qry3, pred_dict=pred_dict, cat=cat, sd=lss)
     else:
         return redirect('/')
+
 
 # @app.route('/appointment_select/<eid>')
 # def appointment_select(eid):
@@ -1722,10 +1926,6 @@ def user_myappointment_more(i):
     ap = dict()
     ap['appointment_id'] = app['appointment_id']
 
-    res = db.selectOne(
-        "select * from prediction_results where prediction_id='" + str(app['prediction_id']) + "'")
-    ap['prediction'] = res
-
     dr = db.selectOne(
         "select * from login, doctor where login.login_id=doctor.doctor_id and doctor.doctor_id='" + str(app[
                                                                                                              'doctor_id']) + "'")
@@ -1740,30 +1940,35 @@ def user_myappointment_more(i):
     ap['status'] = app['status']
     this_year = datetime.date.today().year
     age = this_year - int(ap['user']['dob'].split('-')[0])
-
-    pred_dict = dict()
-    # for data in qry:
-    pred_dict["prediction_id"] = ap['prediction']["prediction_id"]
-    sym_set = list(filter(lambda x: x != "", ap['prediction']["symptoms"].split(',')))
-    pred_dict["symptoms"] = sym_set
-    # sym_set1 = ", ".join(sym_set1)
-    # sym_set1 = sym_set1.strip()
-    abc = ap['prediction']["predicted_disease"].split(",")
-    ll = []
-    for dd in abc:
-        d = tuple(dd.split(":"))
-        ll.append(d)
-    pred_dict["prediction"] = ll
-    pred_dict["date"] = ap['prediction']["date"].split(".")
     cat = ap['doctor']['category'].split(',')
-    return render_template('user/user_myappointment_more.html', app=ap, age=age, pred_dict=pred_dict)
+
+    if app['prediction_id'] != -1:
+        res = db.selectOne("select * from prediction_results where prediction_id='" + str(app['prediction_id']) + "'")
+        ap['prediction'] = res
+        pred_dict = dict()
+        # for data in qry:
+        pred_dict["prediction_id"] = ap['prediction']["prediction_id"]
+        sym_set = list(filter(lambda x: x != "", ap['prediction']["symptoms"].split(',')))
+        pred_dict["symptoms"] = sym_set
+        # sym_set1 = ", ".join(sym_set1)
+        # sym_set1 = sym_set1.strip()
+        abc = ap['prediction']["predicted_disease"].split(",")
+        ll = []
+        for dd in abc:
+            d = tuple(dd.split(":"))
+            ll.append(d)
+        pred_dict["prediction"] = ll
+        pred_dict["date"] = ap['prediction']["date"].split(".")
+        return render_template('user/user_myappointment_more.html', app=ap, age=age, cat=cat, pred_dict=pred_dict, f=1)
+
+    return render_template('user/user_myappointment_more.html', app=ap, age=age, cat=cat, f=0)
 
 
 @app.route('/user/my_appointment/cancel/<i>')
 def user_myappointment_cancel(i):
     db = Db()
     db.update("update dr_appointment set status='Cancelled' where appointment_id='"+str(i)+"'")
-    return user_my_appointment()
+    return redirect('/user/my_appointment')
 
 @app.route('/user/dp_history/rm/<i>')
 def user_dp_history_rm(i):
@@ -1853,11 +2058,9 @@ def user_send_feedback():
         lid = session.get('lid')
         qry = db.selectOne("SELECT * FROM feedbacks WHERE user_id = '" + str(lid) + "'")
         if qry is not None:
-            content = True
-            return render_template('user/send_feedback.html', qry=qry, content=content)
+            return render_template('user/send_feedback.html', qry=qry, content=True)
         else:
-            content = False
-            return render_template('user/send_feedback.html', qry=qry, content=content)
+            return render_template('user/send_feedback.html', content=False)
     else:
         return redirect('/')
 
@@ -1866,7 +2069,7 @@ def user_send_feedback():
 def send_feedback_post():
     if session['log'] == "ulogin":
         dates = datetime.datetime.now().strftime("%d/%m/%Y")
-        rate = request.form['rate']
+        rate = request.form['stars']
         review = request.form['review']
         db = Db()
         lid = session.get('lid')
@@ -1875,11 +2078,11 @@ def send_feedback_post():
             qry1 = db.update(
                 "UPDATE feedbacks SET rate = '" + rate + "', review = '" + review + "' WHERE user_id = '" + str(
                     lid) + "'")
-            return redirect('/user_home')
+            return redirect('/user_send_feedback')
         else:
             qry1 = db.insert("INSERT INTO feedbacks VALUES('', '" + str(
                 lid) + "', '" + rate + "', '" + review + "', '" + dates + "')")
-            return redirect('/user_home')
+            return redirect('/user_send_feedback')
     else:
         return redirect('/')
 
@@ -1950,7 +2153,7 @@ def user_appointment_submit():
         #                 shdl[
         #                     'end_time'] + "', '" + symptoms + "', '" + prediction1 + "', '" + prediction2 + "', '" + prediction3 + "', '" + prediction_date + "', 'Pending')")
 
-        return user_my_appointment()
+        return redirect('/user/my_appointment')
     else:
         return redirect('/')
 

@@ -83,15 +83,12 @@
                         <td>
                             {{ data["hospital_name"] }} <br>
                             {{ data["place"] }} <br>
-                            {{ data["district"] }} <br>
-                            {{ data["state"] }} <br>
-                            {{ data["post"] }} <br>
-                            PIN : {{ data["pin"] }} <br>
+                            {{ data["district"] }}, {{ data["state"] }}
                         </td>
                         <td>{{ data["contact_number"] }}</td>
                         <td>{{ data["admission_fee"] }}</td>
                         <td>
-                            <a href="">Register Now</a>
+                            <a href="/user/dr/appointment/{{ data['doctor_id'] }}"><button class="btn btn-primary btn-sm">Register Now</button></a>
                         </td>
                       </tr>
                   {% endfor %}

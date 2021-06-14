@@ -12,9 +12,16 @@
             <div class="col">
               <p class="h5">Patient Details: </p>
             </div>
-            <div class="col">
-              <p class="h5">Prediction Information: </p>
-            </div>
+            {% if f==1 %}
+                <div class="col">
+                    <p class="h5">Prediction Information: </p>
+                </div>
+            {% endif %}
+          {% if f==0 %}
+                <div class="col">
+                    <p class="h5">Doctor Details: </p>
+                </div>
+            {% endif %}
           </div>
             </div>
             <br>
@@ -51,7 +58,8 @@
               </tbody>
             </table>
             </div>
-            <div class="col">
+            {% if f==1 %}
+                <div class="col">
               <table class="table">
               <tbody>
 
@@ -74,24 +82,67 @@
               </tbody>
             </table>
             </div>
+            {% endif %}
+            {% if f==0 %}
+                <div class="col">
+              <table class="table">
+              <tbody>
+                <tr>
+                  <td>Doctor Name</td>
+                  <td>{{ app['doctor']['name'] }}</td>
+                </tr>
+                <tr>
+
+                  <td>Qualification</td>
+                  <td>{{ app['doctor']['qualification'] }}</td>
+                </tr>
+                <tr>
+
+                  <td>Category</td>
+                  <td>{% for x in cat %}{{ x }}<br>{% endfor %}</td>
+                </tr>
+                <tr>
+
+                  <td>Hospital/Clinic Address</td>
+                  <td>{{ app['doctor']['house_name'] }}<br>{{ app['doctor']['place'] }}, {{ app['doctor']['district'] }}</td>
+                </tr>
+              <tr>
+                  <td>Contact Number</td>
+                  <td>{{ app['doctor']['contact_number'] }}</td>
+                </tr>
+              </tbody>
+            </table>
+            </div>
+            {% endif %}
           </div>
         </div>
             <br>
             <div class="container">
           <div class="row">
-            <div class="col">
+            {% if f==1 %}
+                <div class="col">
               <p class="h5">Doctor Details: </p>
             </div>
             <div class="col">
               <p class="h5">Appointment Time: </p>
             </div>
+              {% endif %}
+          {% if f==0 %}
+                <div class="col">
+              <p class="h5">Appointment Time: </p>
+            </div>
+            <div class="col">
+              <p class="h5"></p>
+            </div>
+              {% endif %}
           </div>
             </div>
             <br>
 
             <div class="container">
           <div class="row">
-            <div class="col">
+            {% if f==1 %}
+                <div class="col">
               <table class="table">
               <tbody>
                 <tr>
@@ -141,20 +192,33 @@
                     <a href="/user/my_appointment/cancel/{{ app['appointment_id'] }}>"><button class="btn btn-danger">Cancel</button></a>
                 {% endif %}
             </div>
+              {% endif %}
+          {% if f==0 %}
+              <div class="col">
+                 <table class="table">
+              <tbody>
+                <tr>
+                  <td>Appointment Date</td>
+                  <td>{{ app['schedule']['schedule_date'] }} ({{ app['schedule']['schedule_day'] }})</td>
+                </tr>
+                <tr>
+                  <td>Appointment Time</td>
+                  <td>{{ app['schedule']['start_time'] }} to {{ app['schedule']['end_time'] }}</td>
+                </tr>
+                <tr>
+                  <td>Status</td>
+                  <td>{{ app['status'] }}</td>
+                </tr>
+               </tbody>
+            </table>
+                {% if app['status'] == 'Pending' %}
+                    <a href="/user/my_appointment/cancel/{{ app['appointment_id'] }}>"><button class="btn btn-danger">Cancel</button></a>
+                {% endif %}
+            </div>
+              <div class="col"></div>
+          {% endif %}
           </div>
             </div>
-
-{#            <div class="container">#}
-{#          <div class="row">#}
-{#            <div class="col">#}
-{#                <a href=""><button class="btn btn-primary">Download</button></a>#}
-{#                {% if app['status'] == 'Pending' %}#}
-{#                    <a href="/user/my_appointment/cancel/<{{ app['appointment_id'] }}>"><button class="btn btn-danger">Cancel</button></a>#}
-{#                {% endif %}#}
-{##}
-{#            </div>#}
-{#          </div>#}
-{#            </div>#}
 
     </main>
 {% endblock content %}

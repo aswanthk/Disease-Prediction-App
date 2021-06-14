@@ -77,45 +77,61 @@
         </div>
 
     <h1 class="h5">Rating:</h1>
-    <form class="rating">
-  <label>
-    <input type="radio" name="stars" value="1" />
+    <form action="/send_feedback_post" method="post">
+  <div class="rating">
+      <label>
+    <input type="radio" name="stars" value="1" {% if content==True %}{{ 'checked' if qry['rate']==1 }}{% endif %} required />
     <span class="icon">★</span>
   </label>
   <label>
-    <input type="radio" name="stars" value="2" />
-    <span class="icon">★</span>
-    <span class="icon">★</span>
-  </label>
-  <label>
-    <input type="radio" name="stars" value="3" />
-    <span class="icon">★</span>
+    <input type="radio" name="stars" value="2" {% if content==True %}{{ 'checked' if qry['rate']==2 }}{% endif %} />
     <span class="icon">★</span>
     <span class="icon">★</span>
   </label>
   <label>
-    <input type="radio" name="stars" value="4" />
-    <span class="icon">★</span>
+    <input type="radio" name="stars" value="3" {% if content==True %}{{ 'checked' if qry['rate']==3 }}{% endif %} />
     <span class="icon">★</span>
     <span class="icon">★</span>
     <span class="icon">★</span>
   </label>
   <label>
-    <input type="radio" name="stars" value="5" />
+    <input type="radio" name="stars" value="4" {% if content==True %}{{ 'checked' if qry['rate']==4 }}{% endif %} />
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+    <span class="icon">★</span>
+  </label>
+  <label>
+    <input type="radio" name="stars" value="5" {% if content==True %}{{ 'checked' if qry['rate']==5 }}{% endif %} />
     <span class="icon">★</span>
     <span class="icon">★</span>
     <span class="icon">★</span>
     <span class="icon">★</span>
     <span class="icon">★</span>
   </label>
-
-</form>
+  </div>
     <div class="form-group">
   <h1 class="h5">Reviews:</h1>
 {#  <label for="comment">Reviews:</label>#}
-  <textarea class="form-control" rows="5" id="comment"></textarea><br>
-        <button class="btn btn-primary">Send/Update</button>
+  <textarea class="form-control" rows="5" name="review" id="review">{% if content==True %}{{ qry['review'] }}{% endif %}</textarea><br>
 </div>
+    {% if content==True %}
+        <button type="submit" class="btn btn-primary">Update</button>
+    {% endif %}
+    {% if content==False %}
+        <button type="submit" class="btn btn-primary">Submit</button>
+    {% endif %}
+
+    </form>
+{#        <div class="form-group">#}
+{#  <h1 class="h5">Reviews:</h1>#}
+{#  <label for="comment">Reviews:</label>#}
+{#  <textarea class="form-control" rows="5" name="review" id="review">{% if content==True %}{{ qry['review'] }}{% endif %}</textarea><br>#}
+{#</div>#}
+{#    <button type="submit" class="btn btn-primary">Send/Update</button>#}
+{#</form>#}
+
+
     </main>
 {#<form action="/send_feedback_post" method="post" onsubmit="return confirm('You reviewed successfully')">#}
 {#    <label for="rate">Rate</label>#}

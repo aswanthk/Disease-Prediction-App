@@ -1,0 +1,161 @@
+{% extends 'user/user_base.html' %}
+
+{% block content %}
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h4">Register for Appointment</h1>
+        </div>
+
+        <form action="/user/appointment/submit" method="post" onsubmit="return confirm('Do you want to book appointment?')">
+
+            <div class="container">
+          <div class="row">
+            <div class="col">
+              <p class="h5">Patient Details: </p>
+            </div>
+            <div class="col">
+              <p class="h5">Doctor Details: </p>
+            </div>
+          </div>
+            </div>
+            <br>
+
+        <div class="container">
+            <div class="row">
+                <div class="col">
+              <table class="table">
+              <tbody>
+                <tr>
+                  <td>Name</td>
+                  <td>{{ usr['name'] }}</td>
+                </tr>
+                <tr>
+
+                  <td>Gender</td>
+                  <td>{{ usr['gender'] }}</td>
+                </tr>
+                <tr>
+
+                  <td>Age</td>
+                  <td>{{ age }}</td>
+                </tr>
+                <tr>
+
+                  <td>Address</td>
+                  <td>{{ usr['house_name'] }}<br>{{ usr['place'] }}, {{ usr['district'] }}</td>
+                </tr>
+                <tr>
+
+                  <td>Contact Number</td>
+                  <td>{{ usr['mobile_number'] }}</td>
+                </tr>
+              </tbody>
+            </table>
+            </div>
+            <div class="col">
+              <table class="table">
+              <tbody>
+                <tr>
+                  <td>Doctor Name</td>
+                  <td>{{ dr['name'] }}</td>
+                </tr>
+                <tr>
+
+                  <td>Qualification</td>
+                  <td>{{ dr['qualification'] }}</td>
+                </tr>
+                <tr>
+
+                  <td>Category</td>
+                  <td>{% for x in cat %}{{ x }}<br>{% endfor %}</td>
+                </tr>
+                <tr>
+
+                  <td>Hospital/Clinic Address</td>
+                  <td>{{ dr['house_name'] }}<br>{{ dr['place'] }}, {{ dr['district'] }}</td>
+                </tr>
+              <tr>
+                  <td>Contact Number</td>
+                  <td>{{ dr['contact_number'] }}</td>
+                </tr>
+              </tbody>
+            </table>
+            </div>
+          </div>
+        </div>
+            <br>
+
+            <div class="container">
+          <div class="row">
+            <div class="col">
+              <p class="h5">Appointment Time: </p>
+            </div>
+            <div class="col">
+              <p class="h5"></p>
+            </div>
+          </div>
+            </div>
+            <br>
+
+            <div class="container">
+          <div class="row">
+            <div class="col">
+{#            <p class="h6">Appointment Date </p><br>#}
+            <label class="h6" for="option-date">Appointment Time</label> <br>
+              <select class="form-select" aria-label="Option Date" name="option-date" id="option-date" onchange="adds(this.value)" required>
+                <option value="" selected disabled >Choose Appointment Date</option>
+                {% for x in sd %}
+                <option value="{{ x[0] }}">{{ x[0] }} ({{ x[1] }})</option>
+                {% endfor %}
+            </select>
+            <div id="d"></div>
+            </div>
+              <div class="col"></div>
+          </div>
+            </div>
+                <input type="hidden" name="user-id" id="user-id" value="{{ usr['user_id'] }}">
+            <input type="hidden" name="doctor-id" id="doctor-id" value="{{ dr['doctor_id'] }}">
+            <input type="hidden" name="prediction-id" id="prediction-id" value="-1">
+            <br>
+            <div class="container">
+          <div class="row">
+            <div class="col">
+              <button type="submit" class="btn btn-primary">Book</button>
+                <button type="reset" class="btn btn-secondary">Cancel</button>
+            </div>
+          </div>
+            </div>
+        </form>
+
+    </main>
+{% endblock content %}
+
+{% block footer %}
+    <script type="text/javascript">
+        var xmlHttp;
+                    function adds(eid){
+
+                        if (typeof XMLHttpRequest != "undefined"){
+                        xmlHttp= new XMLHttpRequest();
+                        }
+                        else if (window.ActiveXObject){
+                            xmlHttp= new ActiveXObject("Microsoft.XMLHTTP");
+                        }
+                        if (xmlHttp==null){
+                            alert("Browser does not support XMLHTTP Request")
+                            return;
+                        }
+                        var url="/appointment_select/"+eid
+                        xmlHttp.onreadystatechange = stateChange;
+                        xmlHttp.open("GET", url, true);
+                        xmlHttp.send(null);
+                    }
+
+                    function stateChange(){
+                        if(xmlHttp.readyState==4 || xmlHttp.readyState=="complete"){
+                            document.getElementById("d").innerHTML=xmlHttp.responseText
+
+                        }
+                    }
+        </script>
+{% endblock footer %}
