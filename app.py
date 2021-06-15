@@ -6,10 +6,9 @@ from flask import Flask, render_template, request, redirect,session
 import smtplib
 from email.mime.text import MIMEText
 from flask_mail import Mail
-from random import randint
+from random import randint, shuffle
 import numpy as np
 import pandas as pd
-import os
 
 app = Flask(__name__)
 app.secret_key="kmsoe89j42"
@@ -18,6 +17,7 @@ path1=r"C:\Users\user\Documents\PROGRAMS\PycharmProjects\DiseasePredictionApp\st
 path2=r"C:\Users\user\Documents\PROGRAMS\PycharmProjects\dps_email\dps_email.txt"
 path3=r"C:\Users\user\Documents\PROGRAMS\PycharmProjects\DiseasePredictionApp\static\dataset\\"
 path4=r"C:\Users\user\Documents\PROGRAMS\PycharmProjects\DiseasePredictionApp\static\dataset\added\\"
+no_pp="/static/images/icons/no-pp.jpg"
 
 """
 import bcrypt
@@ -201,16 +201,18 @@ def admin_home():
         db = Db()
         tdr = db.selectOne("select count(login_id) from login where user_type='doctor'")
         pdr = db.selectOne("select count(login_id) from login where user_type='pending'")
-        dash.append(("Doctors", f"Total: {tdr['count(login_id)']} Pending: {pdr['count(login_id)']}"))
+        dash.append(("Doctors", f"Total: {tdr.get('count(login_id)', 0)} Pending: {pdr.get('count(login_id)', 0)}"))
         tusr = db.selectOne("select count(login_id) from login where user_type='user'")
-        dash.append(("Patients", str(tusr['count(login_id)'])))
+        dash.append(("Patients", str(tusr.get('count(login_id)', 0))))
         tset = db.selectOne("select count(dataset_id) from disease_dataset")
-        dash.append(("Dataset", str(tset['count(dataset_id)'])))
+        dash.append(("Dataset", str(tset.get('count(dataset_id)', 0))))
         tf = db.selectOne("select sum(rate), count(rate) from feedbacks")
-        avgr = int(tf['sum(rate)']) / int(tf['count(rate)'])
-        dash.append(("Reviews", f"{round(avgr, 2)}/5 average on {tf['count(rate)']} reviews"))
+        if tf.get('sum(rate)') is not None:
+            avgr = int(tf.get('sum(rate)', 0)) / int(tf.get('count(rate)', 0))
+            dash.append(("Reviews", f"{round(avgr, 2)}/5 average on {tf.get('count(rate)', 0)} reviews"))
+        else:
+            dash.append(("Reviews", f"0/5 average on 0 reviews"))
         dash.append(("Session", str(a)))
-
         return render_template("admin/admin_home.html", dash=dash)
     else:
         return redirect('/')
@@ -252,7 +254,6 @@ def add_dataset():
 
         # START OF INSERTION OF DATASET INTO DATABASE FROM CSV
 
-        import csv
         disease_set = dict()
         with open(path, 'r') as csvfile:
 
@@ -531,8 +532,16 @@ def admin_feedbacks():
         db = Db()
 
         urt = db.selectOne("SELECT sum(rate), count(rate) FROM login, feedbacks WHERE login.login_id = feedbacks.user_id AND login.user_type='user'")
-        user_rating_total = int(urt['sum(rate)'])
-        user_rating_average = round( (int(urt['sum(rate)'])/int(urt['count(rate)'])), 1 )
+
+        def star(u):
+            if u is not None:
+                t = int(u.get('sum(rate)', 0))
+                av = round( (int(u.get('sum(rate)', 0))/int(u.get('count(rate)', 0))), 1 )
+                return t, av
+            else:
+                return 0, 0.0
+
+        user_rating_total, user_rating_average = star(urt['sum(rate)'])
 
         user_rating = dict()
         user5 = db.selectOne("SELECT count(rate) FROM login, feedbacks WHERE login.login_id = feedbacks.user_id AND login.user_type='user' AND feedbacks.rate=5")
@@ -541,16 +550,17 @@ def admin_feedbacks():
         user2 = db.selectOne("SELECT count(rate) FROM login, feedbacks WHERE login.login_id = feedbacks.user_id AND login.user_type='user' AND feedbacks.rate=2")
         user1 = db.selectOne("SELECT count(rate) FROM login, feedbacks WHERE login.login_id = feedbacks.user_id AND login.user_type='user' AND feedbacks.rate=1")
 
-        user_rating['5'] = user5['count(rate)']
-        user_rating['4'] = user4['count(rate)']
-        user_rating['3'] = user3['count(rate)']
-        user_rating['2'] = user2['count(rate)']
-        user_rating['1'] = user1['count(rate)']
+        user_rating['5'] = user5.get('count(rate)', 0)
+        user_rating['4'] = user4.get('count(rate)', 0)
+        user_rating['3'] = user3.get('count(rate)', 0)
+        user_rating['2'] = user2.get('count(rate)', 0)
+        user_rating['1'] = user1.get('count(rate)', 0)
 
         drt = db.selectOne(
             "SELECT sum(rate), count(rate) FROM login, feedbacks WHERE login.login_id = feedbacks.user_id AND login.user_type='doctor'")
-        dr_rating_total = int(drt['sum(rate)'])
-        dr_rating_average = round( (int(drt['sum(rate)']) / int(drt['count(rate)'])), 1 )
+
+
+        dr_rating_total, dr_rating_average = star(drt['sum(rate)'])
 
         dr_rating = dict()
         dr5 = db.selectOne(
@@ -564,11 +574,11 @@ def admin_feedbacks():
         dr1 = db.selectOne(
             "SELECT count(rate) FROM login, feedbacks WHERE login.login_id = feedbacks.user_id AND login.user_type='doctor' AND feedbacks.rate=1")
 
-        dr_rating['5'] = dr5['count(rate)']
-        dr_rating['4'] = dr4['count(rate)']
-        dr_rating['3'] = dr3['count(rate)']
-        dr_rating['2'] = dr2['count(rate)']
-        dr_rating['1'] = dr1['count(rate)']
+        dr_rating['5'] = dr5.get('count(rate)', 0)
+        dr_rating['4'] = dr4.get('count(rate)', 0)
+        dr_rating['3'] = dr3.get('count(rate)', 0)
+        dr_rating['2'] = dr2.get('count(rate)', 0)
+        dr_rating['1'] = dr1.get('count(rate)', 0)
 
         return render_template("admin/admin_feedbacks.html", user_rating_average=user_rating_average, user_rating_total=user_rating_total, user_rating=user_rating, dr_rating_average=dr_rating_average, dr_rating_total=dr_rating_total, dr_rating=dr_rating)
     else:
@@ -588,19 +598,27 @@ def admin_feedbacks_reviews():
 
 ############     D O C T O R     #######################################################################################
 
-# @app.route('/test')
-# def test():
-#     return render_template('test.html')
-
 @app.route('/doctor/register')
 def doctor_register():
     return render_template('doctor/doctor_register.html')
 
 @app.route('/doctor/register_post', methods=['post'])
 def doctor_register_post():
+    dates = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     username = request.form['username']
     name = request.form['name']
     photo = request.files['photo']
+
+    def pp(pic):
+        if pic.filename != "":
+            pic.save(path1 + dates + ".jpg")
+            loc = "/static/images/" + dates + ".jpg"
+            return loc
+        else:
+            return no_pp
+
+    path = pp(photo)
+
     email_address = request.form['email-address']
     contact_number = request.form['contact-number']
     gender = request.form['gender']
@@ -621,9 +639,6 @@ def doctor_register_post():
     longitude = request.form['longitude']
     password = request.form['password']
     re_password = request.form['re-password']
-    dates = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-    photo.save(path1 + dates + ".jpg")
-    path = "/static/images/" + dates + ".jpg"
 
     db = Db()
     qry2 = db.select("SELECT * FROM login WHERE username = '"+username+"'")
@@ -947,9 +962,21 @@ def doctor_profile_edit():
 @app.route('/doctor/profile/edit/post', methods=['post'])
 def doctor_profile_edit_post():
     if session['log'] == "dlogin":
+        dates = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
         username = request.form['username']
         name = request.form['name']
         photo = request.files['photo']
+
+        def pp(pic):
+            if pic.filename != "":
+                pic.save(path1 + dates + ".jpg")
+                loc = "/static/images/" + dates + ".jpg"
+                return loc
+            else:
+                return no_pp
+
+        path = pp(photo)
+
         # email_address = request.form['email-address']
         contact_number = request.form['contact-number']
         gender = request.form['gender']
@@ -967,9 +994,6 @@ def doctor_profile_edit_post():
         admission_fee = request.form['admission-fee']
         pro_started_yr = request.form['pro-started-yr']
 
-        dates = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-        photo.save(path1 + dates + ".jpg")
-        path = "/static/images/" + dates + ".jpg"
         db = Db()
         if request.files is not None:
             if photo.filename != "":
@@ -1033,9 +1057,21 @@ def user_register():
 
 @app.route('/user/register_post', methods=['post'])
 def user_register_post():
+    dates = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     username = request.form['username']
     name = request.form['name']
     photo = request.files['photo']
+
+    def pp(pic):
+        if pic.filename != "":
+            pic.save(path1 + dates + ".jpg")
+            loc = "/static/images/" + dates + ".jpg"
+            return loc
+        else:
+            return no_pp
+
+    path = pp(photo)
+
     email_address = request.form['email-address']
     mobile_number = request.form['mobile-number']
     gender = request.form['gender']
@@ -1050,9 +1086,6 @@ def user_register_post():
     longitude = request.form['longitude']
     password = request.form['password']
     re_password = request.form['re-password']
-    dates = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-    photo.save(path1 + dates + ".jpg")
-    path = "/static/images/" + dates + ".jpg"
 
     db = Db()
     qry2 = db.select("SELECT * FROM login WHERE username = '"+username+"'")
@@ -1079,13 +1112,13 @@ def user_home():
         apps = []
         papp = db.selectOne("select count(status) from dr_appointment where user_id='" + str(
             session['lid']) + "' and status='Pending'")
-        apps.append(f"Pending: {papp['count(status)']}")
+        apps.append(f"Pending: {papp.get('count(status)', 0)}")
         bapp = db.selectOne("select count(status) from dr_appointment where user_id='" + str(
             session['lid']) + "' and status='Booked'")
-        apps.append(f"Booked: {bapp['count(status)']}")
+        apps.append(f"Booked: {bapp.get('count(status)', 0)}")
         capp = db.selectOne("select count(status) from dr_appointment where user_id='" + str(
             session['lid']) + "' and status='Consulted'")
-        apps.append(f"Consulted: {capp['count(status)']}")
+        apps.append(f"Consulted: {capp.get('count(status)', 0)}")
         uapp = db.select(
             "select doctor_id from dr_appointment where user_id='" + str(session['lid']) + "' and status='Consulted'")
         ua = []
@@ -1122,9 +1155,21 @@ def user_profile_edit():
 @app.route('/user/profile/edit-post',methods=['post'])
 def user_profile_edit_post():
     if session['log'] == "ulogin":
+        dates = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
         username = request.form['username']
         name = request.form['name']
         photo = request.files['photo']
+
+        def pp(pic):
+            if pic.filename != "":
+                pic.save(path1 + dates + ".jpg")
+                loc = "/static/images/" + dates + ".jpg"
+                return loc
+            else:
+                return no_pp
+
+        path = pp(photo)
+
         # email_address = request.form['email-address']
         mobile_number = request.form['mobile-number']
         gender = request.form['gender']
@@ -1135,9 +1180,7 @@ def user_profile_edit_post():
         state = request.form['state']
         post = request.form['post']
         pin = request.form['pin']
-        dates = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-        photo.save(path1 + dates + ".jpg")
-        path = "/static/images/" + dates + ".jpg"
+
         db = Db()
         if request.files is not None:
             if photo.filename != "":
@@ -1149,7 +1192,6 @@ def user_profile_edit_post():
                     "UPDATE login, user SET login.username='" + username + "',user.username='" + username + "',user.name='" + name + "', user.mobile_number='" + mobile_number + "', user.gender='" + gender + "', user.dob='" + dob + "', user.house_name='" + house_name + "', user.place='" + place + "', user.district='" + district + "',user.state='" + state + "', user.post='" + post + "', user.pin='" + pin + "' WHERE login.login_id = user.user_id AND login.login_id='" + str(
                         session.get('lid')) + "'")
         else:
-            print(6)
             qry = db.update(
                 "UPDATE login, user SET login.username='" + username + "',user.username='" + username + "',user.name='" + name + "', user.mobile_number='" + mobile_number + "', user.gender='" + gender + "', user.dob='" + dob + "', user.house_name='" + house_name + "', user.place='" + place + "', user.district='" + district + "',user.state='" + state + "', user.post='" + post + "', user.pin='" + pin + "' WHERE login.login_id = user.user_id AND login.login_id='" + str(
                     session.get('lid')) + "'")
@@ -1419,8 +1461,7 @@ def user_disease_prediction():
             if qry2[i] not in qry2[i + 1:]:
                 qry3.append(qry2[i])
 
-        import random
-        random.shuffle(qry3)
+        shuffle(qry3)
 
         qry2 = qry3
 
