@@ -1,4 +1,6 @@
 {% extends 'admin/admin_base.html' %}
+{% set active_page = 'admin_doctors' %}
+{% block title %}Doctors List{% endblock title %}
 
 {% block content %}
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
@@ -11,7 +13,7 @@
         </div>
 
         <div style="text-align: center">
-            <img src="{{ q['photo'] }}" alt="{{ q['username'] }}'s-photo" height="200px" width="150px"/>
+            <img src="{{ q['photo'] }}" alt="{{ q['username'] }}'s-photo" height="150px" width="150px"/>
         </div>
         <br>
 
@@ -60,42 +62,6 @@
                         PIN:  {{ q['pin'] }}
                     </td>
                   </tr>
-{#                <tr>#}
-{#                  <th scope="row">House Name</th>#}
-{#                  <td>#}
-{#                      {{ q['house_name'] }}#}
-{#                  </td>#}
-{#                </tr>#}
-{#                <tr>#}
-{#                  <th scope="row">Place</th>#}
-{#                  <td>#}
-{#                        {{ q['place'] }}#}
-{#                  </td>#}
-{#                </tr>#}
-{#                <tr>#}
-{#                  <th scope="row">District</th>#}
-{#                  <td>#}
-{#                        {{ q['district'] }}#}
-{#                  </td>#}
-{#                </tr>#}
-{#                <tr>#}
-{#                  <th scope="row">State</th>#}
-{#                  <td>#}
-{#                        {{ q['state'] }}#}
-{#                  </td>#}
-{#                </tr>#}
-{#              <tr>#}
-{#                  <th scope="row">Post</th>#}
-{#                  <td>#}
-{#                        {{ q['post'] }}#}
-{#                  </td>#}
-{#                </tr>#}
-{#              <tr>#}
-{#                  <th scope="row">PIN</th>#}
-{#                  <td>#}
-{#                        {{ q['pin'] }}#}
-{#                  </td>#}
-{#                </tr>#}
                 <tr>
                     <th scope="row">Admission fee</th>
                     <td>&nbsp;{{ q['admission_fee'] }}</td>
@@ -107,52 +73,5 @@
               </tbody>
               </table>
         </div>
-
-
-{#        <img src="{{ qry["photo"] }}"/>#}
-{#<h3>{{ qry["name"] }}</h3>#}
-{#<table width="200" border="2" cellspacing="2" cellpadding="2">#}
-{#  <tr>#}
-{#    <td>Username</td>#}
-{#    <td>{{ qry["username"] }}</td>#}
-{#  </tr>#}
-{#  <tr>#}
-{#    <td>Email Address</td>#}
-{#    <td>{{ qry["email_address"] }}</td>#}
-{#  </tr>#}
-{#  <tr>#}
-{#    <td>License ID</td>#}
-{#    <td>&nbsp;{{ qry["license_id"] }}</td>#}
-{#  </tr>#}
-{#  <tr>#}
-{#    <td>Qualification</td>#}
-{#    <td>{{ qry["qualification"] }}</td>#}
-{#  </tr>#}
-{#  <tr>#}
-{#    <td>Category</td>#}
-{#    <td>{{ qry["category"] }}</td>#}
-{#  </tr>#}
-{#  <tr>#}
-{#    <td>Address</td>#}
-{#    <td>&nbsp;{{ qry["address"] }}</td>#}
-{#  </tr>#}
-{#  <tr>#}
-{#    <td>Age</td>#}
-{#    <td>&nbsp;{{ qry["age"] }}</td>#}
-{#  </tr>#}
-{#  <tr>#}
-{#    <td>Experience</td>#}
-{#    <td>{{ qry["experience"] }}</td>#}
-{#  </tr>#}
-{#  <tr>#}
-{#    <td>Admission Fee</td>#}
-{#    <td>&nbsp;{{ qry["admission_fee"] }}</td>#}
-{#  </tr>#}
-{#  <tr>#}
-{#    <td>Mobile number</td>#}
-{#    <td>&nbsp;{{ qry["mobile_number"] }}</td>#}
-{#  </tr>#}
-{#</table>#}
-
     </main>
 {% endblock content %}

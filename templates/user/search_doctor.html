@@ -1,43 +1,6 @@
 {% extends 'user/user_base.html' %}
-
-{#<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">#}
-{#<html xmlns="http://www.w3.org/1999/xhtml">#}
-{#<head>#}
-{#<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />#}
-{#<title>Untitled Document</title>#}
-{#    <script type="text/javascript">#}
-{#var xmlHttp;#}
-{#            function adds(eid){#}
-{##}
-{#                if (typeof XMLHttpRequest != "undefined"){#}
-{#                xmlHttp= new XMLHttpRequest();#}
-{#                }#}
-{#                else if (window.ActiveXObject){#}
-{#                    xmlHttp= new ActiveXObject("Microsoft.XMLHTTP");#}
-{#                }#}
-{#                if (xmlHttp==null){#}
-{#                    alert("Browser does not support XMLHTTP Request")#}
-{#                    return;#}
-{#                }#}
-{#                var url="/search_dr_experience/"+eid#}
-{#                xmlHttp.onreadystatechange = stateChange;#}
-{#                xmlHttp.open("GET", url, true);#}
-{#                xmlHttp.send(null);#}
-{#            }#}
-{##}
-{#            function stateChange(){#}
-{#                if(xmlHttp.readyState==4 || xmlHttp.readyState=="complete"){#}
-{#                    document.getElementById("d").innerHTML=xmlHttp.responseText#}
-{##}
-{#                }#}
-{#            }#}
-{#</script>#}
-{#</head>#}
-{#<body>#}
-{##}
-{#</body>#}
-{#</html>#}
-
+{% set active_page = 'user_searchdr' %}
+{% block title %}Search Doctor{% endblock title %}
 
 {% block content %}
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
@@ -59,7 +22,7 @@
 
             <div class="form-group" id="d"></div>
             <br>
-            <button type="submit" class="btn btn-primary">Search</button>
+            <button type="submit" class="btn btn-primary btn-sm">Search</button>
         </form>
         <br>
         <p class="h5">Search Results {% if cat=="cat" %} for '{{ sp }}' Specialists {% endif %}</p>
@@ -85,7 +48,7 @@
                       {% for data in qry1 %}
                       <tr>
                         <td>{{ loop.index }}</td>
-                        <td><b>{{data["name"]}}</b> <br> <img src="{{ data["photo"] }}" height="100" width="50"/></td>
+                        <td><b>{{data["name"]}}</b> <br> <img src="{{ data["photo"] }}" height="60" width="60"/></td>
                         <td>{{ data["qualification"] }}</td>
                         <td>{{ data["category"] }}</td>
 
@@ -116,50 +79,6 @@
 
     </main>
 {% endblock content %}
-
-
-{#        <form action="/search_doctor_post" method="post">#}
-{#    	<p>Select By</p>#}
-{#    	<select name="option" onchange="adds(this.value)">#}
-{#        	<option value="--select--">--select--</option>#}
-{#            <option value="name">Name</option>#}
-{#            <option value="specialisation">Specialisation</option>#}
-{#            <option value="experience">Experience</option>#}
-{#            <option value="location">Location</option>#}
-{#        </select> <br><br>#}
-{#     <div id="d">#}
-{##}
-{#     </div>#}
-{#        <br /><br />#}
-{#        <input type="submit" value="Search" />#}
-{#    </form> <br>#}
-{#<table width="624" border="2" cellspacing="2" cellpadding="2">#}
-{#  <tr>#}
-{#    <th width="11" scope="col">#</th>#}
-{#    <th width="44" scope="col">Dr. Name</th>#}
-{#    <th width="27" scope="col">Username</th>#}
-{#    <th width="36" scope="col">Email Address</th>#}
-{#    <th width="48" scope="col">License ID</th>#}
-{#    <th width="48" scope="col">Qualification</th>#}
-{#    <th width="79" scope="col">Category</th>#}
-{#    <th width="79" scope="col"></th>#}
-{#  </tr>#}
-{#  {% for data in qry1 %}#}
-{#      <tr>#}
-{#      <td>{{ loop.index }}</td>#}
-{#    <td>{{data["name"]}} <img src="{{ data["photo"] }}" height="100" width="50"/></td>#}
-{##}
-{#    <td>{{ data["username"] }}</td>#}
-{#    <td>&nbsp;{{ data["email_address"] }}</td>#}
-{#    <td>{{ data["license_id"] }}</td>#}
-{#    <td>&nbsp;{{ data["qualification"] }}</td>#}
-{#    <td>&nbsp;{{ data["category"] }}</td>#}
-{#      <td><a href="#">Register Now</a></td>#}
-{#  {% endfor %}#}
-{#</table>#}
-{#    </main>#}
-{##}
-{#{% endblock content %}#}
 
 {% block footer %}
     <script type="text/javascript">

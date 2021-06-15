@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Title</title>
+    <title>{% block title %}{% endblock title %}</title>
 {#    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/dashboard/">#}
 
     <!-- Bootstrap core CSS -->
@@ -61,49 +61,49 @@
             <div class="position-sticky pt-3">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/user_home">
+                        <a class="nav-link {{ 'active' if active_page == 'user_home' }}" aria-current="page" href="/user_home">
                             <span data-feather="home"></span>
                             User Dashboard
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/user/profile">
+                        <a class="nav-link {{ 'active' if active_page == 'user_profile' }}" href="/user/profile">
                             <span data-feather="file"></span>
                             My Profile
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/user/add_symptoms">
+                        <a class="nav-link {{ 'active' if active_page == 'user_dp' }}" href="/user/add_symptoms">
                             <span data-feather="shopping-cart"></span>
                             Disease Prediction
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/user/my_appointment">
+                        <a class="nav-link {{ 'active' if active_page == 'user_appointment' }}" href="/user/my_appointment">
                             <span data-feather="shopping-cart"></span>
                             My Appointment
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/search_doctor">
+                        <a class="nav-link {{ 'active' if active_page == 'user_searchdr' }}" href="/search_doctor">
                             <span data-feather="users"></span>
                             Search Doctor
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/change_pass">
+                        <a class="nav-link {{ 'active' if active_page == 'user_pass' }}" href="/change_pass">
                             <span data-feather="bar-chart-2"></span>
                             Change Password
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/user/dp_history">
+                        <a class="nav-link {{ 'active' if active_page == 'user_history' }}" href="/user/dp_history">
                             <span data-feather="layers"></span>
                             Prediction History
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/user_send_feedback">
+                        <a class="nav-link {{ 'active' if active_page == 'user_feedbacks' }}" href="/user_send_feedback">
                             <span data-feather="layers"></span>
                             Feedbacks
                         </a>

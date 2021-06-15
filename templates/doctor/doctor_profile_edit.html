@@ -1,11 +1,13 @@
 {% extends 'doctor/doctor_base.html' %}
+{% set active_page = 'doctor_profile' %}
+{% block title %}My Profile{% endblock title %}
 
 {% block content %}
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 class="h4">Edit Profile ({{ data['name'] }})</h1>
             <form action="/doctor/profile/edit/post" method="post" enctype="multipart/form-data">
-            <button type="submit" class="btn btn-primary" style="text-align: right">Save</button>
+            <button type="submit" class="btn btn-primary btn-sm" style="text-align: right">Save</button>
         </div>
             <div class="row g-3">
               <div class="col">
@@ -47,18 +49,14 @@
                 <div class="row">
                   <legend class="col-form-label col-sm-2 pt-0">Gender</legend>
                   <div class="col-sm-10">
-{#                    <div class="form-check">#}
                       <input class="form-check-input" type="radio" name="gender" id="male" value="Male" {{ 'checked' if data['gender']=='Male' }}>
                       <label class="form-check-label" for="male">
                         Male &nbsp; &nbsp;
                       </label>
-{#                    </div>#}
-{#                    <div class="form-check">#}
                       <input class="form-check-input" type="radio" name="gender" id="female" value="Female" {{ 'checked' if data['gender']=='Female' }}>
                       <label class="form-check-label" for="female">
                         Female &nbsp; &nbsp;
                       </label>
-{#                    </div>#}
                       <input class="form-check-input" type="radio" name="gender" id="other" value="Other" {{ 'checked' if data['gender']=='Other' }}>
                       <label class="form-check-label" for="other">
                         Other
@@ -226,113 +224,3 @@
 
     </main>
 {% endblock content %}
-
-..................
-{#<h2>Edit Profile ({{ data['username'] }})</h2>#}
-{#<form action="/doctor/profile/edit/post" method="post" enctype="multipart/form-data">#}
-{#<table width="344" height="284" border="2"  cellpadding="2" cellspacing="2">#}
-{#  <tr>#}
-{#    <td>Username</td>#}
-{#    <td>#}
-{#      <input type="text" name="username" id="username" value="{{ data['username'] }}" readonly />#}
-{#    </td>#}
-{#  </tr>#}
-{#  <tr>#}
-{#    <td>Name</td>#}
-{#    <td><input type="text" name="name" id="name" value="{{ data['name'] }}" /></td>#}
-{#  </tr>#}
-{#  <tr>#}
-{#    <td>Photo</td>#}
-{#    <td>#}
-{#      <input type="file" name="photo" id="photo" />#}
-{#    </td>#}
-{#  </tr>#}
-{#    <tr>#}
-{#    <td>Email Address</td>#}
-{#      <td><input type="text" name="email-address" id="email-address" value="{{ data['email_address'] }}" readonly /></td>#}
-{#  </tr>#}
-{#   <tr>#}
-{#    <td>Contact Number</td>#}
-{#    <td><input type="text" name="contact-number" id="contact-number" value="{{ data['contact_number'] }}" /></td>#}
-{#  </tr>#}
-{#  <tr>#}
-{#    <td>Gender</td>#}
-{#        <td><input type="radio" name="gender" id="male" value="Male" {{ 'checked' if data['gender']=='Male' }}/>Male#}
-{#        <input type="radio" name="gender" id="female" value="Female" {{ 'checked' if data['gender']=='Female' }}/>Female#}
-{#        <input type="radio" name="gender" id="other" value="Other" {{ 'checked' if data['gender']=='Other' }}/>Other#}
-{#    </td>#}
-{#  </tr>#}
-{#    <tr>#}
-{#    <td>Date of Birth</td>#}
-{#    <td><input type="date" name="dob" id="dob" value="{{ data['dob'] }}" /></td>#}
-{#  </tr>#}
-{#  <tr>#}
-{#    <td>License ID</td>#}
-{#      <td><input type="text" name="license-id" id="license-id" value="{{ data['license_id'] }}" /></td>#}
-{#  </tr>#}
-{#  <tr>#}
-{#    <td>Qualification</td>#}
-{#      <td><input type="text" name="qualification" id="qualification" value="{{ data['qualification'] }}" /></td>#}
-{#  </tr>#}
-{##}
-{#  <tr>#}
-{#    <th><label for="category">Category</label></th>#}
-{#      <td>#}
-{#            <label for="cat1">Category 1</label>#}
-{#            <input type="checkbox" name="category" id="cat1" value="category1" {% if "category1" in category %} checked {% endif %}>#}
-{#            <label for="cat2">Category 2</label>#}
-{#            <input type="checkbox" name="category" id="cat2" value="category2" {% if "category2" in category %} checked {% endif %}>#}
-{#            <label for="cat3">Category 3</label>#}
-{#            <input type="checkbox" name="category" id="cat3" value="category3" {% if "category3" in category %} checked {% endif %}>#}
-{#            <label for="cat4">Category 4</label>#}
-{#            <input type="checkbox" name="category" id="cat4" value="category4" {% if "category4" in category %} checked {% endif %}>#}
-{#      </td>#}
-{#  </tr>#}
-{##}
-{#    <tr>#}
-{#    <td>Hospital/ Clinic name</td>#}
-{#    <td>#}
-{#      <input type="text" name="hospital-name" id="hospital-name" value="{{ data['hospital_name'] }}" />#}
-{#    </td>#}
-{#  </tr>#}
-{# <tr>#}
-{#    <td>Place</td>#}
-{#   <td> <input type="text" name="place" id="place"  value="{{ data['place'] }}"/></td>#}
-{#  </tr>#}
-{#  <tr>#}
-{#    <td>District</td>#}
-{#   <td> <input type="text" name="district" id="district"  value="{{ data['district'] }}"/></td>#}
-{#  </tr>#}
-{#  <tr>#}
-{#    <td>State</td>#}
-{#   <td> <input type="text" name="state" id="state"  value="{{ data['state'] }}"/></td>#}
-{#  </tr>#}
-{#   <tr>#}
-{#    <td>Post</td>#}
-{#   <td> <input type="text" name="post" id="post"  value="{{ data['post'] }}"/></td>#}
-{#  </tr>#}
-{#  <tr>#}
-{#    <td>pin</td>#}
-{#    <td>#}
-{#      <input type="text" name="pin" id="pin" value="{{ data['pin'] }}"/>#}
-{#    </td>#}
-{#  </tr>#}
-{##}
-{#  <tr>#}
-{#    <td>Admission fee</td>#}
-{#      <td><input type="text" name="admission-fee" id="admission-fee" value="{{ data['admission_fee'] }}" /></td>#}
-{#  </tr>#}
-{#  <tr>#}
-{#    <td>Profession started Year</td>#}
-{#      <td><input type="text" name="pro-started-yr" id="pro-started-yr" value="{{ data['pro_started_yr'] }}" /></td>#}
-{#  </tr>#}
-{#  <tr>#}
-{#    <td>&nbsp;</td>#}
-{#    <td>#}
-{#      <input type="submit" value="EDIT" />#}
-{#    </td>#}
-{#  </tr>#}
-{#</table>#}
-{#</form>#}
-{#</body>#}
-{#</html>#}

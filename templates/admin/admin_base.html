@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.82.0">
-    <title>Admin Dashboard</title>
+    <title>{% block title %}{% endblock title %}</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/dashboard/">
 
@@ -66,37 +66,37 @@
       <div class="position-sticky pt-3">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/admin_home">
+            <a class="nav-link {{ 'active' if active_page == 'admin_home' }}" aria-current="page" href="/admin_home">
               <span data-feather="home"></span>
               Admin Dashboard
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/admin/dataset">
+            <a class="nav-link {{ 'active' if active_page == 'admin_dataset' }}" href="/admin/dataset">
               <span data-feather="file"></span>
               Manage Dataset
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/admin/doctors">
+            <a class="nav-link {{ 'active' if active_page == 'admin_doctors' }}" href="/admin/doctors">
               <span data-feather="shopping-cart"></span>
               Manage Doctors
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/admin/patients">
+            <a class="nav-link {{ 'active' if active_page == 'admin_patients' }}" href="/admin/patients">
               <span data-feather="users"></span>
               Manage Patients
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/change_pass">
+            <a class="nav-link {{ 'active' if active_page == 'admin_pass' }}" href="/change_pass">
               <span data-feather="bar-chart-2"></span>
               Change Password
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/admin/feedbacks">
+            <a class="nav-link {{ 'active' if active_page == 'admin_feedbacks' }}" href="/admin/feedbacks">
               <span data-feather="layers"></span>
               Feedbacks
             </a>

@@ -1,4 +1,6 @@
 {% extends 'doctor/doctor_base.html' %}
+{% set active_page = 'doctor_schedule' %}
+{% block title %}Schedules{% endblock title %}
 
 {% block content %}
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
@@ -20,37 +22,9 @@
             <input type="time" class="form-control" name="end_time" id="end_time" required>
         </div>
         <br>
-            <button type="submit" class="btn btn-primary">Add</button>
-            <button type="reset" class="btn btn-secondary">Reset</button>
+            <button type="submit" class="btn btn-primary btn-sm">Add</button>
+            <button type="reset" class="btn btn-secondary btn-sm">Reset</button>
         </form>
         </main>
 
 {% endblock content %}
-
-
-{#<h2>Add Doctor Schedule Data</h2>#}
-{#     <form action="/doctor_schedule_add_post" method="post">#}
-{#     <table width="279" border="2" cellspacing="2" cellpadding="2">#}
-{#  <tr>#}
-{#    <th width="115" scope="row">Schedule Date</th>#}
-{#    <td width="142"><input type="date" id="schedule_date" name="schedule_date"/></td>#}
-{#  </tr>#}
-{#  <tr>#}
-{#    <th scope="row">Start Time</th>#}
-{#    <td><input type="time" id="start_time" name="start_time"/></td>#}
-{#  </tr>#}
-{#  <tr>#}
-{#    <th scope="row">End Time</th>#}
-{#    <td><input type="time" id="end_time" name="end_time"/></td>#}
-{#  </tr>#}
-{#  <tr>#}
-{#    <th scope="row">&nbsp;</th>#}
-{#    <td><input type="submit" value="Add"/>#}
-{#    &nbsp;#}
-{#    <input type="reset" value="Close"/>#}
-{#    </td>#}
-{#  </tr>#}
-{#</table>#}
-{#     </form>#}
-{#</body>#}
-{#</html>#}

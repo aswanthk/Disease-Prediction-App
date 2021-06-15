@@ -1,4 +1,6 @@
 {% extends 'user/user_base.html' %}
+{% set active_page = 'user_appointment' %}
+{% block title %}Book Appointment{% endblock title %}
 
 {% block content %}
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
@@ -100,7 +102,6 @@
             <div class="container">
           <div class="row">
             <div class="col">
-{#            <p class="h6">Appointment Date </p><br>#}
             <label class="h6" for="option-date">Appointment Time</label> <br>
               <select class="form-select" aria-label="Option Date" name="option-date" id="option-date" onchange="adds(this.value)" required>
                 <option value="" selected disabled >Choose Appointment Date</option>
@@ -120,8 +121,8 @@
             <div class="container">
           <div class="row">
             <div class="col">
-              <button type="submit" class="btn btn-primary">Book</button>
-                <button type="reset" class="btn btn-secondary">Cancel</button>
+              <button type="submit" class="btn btn-primary btn-sm">Book</button>
+                <button type="reset" class="btn btn-secondary btn-sm">Cancel</button>
             </div>
           </div>
             </div>

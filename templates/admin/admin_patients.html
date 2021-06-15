@@ -1,4 +1,6 @@
 {% extends 'admin/admin_base.html' %}
+{% set active_page = 'admin_patients' %}
+{% block title %}Patients List{% endblock title %}
 
 {% block content %}
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
@@ -9,14 +11,20 @@
         <form action="/search_user" method="post">
     <table>
   	<tr>
-   	 	<td><input type="text" name="search_patient" id="search_patient" placeholder="Search a patient"></td>
-{#    	<td><input type="submit" value="Search" /></td>#}
+   	 	<td>
+            {% if s=="nosearch" %}
+                <input type="text" name="search_patient" id="search_patient" placeholder="Search a patient">
+            {% endif %}
+            {% if s=="search" %}
+                <input type="text" name="search_patient" id="search_patient" placeholder="Search a patient" value="{{ sn }}">
+            {% endif %}
+        </td>
     	<td><button type="submit" class="btn btn-sm btn-primary">Search</button></td>
   	</tr>
 	</table>
     </form>
-
-    <table class="table">
+        {% if l!=0 %}
+            <table class="table">
           <thead class="table-light">
             <th>#</th>
             <th>Name</th>
@@ -29,47 +37,25 @@
             {% for data in qry1 %}
             <tr>
               <td>{{ loop.index }}</td>
-            <td><b>{{data["name"]}}</b><br><img src="{{ data["photo"] }}" height="100" width="50"/></td>
+            <td><b>{{data["name"]}}</b><br><img src="{{ data["photo"] }}" height="60" width="60"/></td>
             <td>&nbsp;{{ data["gender"] }}</td>
             <td>&nbsp;{{ data["email_address"] }}</td>
             <td>
                                 {{ data["house_name"] }} <br>
                                 {{ data["place"] }} <br>
-                                {{ data["district"] }} <br>
-                                {{ data["state"] }} <br>
+                                {{ data["district"] }}, {{ data["state"] }}
                             </td>
             <td>
-                <a href="#"><button class="btn btn-primary btn-sm">View More</button></a>
+                <a href="/admin/user/more/{{ data['user_id'] }}"><button class="btn btn-primary btn-sm">Details</button></a>
             </td>
             </tr>
           {% endfor %}
           </tbody>
         </table>
-
-
-
-{#        <table width="624" border="2" cellspacing="2" cellpadding="2">#}
-{#  <tr>#}
-{#    <th>#</th>#}
-{#    <th> Name</th>#}
-{#    <th>Username</th>#}
-{#    <th>Email Address</th>#}
-{#    <th>Address</th>#}
-{#    <th>Mobile Number</th>#}
-{#    <th>Age</th>#}
-{#    </tr>#}
-{#  {% for data in qry1 %}#}
-{#    <tr>#}
-{#      <td>{{ loop.index }}</td>#}
-{#    <td>{{data["name"]}} <img src="{{ data["photo"] }}" height="100" width="50"/></td>#}
-{#    <td>&nbsp;{{ data["username"] }}</td>#}
-{#    <td>&nbsp;{{ data["email_address"] }}</td>#}
-{#    <td>&nbsp;{{ data["address"] }}</td>#}
-{#    <td>&nbsp;{{ data["mobile_number"] }}</td>#}
-{#    <td>&nbsp;{{ data["age"] }}</td>#}
-{#    </tr>#}
-{#  {% endfor %}#}
-{#</table>#}
+        {% endif %}
+        {% if l==0 %}
+            <br><p>&nbsp;  &nbsp; &nbsp; &nbsp;data not found</p>
+        {% endif %}
 
     </main>
 

@@ -18,7 +18,7 @@
         <div class="col col-xs-12">
             <main class="form-signin dark-background">
   <form id="form1" name="form1" method="post" action="/login_post">
-    <img class="mb-4 main-logo" src="static/images/dplogo4.png" alt="" width="180" height="100">
+    <img class="mb-4 main-logo" src="static/images/icons/dplogo.png" alt="" width="180" height="100">
     <h1 class="h4 mb-3 fw-normal txt">Sign in</h1>
     <div class="form-floating">
       <input type="text" class="form-control" id="floatingInput" name="username" placeholder="Username" required>
@@ -32,11 +32,13 @@
     <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
     </form>
                 <p><a href="/forgot_password" id="forgot-link">Forgot password?</a></p>
-{#      <form action="/signup_post" method="post">#}
+
     <b class="mb-3 fw-normal txt" >Register as</b>
                 <a href="/signup_post/user" id="sign-up">User</a>
                 <b class="mb-3 fw-normal txt" >or</b>
                 <a href="/signup_post/doctor" id="sign-up">Doctor</a>
+
+{#      <form action="/signup_post" method="post">#}
 {#        <select name="sign-up" id="sign-up">#}
 {#            <option value="user" selected>User</option>#}
 {#            <option value="doctor">Doctor</option>#}

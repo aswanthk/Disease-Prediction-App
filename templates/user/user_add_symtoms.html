@@ -1,4 +1,6 @@
 {% extends 'user/user_base.html' %}
+{% set active_page = 'user_dp' %}
+{% block title %}Disease Prediction{% endblock title %}
 
 {% block content %}
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
@@ -57,89 +59,8 @@
                 </datalist>
             </div>
             <br>
-            <button type="submit" class="btn btn-primary">Predict Disease</button>
-            <button type="reset" class="btn btn-secondary">Reset</button>
+            <button type="submit" class="btn btn-primary btn-sm">Predict Disease</button>
+            <button type="reset" class="btn btn-secondary btn-sm">Reset</button>
         </form>
     </main>
 {% endblock content %}
-
-
-{#<label for="exampleDataList" class="form-label">Datalist example</label>#}
-{#<input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Type to search...">#}
-{#<datalist id="datalistOptions">#}
-{#    <option value="San Francisco">#}
-{#    <option value="New York">#}
-{#    <option value="Seattle">#}
-{#    <option value="Los Angeles">#}
-{#    <option value="Chicago">#}
-{#</datalist>#}
-{##}
-{##}
-{#    <form method="POST" action="/user/disease_prediction">#}
-{#    	<table width="282" height="215" border="2" cellpadding="2" cellspacing="2">#}
-{#  <tr>#}
-{#    <th width="103" scope="row">Symptom 1</th>#}
-{#    <td width="103">#}
-{#        <input list="symptoms" name="symptoms1">#}
-{#    	<datalist id="symptoms">#}
-{#            {% for s in l1 %}#}
-{#                <option value={{ s }}>#}
-{#            {% endfor %}#}
-{#        </datalist>#}
-{#    </td>#}
-{#  </tr>#}
-{#  <tr>#}
-{#    <th scope="row">Symptom 2</th>#}
-{#    <td>#}
-{#        <input list="symptoms" name="symptoms2">#}
-{#    	<datalist id="symptoms">#}
-{#            {% for s in l1 %}#}
-{#                <option value={{ s }}>#}
-{#            {% endfor %}#}
-{#            </datalist>#}
-{#    </td>#}
-{#  </tr>#}
-{#  <tr>#}
-{#    <th scope="row">Symptom 3</th>#}
-{#    <td>#}
-{#        <input list="symptoms" name="symptoms3">#}
-{#    	<datalist id="symptoms">#}
-{#            {% for s in l1 %}#}
-{#                <option value={{ s }}>#}
-{#            {% endfor %}#}
-{#            </datalist>#}
-{#    </td>#}
-{#  </tr>#}
-{#  <tr>#}
-{#    <th scope="row">Symptom 4</th>#}
-{#    <td>#}
-{#        <input list="symptoms" name="symptoms4">#}
-{#    	<datalist id="symptoms">#}
-{#            {% for s in l1 %}#}
-{#                <option value={{ s }}>#}
-{#            {% endfor %}#}
-{#        </datalist>#}
-{#    </td>#}
-{#  </tr>#}
-{#  <tr>#}
-{#    <th scope="row">Symptom 5</th>#}
-{#    <td>#}
-{#        <input list="symptoms" name="symptoms5">#}
-{#    	<datalist id="symptoms">#}
-{#            <{% for s in l1 %}#}
-{#                <option value={{ s }}>#}
-{#            {% endfor %}#}
-{#        </datalist>#}
-{#    </td>#}
-{#  </tr>#}
-{#  <tr>#}
-{#    <th scope="row">&nbsp;</th>#}
-{#    <td>#}
-{#    	<input type="submit" value="Predict Disease"/>#}
-{#        <input type="reset" value="Reset"/>#}
-{#    </td>#}
-{#  </tr>#}
-{#</table>#}
-{#    </form>#}
-{#    </main>#}
-{#{% endblock content %}#}

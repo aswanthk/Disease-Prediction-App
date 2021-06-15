@@ -1,4 +1,6 @@
 {% extends 'user/user_base.html' %}
+{% set active_page = 'user_history' %}
+{% block title %}Prediction History{% endblock title %}
 
 {% block content %}
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
@@ -25,7 +27,7 @@
                     {% for data in qry1 %}
                       <tr>
                         <th>{{ loop.index }}</th>
-                        <td><b>{{data["name"]}}</b> <br><img src="{{ data["photo"] }}" height="100" width="50"/></td>
+                        <td><b>{{data["name"]}}</b> <br><img src="{{ data["photo"] }}" height="60" width="60"/></td>
                         <td>{{ data["qualification"] }}</td>
                         <td>{{ data["category"] }}</td>
                         <td>
@@ -48,33 +50,5 @@
                 <p>No data found</p>
             {% endif %}
         {% endfor %}
-
-{#    <table width="624" border="2" cellspacing="2" cellpadding="2">#}
-{#  <tr>#}
-{#    <th width="11" scope="col">#</th>#}
-{#    <th width="44" scope="col">Dr. Name</th>#}
-{#    <th width="27" scope="col">Username</th>#}
-{#    <th width="36" scope="col">Email Address</th>#}
-{#    <th width="48" scope="col">License ID</th>#}
-{#    <th width="48" scope="col">Qualification</th>#}
-{#    <th width="79" scope="col">Category</th>#}
-{#    <th width="102" scope="col"></th>#}
-{#  </tr>#}
-{#        {% for data in qry1 %}#}
-{#  <tr>#}
-{#  	<td>{{ loop.index }}</td>#}
-{#    <td>{{data["name"]}} <img src="{{ data["photo"] }}" height="100" width="50"/></td>#}
-{#    <td>{{ data["username"] }}</td>#}
-{#    <td>&nbsp;{{ data["email_address"] }}</td>#}
-{#    <td>{{ data["license_id"] }}</td>#}
-{#    <td>&nbsp;{{ data["qualification"] }}</td>#}
-{#    <td>&nbsp;{{ data["category"] }}</td>#}
-{#    <td>#}
-{#    	<a href="/user/dr/appointment/{{ data['doctor_id'] }}">Register Now</a>#}
-{#    </td>#}
-{#  </tr>#}
-{#        {% endfor %}#}
-{#  </table>#}
-
     </main>
 {% endblock content %}

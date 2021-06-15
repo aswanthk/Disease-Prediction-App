@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Title</title>
+    <title>{% block title %}{% endblock title %}</title>
 {#    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/dashboard/">#}
 
     <!-- Bootstrap core CSS -->
@@ -61,37 +61,37 @@
       <div class="position-sticky pt-3">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link active {% if doctor_home %}active {% endif %}" aria-current="page" href="/doctor_home">
+            <a class="nav-link {{ 'active' if active_page == 'doctor_home' }}" href="/doctor_home">
               <span data-feather="home"></span>
               Doctor Dashboard
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link  {% if doctor_profile %}active {% endif %}" href="/doctor/profile">
+            <a class="nav-link {{ 'active' if active_page == 'doctor_profile' }}" href="/doctor/profile">
               <span data-feather="file"></span>
               My Profile
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link {% if doctor_schedule %}active {% endif %}" href="/doctor_schedule">
+            <a class="nav-link {{ 'active' if active_page == 'doctor_schedule' }}" href="/doctor_schedule">
               <span data-feather="shopping-cart"></span>
               Doctor Schedule
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link {% if doctor_appointment %}active {% endif %}" href="/doctor/appointment">
+            <a class="nav-link {{ 'active' if active_page == 'doctor_appointment' }}" href="/doctor/appointment">
               <span data-feather="users"></span>
               Appointment
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link {% if change_pass %}active {% endif %}" href="/change_pass">
+            <a class="nav-link {{ 'active' if active_page == 'doctor_pass' }}" href="/change_pass">
               <span data-feather="users"></span>
               Change Password
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/doctor/feedbacks">
+            <a class="nav-link {{ 'active' if active_page == 'doctor_feedbacks' }}" href="/doctor/feedbacks">
               <span data-feather="layers"></span>
               Feedbacks
             </a>

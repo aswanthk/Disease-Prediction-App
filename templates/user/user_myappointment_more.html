@@ -1,10 +1,12 @@
 {% extends 'user/user_base.html' %}
+{% set active_page = 'user_appointment' %}
+{% block title %}My Appointments{% endblock title %}
 
 {% block content %}
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 class="h4">Appointment Details</h1>
-            <a href="#"><button class="btn btn-primary">Download</button></a>
+            <button onclick="window.print()" class="btn btn-primary btn-sm">Download</button>
         </div>
 
             <div class="container">
@@ -184,12 +186,17 @@
                 </tr>
                 <tr>
                   <td>Status</td>
-                  <td>{{ app['status'] }}</td>
+                  <td>
+                      {% if app['status']=='Booked' %}<b><p style="color: darkgreen">{{ app['status'] }}</p></b>{% endif %}
+                        {% if app['status']=='Consulted' %}<b><p style="color: darkgreen">{{ app['status'] }}✅</p></b>{% endif %}
+                      {% if app['status']=='Rejected' %}<b><p style="color: darkred">{{ app['status'] }}</p></b>{% endif %}
+                      {% if app['status']=='Pending' %}<b><p style="color: darkorange">{{ app['status'] }}</p></b>{% endif %}
+                  </td>
                 </tr>
                </tbody>
             </table>
                 {% if app['status'] == 'Pending' %}
-                    <a href="/user/my_appointment/cancel/{{ app['appointment_id'] }}>"><button class="btn btn-danger">Cancel</button></a>
+                    <a href="/user/my_appointment/cancel/{{ app['appointment_id'] }}>"><button class="btn btn-danger btn-sm">Cancel</button></a>
                 {% endif %}
             </div>
               {% endif %}
@@ -207,18 +214,22 @@
                 </tr>
                 <tr>
                   <td>Status</td>
-                  <td>{{ app['status'] }}</td>
+                  <td>
+                      {% if app['status']=='Booked' %}<b><p style="color: darkgreen">{{ app['status'] }}</p></b>{% endif %}
+                        {% if app['status']=='Consulted' %}<b><p style="color: darkgreen">{{ app['status'] }}✅</p></b>{% endif %}
+                      {% if app['status']=='Rejected' %}<b><p style="color: darkred">{{ app['status'] }}</p></b>{% endif %}
+                      {% if app['status']=='Pending' %}<b><p style="color: darkorange">{{ app['status'] }}</p></b>{% endif %}
+                  </td>
                 </tr>
                </tbody>
             </table>
                 {% if app['status'] == 'Pending' %}
-                    <a href="/user/my_appointment/cancel/{{ app['appointment_id'] }}>"><button class="btn btn-danger">Cancel</button></a>
+                    <a href="/user/my_appointment/cancel/{{ app['appointment_id'] }}>"><button class="btn btn-danger btn-sm">Cancel</button></a>
                 {% endif %}
             </div>
               <div class="col"></div>
           {% endif %}
           </div>
             </div>
-
     </main>
 {% endblock content %}

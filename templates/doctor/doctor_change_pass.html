@@ -1,4 +1,6 @@
 {% extends 'doctor/doctor_base.html' %}
+{% set active_page = 'doctor_pass' %}
+{% block title %}Change Password{% endblock title %}
 
 {% block content %}
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
@@ -22,7 +24,7 @@
                 <input type="checkbox" class="form-check-input" name="checkbox" id="checkbox" value="show-me" onclick="password_visible()">
                 <label class="form-check-label" for="checkbox">Check me out</label>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary btn-sm">Submit</button>
         </form>
     </main>
 {% endblock content %}

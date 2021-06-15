@@ -1,4 +1,6 @@
 {% extends 'admin/admin_base.html' %}
+{% set active_page = 'admin_dataset' %}
+{% block title %}Dataset{% endblock title %}
 
 {% block content %}
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
@@ -8,34 +10,37 @@
 
 
         <form action="/edit_dataset_post/{{ qry['dataset_id'] }}" method="post" onsubmit="return confirm('Do you want to update dataset?')">
-    <table width="369" height="179" border="2" cellpadding="2" cellspacing="2">
-  <tr>
-    <td><label for="disease_name">Disease Name</label></td>
-    <td><input type="text" name="disease_name" id="disease_name" value="{{ qry['disease'] }}"></td>
-  </tr>
-  <tr>
-    <td>Category</td>
-    <td><input type="text" name="category" id="category" value="{{ qry['category'] }}" /></td>
-  </tr>
-  <tr>
-    <td><label for="symptoms">Symptoms</label></td>
-    <td>
-        <textarea name="symptoms" id="symptoms">{{ qry['symptoms'] }}</textarea>
-    </td>
-  </tr>
-        <tr>
-    <td><label for="count">Count of Occurrence</label></td>
-    <td><input type="text" name="count" id="count" value="{{ qry['count_of_occurrence'] }}"></td>
-  </tr>
-  <tr>
-    <td>&nbsp;</td>
-    <td><input type="submit" value="Update">
-                    <input type="reset" value="Reset"></td>
-  </tr>
-</table>
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <label for="disease_name" class="form-label">Disease Name</label>
+                <input type="text" class="form-control" id="disease_name" name="disease_name" placeholder="Disease Name" aria-label="Disease Name" value="{{ qry['disease'] }}" required>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <label for="symptoms" class="form-label">Symptoms</label>
+                        <textarea class="form-control" rows="5" name="symptoms" id="symptoms" required>{{ qry['symptoms'] }}</textarea>
+                    </div>
+                    <div class="col">
+                        <label for="category" class="form-label">Category</label>
+                        <textarea class="form-control" rows="5" name="category" id="category" required>{{ qry['category'] }}</textarea>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                        <button type="reset" class="btn btn-secondary btn-sm">Reset</button>
+                    </div>
+                </div>
+            </div>
 </form>
-
-
 
     </main>
 {% endblock content %}

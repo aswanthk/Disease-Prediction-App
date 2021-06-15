@@ -1,10 +1,12 @@
 {% extends 'doctor/doctor_base.html' %}
+{% set active_page = 'doctor_appointment' %}
+{% block title %}Appointments{% endblock title %}
 
 {% block content %}
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 class="h4">Appointment Details</h1>
-            <a href="#"><button class="btn btn-primary">Download</button></a>
+            <button onclick="window.print()" class="btn btn-primary btn-sm">Download</button>
         </div>
 
             <div class="container">
@@ -229,10 +231,7 @@
                 </tr>
                </tbody>
             </table>
-{#                {% if app['status'] == 'Pending' %}#}
-{#                    <a href="/user/my_appointment/cancel/{{ app['appointment_id'] }}>"><button class="btn btn-danger">Cancel</button></a>#}
-{#                {% endif %}#}
-{#                        <h4>Booking Status</h4> {{ usr['status'] }}#}
+
         {% if app['status']=='Pending' %}
             <a href="/doctor/appointment/approve/{{ app['appointment_id'] }}"><button class="btn btn-success btn-sm">Approve</button></a>
             <a href="/doctor/appointment/reject/{{ app['appointment_id'] }}"><button class="btn btn-danger btn-sm">Reject</button></a>
@@ -251,79 +250,3 @@
 
     </main>
 {% endblock content %}
-{#{% block content %}#}
-{#    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">#}
-{#        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">#}
-{#            <h1 class="h4">Appointment Details</h1>#}
-{#        </div>#}
-{#        <h3>Appointment Details</h3>#}
-{#        <h3>Patient Details</h3>#}
-{#    <pre>#}
-{#        Patient Name :  {{ usr['patient_name'] }}#}
-{#        Age :           {{ usr['patient_age'] }}#}
-{#        Address :       {{ usr['patient_address'] }}#}
-{#        Email Address : {{ usr['patient_email'] }}#}
-{#        Mobile Number : {{ usr['patient_mobile'] }}"#}
-{#    </pre>#}
-{##}
-{#        <h3>Appointment Time</h3>#}
-{#    <pre>#}
-{#        Appointment Date :      {{ usr['schedule_date'] }}#}
-{#        Appointment Day :      {{ usr['shedule_day'] }}#}
-{#        Appointment Time :      {{ usr['start_time'] }} - {{ usr['end_time'] }}#}
-{#    </pre>#}
-{#        <h3>Prediction Information</h3>#}
-{#    <pre>#}
-{#        Symptoms:           {{ usr['symptoms'] }}#}
-{##}
-{#        Predicted Disease:  {{ usr['prediction1'] }}#}
-{#                            {{ usr['prediction2'] }}#}
-{#                            {{ usr['prediction3'] }}#}
-{#        Predicted on {{ usr['prediction_date'] }}#}
-{##}
-{#        <h4>Booking Status</h4> {{ usr['status'] }}#}
-{#        {% if usr['status']=='Pending' %}#}
-{#            <a href="/doctor/appointment/approve/{{ usr['appointment_id'] }}"><button>Approve</button></a>#}
-{#            <a href="/doctor/appointment/reject/{{ usr['appointment_id'] }}"><button>Reject</button></a>#}
-{#        {% endif %}#}
-{#    </pre>#}
-{#        <button onclick="print()">Print</button>#}
-{##}
-{#    </main>#}
-{#{% endblock content %}#}
-{##}
-
-{#    <h3>Appointment Details</h3>#}
-{#	<h3>Patient Details</h3>#}
-{#<pre>#}
-{#    Patient Name :  {{ usr['patient_name'] }}#}
-{#    Age :           {{ usr['patient_age'] }}#}
-{#    Address :       {{ usr['patient_address'] }}#}
-{#    Email Address : {{ usr['patient_email'] }}#}
-{#    Mobile Number : {{ usr['patient_mobile'] }}"#}
-{#</pre>#}
-{##}
-{#    <h3>Appointment Time</h3>#}
-{#<pre>#}
-{#    Appointment Date :      {{ usr['schedule_date'] }}#}
-{#    Appointment Day :      {{ usr['shedule_day'] }}#}
-{#    Appointment Time :      {{ usr['start_time'] }} - {{ usr['end_time'] }}#}
-{#</pre>#}
-{#    <h3>Prediction Information</h3>#}
-{#<pre>#}
-{#    Symptoms:           {{ usr['symptoms'] }}#}
-{##}
-{#    Predicted Disease:  {{ usr['prediction1'] }}#}
-{#                        {{ usr['prediction2'] }}#}
-{#                        {{ usr['prediction3'] }}#}
-{#    Predicted on {{ usr['prediction_date'] }}#}
-{##}
-{#    <h4>Booking Status</h4> {{ usr['status'] }}#}
-{#    {% if usr['status']=='Pending' %}#}
-{#        <a href="/doctor/appointment/approve/{{ usr['appointment_id'] }}"><button>Approve</button></a>#}
-{#        <a href="/doctor/appointment/reject/{{ usr['appointment_id'] }}"><button>Reject</button></a>#}
-{#    {% endif %}#}
-{#</pre>#}
-{#    <button onclick="print()">Print</button>#}
-{#</body>#}
-{#</html>#}

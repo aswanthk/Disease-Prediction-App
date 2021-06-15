@@ -1,4 +1,6 @@
 {% extends 'admin/admin_base.html' %}
+{% set active_page = 'admin_feedbacks' %}
+{% block title %}Feedbacks{% endblock title %}
 
 {% block head %}
     <style>
@@ -82,11 +84,8 @@
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 class="h4">Ratings</h1>
-            <a href="/admin/feedbacks/reviews"><button type="button" class="btn btn-primary" style="text-align: right">Reviews</button></a>
+            <a href="/admin/feedbacks/reviews"><button type="button" class="btn btn-primary btn-sm" style="text-align: right">Reviews</button></a>
         </div>
-
-
-{#        <span class="heading">Patient's Rating</span>#}
 
         <span><p class="h5">Patient's Ratings</p></span>
         <span class="fa fa-star checked"></span>
@@ -222,25 +221,6 @@
             <div>{{ dr_rating['1'] }}</div>
           </div>
         </div>
-
-{#        <table width="624" border="2" cellspacing="2" cellpadding="2">#}
-{#  <tr>#}
-{#    <th width="11" scope="col">#</th>#}
-{#    <th width="44" scope="col">User Info</th>#}
-{#    <th width="44" scope="col">Rating</th>#}
-{#    <th width="36" scope="col">Reviews</th>#}
-{#    <th width="36" scope="col">Date</th>#}
-{#    </tr>#}
-{#  {% for data in qry %}#}
-{#    <tr>#}
-{#    <td>&nbsp;{{ loop.index }}</td>#}
-{#    <td>&nbsp;{{ data["username"] }}</td>#}
-{#     <td>&nbsp;{{ data["rate"] }}</td>#}
-{#    <td>&nbsp;{{ data["review"] }}</td>#}
-{#    <td>&nbsp;{{ data["date"] }}</td>#}
-{#    </tr>#}
-{#  {% endfor %}#}
-{#</table>#}
 
     </main>
 {% endblock content %}

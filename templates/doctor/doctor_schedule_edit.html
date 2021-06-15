@@ -1,4 +1,6 @@
 {% extends 'doctor/doctor_base.html' %}
+{% set active_page = 'doctor_schedule' %}
+{% block title %}Schedules{% endblock title %}
 
 {% block content %}
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
@@ -21,8 +23,8 @@
         </div>
         <br>
             <input type="hidden" name="schedule_id" id="schedule_id" value="{{ qry['schedule_id'] }}">
-            <button type="submit" class="btn btn-primary">Edit</button>
-            <button type="reset" class="btn btn-secondary">Reset</button>
+            <button type="submit" class="btn btn-primary btn-sm">Edit</button>
+            <button type="reset" class="btn btn-secondary btn-sm">Reset</button>
         </form>
         </main>
 

@@ -1,12 +1,6 @@
-{#<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">#}
-{#<html xmlns="http://www.w3.org/1999/xhtml">#}
-{#<head>#}
-{#<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />#}
-{#<title>Untitled Document</title>#}
-{#</head>#}
-{##}
-{#<body>#}
 {% extends 'user/user_base.html' %}
+{% set active_page = 'user_history' %}
+{% block title %}Prediction History{% endblock title %}
 
 {% block content %}
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
@@ -69,51 +63,5 @@
                 {% endfor %}
           </tbody>
         </table>
-
-
-{#<table width="516" border="2" cellspacing="2" cellpadding="2">#}
-{#  <tr>#}
-{#    <th width="43" rowspan="2" scope="col">#</th>#}
-{#    <th width="106" rowspan="2" scope="col">Symptoms</th>#}
-{#    <th colspan="2" scope="col">Disease Prediction</th>#}
-{#    <th width="102" rowspan="2" scope="col">Date/Time</th>#}
-{#    <th width="115" rowspan="2" scope="col"></th>#}
-{#  </tr>#}
-{#  <tr>#}
-{#    <th width="112"><div align="center">Algorithm</div></th>#}
-{#    <th width="107"><div align="center">Disease</div></th>#}
-{#  </tr>#}
-{#    {% for row in dp_res %}#}
-{#  <tr>#}
-{#    <td rowspan="3">{{ loop.index }}</td>#}
-{#    <td rowspan="3">{{row["symptoms"]}}</td>#}
-{#      {% for d in row["prediction"] %}#}
-{#          {% if loop.index == 1 %}#}
-{#        <td>{{d[0]}}</td>#}
-{#        <td>{{d[1]}}</td>#}
-{#       <td rowspan="3">{{row["date"]}}</td>#}
-{#       <td rowspan="3">#}
-{#           <a href="/user/dp_history/rm/{{row["prediction_id"]}}">Remove</a><br><br>#}
-{#           <a href="/user/dp_history/dr_rec/{{row["prediction_id"]}}">Dr. Recommendation</a>#}
-{#       </td>#}
-{#          </tr>#}
-{#          {% endif %}#}
-{#    {% if loop.index == 2 %}#}
-{#  <tr>#}
-{#    <td>{{d[0]}}</td>#}
-{#    <td>{{d[1]}}</td>#}
-{#  </tr>#}
-{#     {% endif %}#}
-{#    {% if loop.index == 3 %}#}
-{#  <tr>#}
-{#    <td>{{d[0]}}</td>#}
-{#    <td>{{d[1]}}</td>#}
-{#  </tr>#}
-{#     {% endif %}#}
-{#     {% endfor %}#}
-{#    {% endfor %}#}
-{#</table>#}
     </main>
 {% endblock content %}
-{#</body>#}
-{#</html>#}

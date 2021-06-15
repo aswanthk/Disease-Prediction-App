@@ -1,0 +1,78 @@
+{% extends 'admin/admin_base.html' %}
+{% set active_page = 'admin_patients' %}
+{% block title %}Patients List{% endblock title %}
+
+{% block content %}
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h4">Manage Patients ({{ q['name'] }})</h1>
+        </div>
+        <div style="text-align: center">
+            <img src="{{ q['photo'] }}" alt="{{ q['username'] }}'s-photo" height="150px" width="150px"/>
+        </div>
+
+        <br><br>
+          <div class="bd-example">
+              <table class="table table-striped">
+              <tbody>
+                <tr>
+                  <th scope="row">Username</th>
+                  <td>{{ q['username'] }}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Email Address</th>
+                  <td>{{ q['email_address'] }}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Mobile Number</th>
+                  <td>{{ q['mobile_number'] }}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Gender</th>
+                  <td>{{ q['gender'] }}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Age</th>
+                  <td>{{ age }}</td>
+                </tr>
+                <tr>
+                  <th scope="row">House Name</th>
+                  <td>
+                      {{ q['house_name'] }}
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">Place</th>
+                  <td>
+                        {{ q['place'] }}
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">District</th>
+                  <td>
+                        {{ q['district'] }}
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">State</th>
+                  <td>
+                        {{ q['state'] }}
+                  </td>
+                </tr>
+              <tr>
+                  <th scope="row">Post</th>
+                  <td>
+                        {{ q['post'] }}
+                  </td>
+                </tr>
+              <tr>
+                  <th scope="row">PIN</th>
+                  <td>
+                        {{ q['pin'] }}
+                  </td>
+                </tr>
+              </tbody>
+              </table>
+        </div>
+    </main>
+{% endblock content %}
