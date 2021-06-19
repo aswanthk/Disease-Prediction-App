@@ -4,17 +4,6 @@
 
 {% block head %}
     <style>
-        {#* {#}
-        {#  box-sizing: border-box;#}
-        {##}
-
-        {#body {#}
-        {#  font-family: Arial;#}
-        {#  margin: 0 auto; /* Center website */#}
-        {#  max-width: 800px; /* Max width */#}
-        {#  padding: 20px;#}
-        {#}#}
-
         .heading {
           font-size: 25px;
           margin-right: 25px;
@@ -93,7 +82,7 @@
         <span class="fa fa-star checked"></span>
         <span class="fa fa-star checked"></span>
         <span class="fa fa-star"></span>
-        <p>{{ user_rating_average }} average based on {{ user_rating_total }} reviews.</p>
+        <p>{{ user_rating_average }} average based on {{ ut_rev }} reviews.</p>
         <hr style="border:3px solid #f1f1f1">
 
         <div class="row">
@@ -161,7 +150,7 @@
         <span class="fa fa-star checked"></span>
         <span class="fa fa-star checked"></span>
         <span class="fa fa-star"></span>
-        <p>{{ dr_rating_average }} average based on {{ dr_rating_total }} reviews.</p>
+        <p>{{ dr_rating_average }} average based on {{ dt_rev }} reviews.</p>
         <hr style="border:3px solid #f1f1f1">
 
         <div class="row">

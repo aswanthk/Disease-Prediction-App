@@ -199,9 +199,14 @@ def admin_home():
     if session['log'] == "alogin":
         dash = []
         db = Db()
+
+        apps = []
         tdr = db.selectOne("select count(login_id) from login where user_type='doctor'")
+        apps.append(f"Total: {tdr.get('count(login_id)', 0)}")
         pdr = db.selectOne("select count(login_id) from login where user_type='pending'")
-        dash.append(("Doctors", f"Total: {tdr.get('count(login_id)', 0)} Pending: {pdr.get('count(login_id)', 0)}"))
+        apps.append(f"Pending: {pdr.get('count(login_id)', 0)}")
+        rdr = db.selectOne("select count(login_id) from login where user_type='rejected'")
+        apps.append(f"Rejected: {rdr.get('count(login_id)', 0)}")
         tusr = db.selectOne("select count(login_id) from login where user_type='user'")
         dash.append(("Patients", str(tusr.get('count(login_id)', 0))))
         tset = db.selectOne("select count(dataset_id) from disease_dataset")
@@ -209,11 +214,11 @@ def admin_home():
         tf = db.selectOne("select sum(rate), count(rate) from feedbacks")
         if tf.get('sum(rate)') is not None:
             avgr = int(tf.get('sum(rate)', 0)) / int(tf.get('count(rate)', 0))
-            dash.append(("Reviews", f"{round(avgr, 2)}/5 average on {tf.get('count(rate)', 0)} reviews"))
+            dash.append(("Reviews", f"{round(avgr, 1)}/5 average on {tf.get('count(rate)', 0)} reviews"))
         else:
             dash.append(("Reviews", f"0/5 average on 0 reviews"))
         dash.append(("Session", str(a)))
-        return render_template("admin/admin_home.html", dash=dash)
+        return render_template("admin/admin_home.html", apps=apps, dash=dash)
     else:
         return redirect('/')
 
@@ -449,6 +454,37 @@ def admin_search_pending_dr():
     else:
         return redirect('/')
 
+@app.route('/admin/rejected_dr')
+def admin_rejected_dr():
+    if session['log'] == "alogin":
+        db = Db()
+        qry1 = db.select(
+            "SELECT * FROM doctor, login WHERE doctor.`doctor_id` = login.`login_id` AND user_type = 'rejected'")
+        for ds in range(len(qry1)):
+            for k, v in qry1[ds].items():
+                if k == "category":
+                    cat = v.split(",")
+                    qry1[ds]["category"] = cat
+        return render_template("admin/admin_rejected_dr.html", qry1=qry1, l=[len(qry1)], s="nosearch")
+    else:
+        return redirect('/')
+
+@app.route('/admin/search_rejected_dr', methods=['post'])
+def admin_search_rejected_dr():
+    if session['log'] == "alogin":
+        text = request.form['search_rejected_dr']
+        db = Db()
+        qry1 = db.select(
+            "SELECT * FROM doctor, login WHERE doctor.`doctor_id` = login.`login_id` AND user_type = 'rejected' AND doctor.name like '%" + text + "%' order by doctor.doctor_id desc")
+        for ds in range(len(qry1)):
+            for k, v in qry1[ds].items():
+                if k == "category":
+                    cat = v.split(",")
+                    qry1[ds]["category"] = cat
+        return render_template('admin/admin_rejected_dr.html', qry1=qry1, l=[len(qry1)], s="search", sn=text)
+    else:
+        return redirect('/')
+
 @app.route('/admin/patients')
 def patients():
     if session['log'] == "alogin":
@@ -534,14 +570,14 @@ def admin_feedbacks():
         urt = db.selectOne("SELECT sum(rate), count(rate) FROM login, feedbacks WHERE login.login_id = feedbacks.user_id AND login.user_type='user'")
 
         def star(u):
-            if u is not None:
+            if u['sum(rate)'] is not None:
                 t = int(u.get('sum(rate)', 0))
                 av = round( (int(u.get('sum(rate)', 0))/int(u.get('count(rate)', 0))), 1 )
                 return t, av
             else:
                 return 0, 0.0
 
-        user_rating_total, user_rating_average = star(urt['sum(rate)'])
+        user_rating_total, user_rating_average = star(urt)
 
         user_rating = dict()
         user5 = db.selectOne("SELECT count(rate) FROM login, feedbacks WHERE login.login_id = feedbacks.user_id AND login.user_type='user' AND feedbacks.rate=5")
@@ -556,11 +592,13 @@ def admin_feedbacks():
         user_rating['2'] = user2.get('count(rate)', 0)
         user_rating['1'] = user1.get('count(rate)', 0)
 
+        ut_rev = user_rating['5'] + user_rating['4'] + user_rating['3'] + user_rating['2'] + user_rating['1']
+
         drt = db.selectOne(
             "SELECT sum(rate), count(rate) FROM login, feedbacks WHERE login.login_id = feedbacks.user_id AND login.user_type='doctor'")
 
 
-        dr_rating_total, dr_rating_average = star(drt['sum(rate)'])
+        dr_rating_total, dr_rating_average = star(drt)
 
         dr_rating = dict()
         dr5 = db.selectOne(
@@ -579,8 +617,9 @@ def admin_feedbacks():
         dr_rating['3'] = dr3.get('count(rate)', 0)
         dr_rating['2'] = dr2.get('count(rate)', 0)
         dr_rating['1'] = dr1.get('count(rate)', 0)
+        dt_rev = dr_rating['5'] + dr_rating['4'] + dr_rating['3'] + dr_rating['2'] + dr_rating['1']
 
-        return render_template("admin/admin_feedbacks.html", user_rating_average=user_rating_average, user_rating_total=user_rating_total, user_rating=user_rating, dr_rating_average=dr_rating_average, dr_rating_total=dr_rating_total, dr_rating=dr_rating)
+        return render_template("admin/admin_feedbacks.html", user_rating_average=user_rating_average, user_rating_total=user_rating_total, user_rating=user_rating, dr_rating_average=dr_rating_average, dr_rating_total=dr_rating_total, dr_rating=dr_rating, ut_rev=ut_rev, dt_rev=dt_rev)
     else:
         return redirect('/')
 
@@ -592,7 +631,7 @@ def admin_feedbacks_reviews():
             "SELECT * FROM login, feedbacks WHERE login.login_id = feedbacks.user_id AND login.user_type='user' order by feedbacks.date desc")
         dr_reviews = db.select(
             "SELECT * FROM login, feedbacks WHERE login.login_id = feedbacks.user_id AND login.user_type='doctor'  order by feedbacks.date desc")
-        return render_template("admin/admin_feedbacks_reviews.html",  user_reviews=user_reviews,  dr_reviews=dr_reviews)
+        return render_template("admin/admin_feedbacks_reviews.html",  user_reviews=user_reviews,  dr_reviews=dr_reviews, u=len(user_reviews), d=len(dr_reviews))
     else:
         return redirect('/')
 
@@ -891,7 +930,7 @@ def doctor_search_app_name():
                 ap['schedule'] = sch
                 ap['status'] = app['status']
                 apps.append(ap)
-        return render_template('doctor/doctor_appointment.html', name=text, ns="nsearch", apps=apps, l=[len(qry)])
+        return render_template('doctor/doctor_appointment.html', name=text, s="search", ns="nsearch", apps=apps, l=[len(qry)])
     else:
         return redirect('/')
 
@@ -930,7 +969,7 @@ def doctor_search_app_date():
                 ap['schedule'] = sch
                 ap['status'] = app['status']
                 apps.append(ap)
-        return render_template('doctor/doctor_appointment.html', s="search", date1=date1, date2=date2, apps=apps, l=[len(qry)])
+        return render_template('doctor/doctor_appointment.html', s="search", ns="nsearch", date1=date1, date2=date2, apps=apps, l=[len(qry)])
     else:
         return redirect('/')
 
@@ -1624,11 +1663,11 @@ def search_doctor_appointment(i):
         for x in qry3:
             ls.append([x['schedule_date'], x['schedule_day']])
 
-        lss=[]
-        for n in range(len(ls)):
-            if n < len(ls)-1 :
-                if ls[n][0] not in ls[n+1][0]:
-                    lss.append(ls[n])
+        lss = []
+        for n in ls:
+            if n[0] not in [x[0] for x in lss]:
+                lss.append(n)
+
         cat=qry2['category'].split(',')
 
         return render_template('user/search_doctor_appointment.html', usr=qry, age=age, dr=qry2, app=qry3, cat=cat, sd=lss)
@@ -1656,7 +1695,7 @@ def user_dp_history():
             pred_dict["prediction"] = ll
             pred_dict["date"] = data["date"].split(".")
             pred_list.append(pred_dict)
-        return render_template("user/user_dp_history.html", dp_res=pred_list)
+        return render_template("user/user_dp_history.html", dp_res=pred_list, l=len(pred_list))
     else:
         return redirect('/')
 
@@ -1705,11 +1744,10 @@ def user_dr_appointment(i):
         ls=[]
         for x in qry3:
             ls.append([x['schedule_date'], x['schedule_day']])
-        lss=[]
-        for n in range(len(ls)):
-            if n < len(ls)-1 :
-                if ls[n][0] not in ls[n+1][0]:
-                    lss.append(ls[n])
+        lss = []
+        for n in ls:
+            if n[0] not in [x[0] for x in lss]:
+                lss.append(n)
         cat=qry2['category'].split(',')
 
         return render_template('user/user_dr_appointment.html', usr=qry, age=age, dr=qry2, app=qry3, pred_dict=pred_dict, cat=cat, sd=lss)
@@ -1752,12 +1790,11 @@ def appointment_select(eid):
         for x in qry3:
             ls.append([x['schedule_date'], x['schedule_day']])
         lss = []
-        for n in range(len(ls)):
-            if n < len(ls) - 1:
-                if ls[n][0] not in ls[n + 1][0]:
-                    lss.append(ls[n][0])
+        for n in ls:
+            if n[0] not in [x[0] for x in lss]:
+                lss.append(n)
         cat = qry2['category'].split(',')
-        if eid in lss:
+        if eid in [x[0] for x in lss]:
             times = db.select("select schedule_id, start_time, end_time from schedule where doctor_id='" + str(
                 i) + "' and schedule_date='" + eid + "'")
             return render_template('user/user_dr_appointment_time.html', times=times, eid=eid)

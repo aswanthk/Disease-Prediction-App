@@ -6,7 +6,8 @@
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 class="h4">Appointment Management</h1>
-            <span>
+
+                <span>
                 <form action="/doctor/search/app-name" method="post">
                     {% if ns=="no_nsearch" %}
                         <input type="text" name="qry-name" id="qry-name" placeholder="Search name" class="form-control-sm"/>
@@ -17,7 +18,9 @@
                     <input type="submit" value="Search" class="btn btn-primary btn-sm"/>
                 </form>
             </span>
+
         </div>
+
             <div class="container">
                 <div class="row">
                     <form action="/doctor/search/app-date" method="post">
@@ -84,7 +87,7 @@
         {% endif %}
         {% if n==0 %}
             <br>
-            <p>No data found</p>
+            <p>&nbsp;  &nbsp; &nbsp; &nbsp;No appointments yet</p>
         {% endif %}
     {% endfor %}
     </main>

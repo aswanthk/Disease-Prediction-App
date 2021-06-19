@@ -79,7 +79,7 @@
         </div>
 
     <h1 class="h5">Rating:</h1>
-    <form action="/doctor/feedbacks_post" method="post">
+    <form action="/doctor/feedbacks_post" method="post" onclick="return alert('You reviewed successfully')">
         <div class="rating">
             <label>
     <input type="radio" name="stars" value="1" {% if content==True %}{{ 'checked' if qry['rate']==1 }}{% endif %} required />

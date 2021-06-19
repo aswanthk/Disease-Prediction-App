@@ -10,6 +10,9 @@
                 <span><a href="/admin/approve_dr/{{ q["doctor_id"] }}"><button class="btn btn-success btn-sm">Approve</button></a>
                 <a href="/admin/reject_dr/{{ q["doctor_id"] }}"><button class="btn btn-danger btn-sm">Reject</button></a></span>
             {% endif %}
+            {% if status == "rejected" %}
+                <a href="/admin/approve_dr/{{ q["doctor_id"] }}"><button class="btn btn-success btn-sm" style="text-align: right">Approve</button></a>
+            {% endif %}
         </div>
 
         <div style="text-align: center">
@@ -55,10 +58,8 @@
                 <tr>
                     <th scope="row">Address</th>
                     <td> {{ q['hospital_name'] }} <br/>
-                        {{ q['place'] }} <br/>
-                        {{ q['district'] }} <br/>
-                         {{ q['state'] }} <br/>
-                        (P.O) {{ q['post'] }} <br/>
+                        {{ q['place'] }}, (P.O) {{ q['post'] }} <br/>
+                        {{ q['district'] }}, {{ q['state'] }} <br/>
                         PIN:  {{ q['pin'] }}
                     </td>
                   </tr>

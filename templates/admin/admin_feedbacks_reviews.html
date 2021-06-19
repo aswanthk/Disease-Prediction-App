@@ -11,34 +11,47 @@
 
 
         <div class="container">
-            <p class="h5">User's Reviews</p>
             <div class="row">
-                    {% for usr in user_reviews %}
-                <div class="col-4">
-                    <div class="card bg-light mb-3" style="max-width: 18rem;">
-                      <div class="card-header">{{ usr['username'] }}</div>
-                      <div class="card-body">
-                        <h5 class="card-title">{{ usr['rate'] }} star rating</h5>
-                        <p class="card-text">{{ usr['review'] }}</p>
-                      </div>
-                    </div>
-                    </div>
-                {% endfor %}
+                <div class="col">
+                    <p class="h5">User's Reviews</p><br>
+                    {% if u!=0 %}
+                        {% for usr in user_reviews %}
+                        <div class="col">
+                            <div class="card bg-light mb-3" style="max-width: 18rem;">
+                              <div class="card-header">{{ usr['username'] }}</div>
+                              <div class="card-body">
+                                <h5 class="card-title">{{ usr['rate']*'★' }}{{ (5-usr['rate'])*'☆' }}</h5>
+                                <p class="card-text">{{ usr['review'] }}</p>
+                              </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                    {% if u==0 %}
+                        <p>No data found</p>
+                    {% endif %}
                 </div>
-                <p class="h5">Doctor's Reviews</p>
-                <div class="row">
-                    {% for usr in dr_reviews %}
-                    <div class="col-4">
-                        <div class="card bg-light mb-3" style="max-width: 18rem;">
-                          <div class="card-header">{{ usr['username'] }}</div>
-                          <div class="card-body">
-                            <h5 class="card-title">{{ usr['rate'] }} star rating</h5>
-                            <p class="card-text">{{ usr['review'] }}</p>
-                          </div>
+
+                <div class="col">
+                    <p class="h5">Doctor's Reviews</p><br>
+                    {% if d!=0 %}
+                        {% for usr in dr_reviews %}
+                        <div class="col">
+                            <div class="card bg-light mb-3" style="max-width: 18rem;">
+                                <div class="card-header">{{ usr['username'] }}</div>
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ usr['rate']*'★' }}{{ (5-usr['rate'])*'☆' }}</h5>
+                                    <p class="card-text">{{ usr['review'] }}</p>
+                                </div>
+                            </div>
                         </div>
-                        </div>
-                    {% endfor %}
-                    </div>
+                        {% endfor %}
+                    {% endif %}
+                    {% if d==0 %}
+                        <p>No data found</p>
+                    {% endif %}
+
+                </div>
             </div>
         </div>
 

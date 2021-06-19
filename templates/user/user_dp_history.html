@@ -8,7 +8,8 @@
             <h1 class="h4">Disease Prediction History</h1>
         </div>
 
-        <table class="table">
+        {% if l!=0 %}
+            <table class="table">
           <thead class="table-light">
             <tr>
                 <th rowspan="2">#</th>
@@ -25,7 +26,7 @@
           <tbody>
             {% for row in dp_res %}
               <tr>
-                <th rowspan="3">{{ loop.index }}</th>
+                <td rowspan="3">{{ loop.index }}</td>
                 <td rowspan="3">
                     {% for sym in row["symptoms"] %}
                         {{ sym }} <br>
@@ -40,10 +41,8 @@
                             {{ dt }} <br>
                         {% endfor %}
                    </td>
-                   <td rowspan="3">
+                   <td rowspan="3" style="text-align: center;">
                        <a href="/user/dp_history/dr_rec/{{row["prediction_id"]}}"><button class="btn btn-primary btn-sm">Dr. Recommendation</button></a>
-{#                       <br><br>#}
-{#                       <a href="/user/dp_history/rm/{{row["prediction_id"]}}"><button class="btn btn-danger btn-sm">Remove</button></a><br><br>#}
                    </td>
                       </tr>
                       {% endif %}
@@ -63,5 +62,9 @@
                 {% endfor %}
           </tbody>
         </table>
+        {% endif %}
+        {% if l==0 %}
+            <p>No history found</p>
+        {% endif %}
     </main>
 {% endblock content %}

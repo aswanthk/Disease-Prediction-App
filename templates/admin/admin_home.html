@@ -9,8 +9,16 @@
         </div>
 
         <div class="container">
-
                 <div class="row">
+                    <div class="col-4">
+                        <div class="card text-white bg-dark bg-primary mb-3" style="max-width: 18rem;">
+                          <div class="card-header">Doctors</div>
+                          <div class="card-body">
+                            <h5 class="card-title"></h5>
+                            <p class="card-text">{{ apps[0] }} &nbsp; &nbsp; {{ apps[1] }} &nbsp; &nbsp; {{ apps[2] }}</p>
+                          </div>
+                        </div>
+                    </div>
                     {% for x in dash %}
                 <div class="col-4">
                     <div class="card text-white bg-dark bg-primary mb-3" style="max-width: 18rem;">

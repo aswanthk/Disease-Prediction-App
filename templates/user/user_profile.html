@@ -37,41 +37,13 @@
                   <td>{{ age }}</td>
                 </tr>
                 <tr>
-                  <th scope="row">House Name</th>
-                  <td>
-                      {{ q['house_name'] }}
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row">Place</th>
-                  <td>
-                        {{ q['place'] }}
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row">District</th>
-                  <td>
-                        {{ q['district'] }}
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row">State</th>
-                  <td>
-                        {{ q['state'] }}
-                  </td>
-                </tr>
-              <tr>
-                  <th scope="row">Post</th>
-                  <td>
-                        {{ q['post'] }}
-                  </td>
-                </tr>
-              <tr>
-                  <th scope="row">PIN</th>
-                  <td>
-                        {{ q['pin'] }}
-                  </td>
-                </tr>
+                    <th scope="row">Address</th>
+                    <td> {{ q['house_name'] }} <br/>
+                        {{ q['place'] }}, (P.O) {{ q['post'] }}<br/>
+                        {{ q['district'] }}, {{ q['state'] }} <br/>
+                        PIN:  {{ q['pin'] }}
+                    </td>
+                  </tr>
               </tbody>
               </table>
         </div>

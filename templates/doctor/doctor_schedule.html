@@ -25,7 +25,7 @@
                   <tbody>
                     {% for data in qry %}
                       <tr>
-                    <th>{{ loop.index }}</th>
+                    <td>{{ loop.index }}</td>
                     <td>{{ data["schedule_date"] }}</td>
                     <td>{{ data["schedule_day"] }}</td>
                     <td>{{ data["start_time"] }}</td>
@@ -40,8 +40,7 @@
                 </table>
             {% endif %}
             {% if n==0 %}
-                    <br>
-                    <p> Not schedule data</p>
+                    <p> No schedule data</p>
                 {% endif %}
         {% endfor %}
 

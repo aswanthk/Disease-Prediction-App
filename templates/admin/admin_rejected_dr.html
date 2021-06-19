@@ -5,22 +5,18 @@
 {% block content %}
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="h4">Manage Doctor</h1>
-            <span>
-                <a href="/admin/pending_dr"><button type="button" class="btn btn-success btn-sm">Pending Requests</button></a>
-                <a href="/admin/rejected_dr"><button type="button" class="btn btn-danger btn-sm">Rejected Requests</button></a>
-            </span>
+            <h1 class="h4">Rejected Doctors</h1>
         </div>
 
         <div class="container">
             <div class="row">
                 <div class="col">
-                    <form action="/admin/search_dr" method="post">
+                    <form action="/admin/search_rejected_dr" method="post">
                         {% if s=="nosearch" %}
-                            <input type="text" class="form-control-sm" name="search_doctor" id="search_doctor" placeholder="Search a doctor">
+                            <input type="text" class="form-control-sm" name="search_rejected_dr" id="search_rejected_dr" placeholder="Search a doctor">
                         {% endif %}
                         {% if s=="search" %}
-                            <input type="text" class="form-control-sm" name="search_doctor" id="search_doctor" placeholder="Search a doctor" value="{{ sn }}">
+                            <input type="text" class="form-control-sm" name="search_rejected_dr" id="search_rejected_dr" placeholder="Search a doctor" value="{{ sn }}">
                         {% endif %}
                         <input class="btn btn-primary btn-sm" type="submit" value="Search">
                     </form>
@@ -28,7 +24,7 @@
             </div>
         </div>
 
-  {% for n in l %}
+    {% for n in l %}
             {% if n>0 %}
                 <table class="table">
                   <thead class="table-light">
@@ -63,11 +59,7 @@
                         <td>{{ data["contact_number"] }}</td>
                           <td>
                               <a href="/admin/view_more_dr/{{data["doctor_id"]}}"><button class="btn btn-primary btn-sm">Details</button></a>
-                              {% if data["user_type"] == "pending" %}
-                                <a href="/admin/approve_dr/{{ data["doctor_id"] }}"><button class="btn btn-success btn-sm">✔</button></a>
-                                <a href="/admin/reject_dr/{{ data["doctor_id"] }}"><button class="btn btn-danger btn-sm">❌</button></a>
-                            {% endif %}
-
+                             <a href="/admin/approve_dr/{{ data["doctor_id"] }}"><button class="btn btn-success btn-sm">✔</button></a>
                         </td>
                       </tr>
                   {% endfor %}
